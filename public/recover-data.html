@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Recuperar Datos - HomeUx</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
+    .card { background: #1e293b; border-radius: 16px; padding: 2.5rem; max-width: 600px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.4); }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #f8fafc; }
+    p { color: #94a3b8; margin-bottom: 1rem; font-size: 0.9rem; }
+    #status { background: #0f172a; border-radius: 10px; padding: 1rem; margin: 1rem 0; font-size: 0.85rem; line-height: 1.8; min-height: 100px; }
+    .ok { color: #4ade80; }
+    .warn { color: #fbbf24; }
+    .err { color: #f87171; }
+    button { padding: 12px 24px; border-radius: 10px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; margin: 4px; }
+    .btn-search { background: #1e40af; color: #fff; }
+    .btn-migrate { background: #059669; color: #fff; display: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>HomeUx - Recuperar Datos</h1>
+    <p>Esta herramienta busca tus datos en otros puertos y los migra al puerto actual.</p>
+    <div id="status">Presiona "Buscar Datos" para iniciar...</div>
+    <div style="margin-top:1rem">
+      <button class="btn-search" onclick="buscar()">Buscar Datos</button>
+      <button class="btn-migrate" id="btnMigrate" onclick="migrar()">Migrar Datos Aqui</button>
+    </div>
+  </div>
+
+  <script>
+    const KEYS = [
+      'homeux-auth-storage',
+      'homeux-clientes-storage',
+      'homeux-solicitudes-storage',
+      'homeux-productos-storage',
+      'homeux-cotizaciones-storage',
+      'homeux-personal-storage',
+      'homeux-config-storage'
+    ];
+
+    let sourcePort = null;
+    let sourceData = {};
+
+    function log(msg, cls) {
+      document.getElementById('status').innerHTML += `<div class="${cls || ''}">${msg}</div>`;
+    }
+
+    function clearLog() {
+      document.getElementById('status').innerHTML = '';
+    }
+
+    // Primero verificar si ya hay datos en el puerto actual
+    function checkLocal() {
+      let count = 0;
+      for (const key of KEYS) {
+        const val = localStorage.getItem(key);
+        if (val) {
+          try {
+            const parsed = JSON.parse(val);
+            const state = parsed.state || parsed;
+            const entries = Object.values(state).filter(v => Array.isArray(v));
+            const total = entries.reduce((s, arr) => s + arr.length, 0);
+            if (total > 0) count += total;
+          } catch {}
+        }
+      }
+      return count;
+    }
+
+    async function buscar() {
+      clearLog();
+
+      // Verificar datos locales
+      const localCount = checkLocal();
+      if (localCount > 0) {
+        log(`✅ Ya tienes ${localCount} registros en el puerto actual (${location.port})`, 'ok');
+        log('Tus datos estan aqui. Cierra esta pagina y usa la app normalmente.', 'ok');
+        return;
+      }
+
+      log(`⚠️ No hay datos en el puerto actual (${location.port}). Buscando en otros puertos...`, 'warn');
+
+      const ports = [3000, 3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008];
+      const currentPort = parseInt(location.port);
+
+      for (const port of ports) {
+        if (port === currentPort) continue;
+        log(`Probando puerto ${port}...`);
+
+        try {
+          // Intentar cargar un iframe del otro puerto para acceder a su localStorage
+          const found = await checkPort(port);
+          if (found > 0) {
+            sourcePort = port;
+            log(`✅ ENCONTRADOS ${found} registros en puerto ${port}!`, 'ok');
+            document.getElementById('btnMigrate').style.display = 'inline-block';
+            return;
+          } else {
+            log(`  Puerto ${port}: sin datos homeux`, '');
+          }
+        } catch (e) {
+          log(`  Puerto ${port}: no accesible`, '');
+        }
+      }
+
+      log('', '');
+      log('❌ No se encontraron datos en ningun puerto.', 'err');
+      log('Los datos pueden haberse perdido si el navegador limpio el cache.', 'err');
+      log('Puedes cargar datos de prueba desde /load-test-data.html si existe.', 'warn');
+    }
+
+    function checkPort(port) {
+      return new Promise((resolve) => {
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = `http://localhost:${port}/recover-data.html?mode=check`;
+
+        const timeout = setTimeout(() => {
+          document.body.removeChild(iframe);
+          resolve(0);
+        }, 3000);
+
+        window.addEventListener('message', function handler(e) {
+          if (e.data && e.data.type === 'homeux-data-check' && e.data.port === port) {
+            clearTimeout(timeout);
+            window.removeEventListener('message', handler);
+            if (e.data.count > 0) {
+              sourceData = e.data.data;
+            }
+            try { document.body.removeChild(iframe); } catch {}
+            resolve(e.data.count);
+          }
+        });
+
+        document.body.appendChild(iframe);
+      });
+    }
+
+    // Si estamos en modo check (llamados desde iframe)
+    if (new URLSearchParams(location.search).get('mode') === 'check') {
+      let count = 0;
+      const data = {};
+      for (const key of KEYS) {
+        const val = localStorage.getItem(key);
+        if (val) {
+          data[key] = val;
+          try {
+            const parsed = JSON.parse(val);
+            const state = parsed.state || parsed;
+            const entries = Object.values(state).filter(v => Array.isArray(v));
+            count += entries.reduce((s, arr) => s + arr.length, 0);
+          } catch {}
+        }
+      }
+      if (window.parent !== window) {
+        window.parent.postMessage({
+          type: 'homeux-data-check',
+          port: parseInt(location.port),
+          count: count,
+          data: data
+        }, '*');
+      }
+    }
+
+    function migrar() {
+      if (!sourceData || Object.keys(sourceData).length === 0) {
+        log('❌ No hay datos para migrar', 'err');
+        return;
+      }
+
+      for (const [key, val] of Object.entries(sourceData)) {
+        localStorage.setItem(key, val);
+      }
+
+      log('', '');
+      log(`✅ Datos migrados exitosamente desde puerto ${sourcePort}!`, 'ok');
+      log('Redirigiendo en 2 segundos...', 'ok');
+
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

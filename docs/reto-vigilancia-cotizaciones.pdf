@@ -1,0 +1,1263 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 5305
+>>
+stream
+0.5670000000000001 w
+0 G
+0.12 0.11 0.29 rg
+0. 841.8899999999999864 595.2755905511811534 -226.7716535433071101 re
+f
+BT
+/F2 22 Tf
+25.2999999999999972 TL
+1. g
+51.0236220472441033 756.8506299212598378 Td
+(CRM COMERCIAL) Tj
+ET
+BT
+/F2 14 Tf
+16.0999999999999979 TL
+1. g
+51.0236220472441033 722.8348818897637784 Td
+(Reto: Cotizaciones para Empresa de Vigilancia) Tj
+ET
+BT
+/F1 11 Tf
+12.6499999999999986 TL
+1. g
+51.0236220472441033 694.4884251968503577 Td
+(Recomendaciones y plan de implementación) Tj
+ET
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+1. g
+51.0236220472441033 657.6380314960629221 Td
+(Generado: 07 de abril de 2026) Tj
+ET
+0.12 0.11 0.29 rg
+0. 589.6065354330708033 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 564.0947244094487587 Td
+(Contexto del reto) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 527.2443307086614368 Td
+(La empresa cotiza múltiples líneas de servicio \(Vigilancia, Escoltas, Cámaras/CCTV, Rastreadores, etc.\). Cada) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 513.0711023622046696 Td
+(línea debe tener su propio consecutivo de cotizaciones, y en los renglones de cada cotización deben poder) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 498.8978740157479592 Td
+(mezclarse productos físicos y servicios. El objetivo es que el CRM cumpla todos esos puntos sin perder) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 484.7246456692913057 Td
+(claridad ni trazabilidad.) Tj
+ET
+0.12 0.11 0.29 rg
+0. 484.7246456692912489 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 459.2128346456692611 Td
+(El concepto: Línea de Servicio + consecutivo independiente) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 422.3624409448818255 Td
+(Cada línea de servicio que ofrece la empresa es prácticamente una unidad de negocio aparte:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 405.3545669291337958 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 405.3545669291337958 Td
+(VIG — Vigilancia Física) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 391.1813385826770855 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 391.1813385826770855 Td
+(ESC — Escoltas) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 377.0081102362204319 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 377.0081102362204319 Td
+(CCT — Vigilancia con Cámaras / Monitoreo) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 362.8348818897637216 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 362.8348818897637216 Td
+(GPS — Rastreo Satelital / Telemetría) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 348.6616535433070112 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 348.6616535433070112 Td
+(CAN — Caninos \(si aplica\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 334.4884251968503008 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 334.4884251968503008 Td
+(MED — Medios Tecnológicos / Alarmas) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 314.6459055118109518 Td
+(Cada una tiene su propio consecutivo:) Tj
+ET
+0.96 0.97 0.98 rg
+51.0236220472441033 306.1419685039369369 493.2283464566929752 -62.3622047244094517 re
+f
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 294.8033858267715459 Td
+(COT-VIG-00001) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 282.0474803149605805 Td
+(COT-ESC-00001) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 269.2915748031495013 Td
+(COT-CCT-00001) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 256.5356692913385359 Td
+(COT-GPS-00001) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 238.1104724409448181 Td
+(Así, si en el mismo día cotizas vigilancia y escoltas para dos clientes distintos, los códigos no se mezclan y) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 223.9372440944881646 Td
+(cada gerente de línea ve su propia secuencia limpia.) Tj
+ET
+0.12 0.11 0.29 rg
+0. 223.9372440944881077 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 198.4254330708660063 Td
+(Por qué esto funciona mejor que un solo consecutivo) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 155.9057480314959321 Td
+(1. Reportes por línea de negocio) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 138.8978740157479024 Td
+(El gerente de Escoltas ve solo "ESC-*" y mide su propio pipeline, sus tasas de conversión, sus márgenes. Hoy) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 124.7246456692912489 Td
+(es muy difícil hacer eso si todo está mezclado.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 102.0474803149605805 Td
+(2. Comisiones claras) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 85.0396062992125508 Td
+(Cada vendedor y cada línea tiene su rentabilidad por separado.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.42 0.447 0.502 rg
+211.8777952755905289 19.8427559055116944 Td
+(CRM Comercial · Reto Vigilancia · Página 1 de 3) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 7178
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 779.5277952755905062 Td
+(3. Numeración legal / contable) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 762.5199212598424765 Td
+(Si la DIAN o un cliente pregunta "muéstrame todas las cotizaciones de escoltas del 2026", sale en un solo filtro.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 739.8427559055118081 Td
+(4. Plantillas distintas por línea) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 722.8348818897637784 Td
+(Vigilancia cotiza en puestos × turnos × salario integral × factor prestacional. CCTV cotiza en equipos +) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 708.6616535433070112 Td
+(instalación + mantenimiento mensual. GPS cotiza en equipos + activación + mensualidad por vehículo. Son) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 694.4884251968503577 Td
+(modelos de cotización distintos, con campos diferentes.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 671.8112598425196893 Td
+(5. Tiempos de aprobación distintos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 654.8033858267716596 Td
+(Una cotización de un puesto de vigilancia se aprueba rápido. Una de 50 cámaras + servidor + integraciones) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 640.6301574803148924 Td
+(puede tomar semanas. Mezclarlas en un solo flujo distorsiona los reportes.) Tj
+ET
+0.12 0.11 0.29 rg
+0. 640.6301574803148924 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 615.1183464566928478 Td
+(Productos vs Servicios en los renglones) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 578.2679527559055259 Td
+(Una sola cotización debe permitir mezclar ambos, porque en este negocio casi nunca van separados.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 555.5907874015747439 Td
+(Ejemplo: Cotización de Vigilancia con CCTV) Tj
+ET
+0.96 0.97 0.98 rg
+51.0236220472441033 547.086850393700729 493.2283464566929752 -113.3858267716535551 re
+f
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 535.748267716535338 Td
+(LÍNEA: VIG-CCT \(Vigilancia + Cámaras\)) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 522.9923622047243725 Td
+(------------------------------------------------) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 510.2364566929133503 Td
+(SERVICIO  Puesto vigilante 24h x 30 días   1  8.500.000  8.500.000) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 497.480551181102328 Td
+(SERVICIO  Supervisor zona x 30 días        1  2.200.000  2.200.000) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 484.7246456692913057 Td
+(PRODUCTO  Cámara IP domo PTZ 4MP           4    650.000  2.600.000) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 471.9687401574802834 Td
+(PRODUCTO  NVR 16 canales 4TB               1  2.400.000  2.400.000) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 459.2128346456692611 Td
+(SERVICIO  Instalación y configuración      1  1.800.000  1.800.000) Tj
+ET
+BT
+/F5 9 Tf
+10.3499999999999996 TL
+0.118 0.106 0.294 rg
+56.6929133858267775 446.4569291338582389 Td
+(SERVICIO  Monitoreo 24/7 mensual           1  1.500.000  1.500.000) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 428.0317322834645211 Td
+(Cada renglón tiene un tipo: Producto o Servicio. Eso te sirve para:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 411.0238582677164914 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 411.0238582677164914 Td
+(Aplicar IVA distinto si el régimen lo requiere \(en Colombia los servicios de vigilancia tienen base AIU) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 396.850629921259781 Td
+(especial, distinto a productos físicos\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 382.6774015748030706 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 382.6774015748030706 Td
+(Generar conceptos separados para facturación.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 368.5041732283464171 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 368.5041732283464171 Td
+(Calcular costos: el producto tiene costo de compra; el servicio tiene costo laboral \(salario + prestaciones +) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 354.3309448818897067 Td
+(dotación + ARL\).) Tj
+ET
+0.12 0.11 0.29 rg
+0. 357.1655905511810261 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 331.6537795275589815 Td
+(Lo crítico que NO puede faltar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 294.8033858267715459 Td
+(Esto es lo que diferencia un CRM genérico de uno que sirve a una empresa de vigilancia colombiana:) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 272.1262204724408775 Td
+(1. Cálculo AIU \(Administración + Imprevistos + Utilidad\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 255.1183464566928478 Td
+(Es la base del negocio de vigilancia en Colombia. La cotización debe permitir capturar:) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 238.1104724409448181 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 238.1104724409448181 Td
+(Costo del puesto/servicio \(todos los componentes laborales\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 223.9372440944881646 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 223.9372440944881646 Td
+(% AIU) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 209.7640157480313974 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 209.7640157480313974 Td
+(IVA solo sobre el AIU, NO sobre el costo total del servicio) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 189.9214960629919915 Td
+(2. Vigencia legal de la oferta) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 172.9136220472439618 Td
+(Supervigilancia exige fechas claras y mención de póliza de cumplimiento.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 150.2364566929132934 Td
+(3. Tipo de modalidad) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 133.2285826771652637 Td
+(8 horas, 12 horas, 24 horas, fines de semana, festivos.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 110.5514173228345953 Td
+(4. Dotación incluida) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 93.5435433070865656 Td
+(Cuántos uniformes, equipos de comunicación, armamento.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 70.8663779527557836 Td
+(5. Pólizas y certificaciones) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.42 0.447 0.502 rg
+211.8777952755905289 19.8427559055116944 Td
+(CRM Comercial · Reto Vigilancia · Página 2 de 3) Tj
+ET
+endstream
+endobj
+7 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 8 0 R
+>>
+endobj
+8 0 obj
+<<
+/Length 7308
+>>
+stream
+0.5670000000000001 w
+0 G
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 785.1970866141732586 Td
+(La cotización profesional debe incluir referencias a las pólizas de la empresa \(cumplimiento, RC) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 771.0238582677164914 Td
+(extracontractual\).) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 748.346692913385823 Td
+(6. Recargos automáticos) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 731.3388188976377933 Td
+(Nocturno, dominical, hora extra — calculados automáticamente según modalidad.) Tj
+ET
+0.12 0.11 0.29 rg
+0. 731.3388188976377933 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 705.8270078740157487 Td
+(Plan de implementación en el CRM \(por etapas\)) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 663.3073228346456744 Td
+(Paso 1 — Líneas de Servicio \(lo más urgente\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 646.2994488188976447 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 646.2994488188976447 Td
+(Crear módulo "Líneas de Servicio" en Configuración.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 632.1262204724408775 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 632.1262204724408775 Td
+(Cada línea tiene: código \(3 letras\), nombre, color, IVA por defecto, % AIU por defecto, prefijo de cotización.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 617.952992125984224 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 617.952992125984224 Td
+(En el formulario de Cotización, primer campo después de Empresa: seleccionar Línea de Servicio.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 603.7797637795274568 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 603.7797637795274568 Td
+(Consecutivo independiente por línea: COT-VIG-00001, COT-ESC-00001, etc.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 589.6065354330708033 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 589.6065354330708033 Td
+(Filtros y reportes por línea.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 569.7640157480313974 Td
+(Paso 2 — Tipo Producto / Servicio en los renglones) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 552.7561417322833677 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 552.7561417322833677 Td
+(Cada detalle tiene un campo Tipo: Producto o Servicio.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 538.5829133858267141 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 538.5829133858267141 Td
+(Visualmente diferente \(icono o color\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 524.4096850393700606 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 524.4096850393700606 Td
+(En los totales del PDF aparece desglose: Total Productos, Total Servicios, Total General.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 504.5671653543306547 Td
+(Paso 3 — Plantillas de Cotización por Línea) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 487.559291338582625 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 487.559291338582625 Td
+(Cada Línea tiene una plantilla con renglones predefinidos.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 473.3860629921259147 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 473.3860629921259147 Td
+(Cuando seleccionas "Vigilancia 24h", se autopopulan los renglones típicos \(puesto vigilante, supervisor,) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 459.2128346456692611 Td
+(dotación, AIU, póliza\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 445.0396062992125508 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 445.0396062992125508 Td
+(Esto es lo que más tiempo ahorra a los vendedores.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 425.1970866141731449 Td
+(Paso 4 — Cálculo AIU) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 408.1892125984251152 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 408.1892125984251152 Td
+(Campo AIU% en la cotización \(con default por línea\).) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 394.0159842519684616 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 394.0159842519684616 Td
+(IVA aplicado sobre el AIU, no sobre el subtotal completo.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 379.8427559055117513 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 379.8427559055117513 Td
+(Reflejado en PDF y email.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.118 0.106 0.294 rg
+51.0236220472441033 360.0002362204724022 Td
+(Paso 5 — Reportes por Línea) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 342.9923622047243725 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 342.9923622047243725 Td
+(Pipeline por línea, tasa de conversión, valor promedio, días de cierre.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.118 0.227 0.541 rg
+51.0236220472441033 328.8191338582676053 Td
+(•) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+65.1968503937007995 328.8191338582676053 Td
+(Comisiones por vendedor segmentadas por línea.) Tj
+ET
+0.12 0.11 0.29 rg
+0. 331.6537795275589815 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 306.1419685039369369 Td
+(Consejo de negocio \(no técnico\)) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 269.2915748031495013 Td
+(Antes de meternos a programar, es mejor listar con el dueño o gerente TODAS las líneas que SÍ van a cotizar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 255.1183464566928478 Td
+(este año. No las del futuro hipotético. Si solo van a manejar 3 líneas, no te metas en 7. Es más fácil agregar) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 240.9451181102361943 Td
+(después que tener un sistema sobrediseñado.) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 218.2679527559054122 Td
+(El AIU es un tema fiscal sensible. El contador debe validar cómo quiere que el sistema lo calcule, porque cada) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 204.0947244094487587 Td
+(empresa de vigilancia lo aplica distinto y la DIAN ha sancionado por errores.) Tj
+ET
+0.12 0.11 0.29 rg
+0. 204.0947244094487303 595.2755905511811534 -39.6850393700787407 re
+f
+BT
+/F2 16 Tf
+18.3999999999999986 TL
+1. g
+51.0236220472441033 178.5829133858267141 Td
+(Próximo paso sugerido) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 141.7325196850392786 Td
+(Arrancar por el Paso 1 \(Líneas de Servicio + consecutivo independiente\). Es el cambio con mayor impacto y) Tj
+ET
+BT
+/F1 10 Tf
+11.5 TL
+0.157 g
+51.0236220472441033 127.559291338582625 Td
+(resuelve directamente el reto planteado. Los demás pasos se hacen en sesiones siguientes.) Tj
+ET
+BT
+/F1 8 Tf
+9.1999999999999993 TL
+0.42 0.447 0.502 rg
+211.8777952755905289 19.8427559055116944 Td
+(CRM Comercial · Reto Vigilancia · Página 3 de 3) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R 7 0 R ]
+/Count 3
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+21 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+22 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 9 0 R
+/F2 10 0 R
+/F3 11 0 R
+/F4 12 0 R
+/F5 13 0 R
+/F6 14 0 R
+/F7 15 0 R
+/F8 16 0 R
+/F9 17 0 R
+/F10 18 0 R
+/F11 19 0 R
+/F12 20 0 R
+/F13 21 0 R
+/F14 22 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+23 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20260407113421-05'00')
+>>
+endobj
+24 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 25
+0000000000 65535 f 
+0000020373 00000 n 
+0000022206 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000005509 00000 n 
+0000005646 00000 n 
+0000012876 00000 n 
+0000013013 00000 n 
+0000020442 00000 n 
+0000020567 00000 n 
+0000020698 00000 n 
+0000020832 00000 n 
+0000020970 00000 n 
+0000021094 00000 n 
+0000021223 00000 n 
+0000021355 00000 n 
+0000021491 00000 n 
+0000021619 00000 n 
+0000021746 00000 n 
+0000021875 00000 n 
+0000022008 00000 n 
+0000022110 00000 n 
+0000022458 00000 n 
+0000022544 00000 n 
+trailer
+<<
+/Size 25
+/Root 24 0 R
+/Info 23 0 R
+/ID [ <CFC6D5FDF65AD06258FF5E69E3723DE8> <CFC6D5FDF65AD06258FF5E69E3723DE8> ]
+>>
+startxref
+22648
+%%EOF
