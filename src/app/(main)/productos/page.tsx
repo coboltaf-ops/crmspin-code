@@ -246,7 +246,7 @@ export default function ProductosPage() {
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Precio (sin decimales) *</label>
+              <label style={labelStyle}>Precio *</label>
               {numberInput(selected.precio_unitario, v => setSelected({ ...selected, precio_unitario: Math.round(v) }), { step: '1' })}
             </div>
             <div>

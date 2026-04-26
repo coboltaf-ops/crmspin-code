@@ -175,7 +175,7 @@ export default function TarifarioPage() {
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Precio (sin decimales) *</label>
+              <label style={labelStyle}>Precio *</label>
               <input type="number" step="1" min="0" value={selected.precio || ''} onChange={e => setSelected({ ...selected, precio: parseFloat(e.target.value) || 0 })} required style={inputStyle} />
             </div>
             <div>
