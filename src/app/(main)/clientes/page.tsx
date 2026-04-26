@@ -1250,10 +1250,13 @@ export default function ClientesPage() {
 
       {tab === 'reportes' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div style={{ background: '#dc2626', color: '#fff', padding: '20px', borderRadius: 12, fontSize: 18, fontWeight: 900, textAlign: 'center', border: '4px solid #fbbf24' }}>
+            🚨 DEPLOY DIAGNÓSTICO v3 — Si ves este banner ROJO, el código nuevo SÍ está activo. Haz scroll completo hacia abajo para ver el reporte DIAN debajo del panel general.
+          </div>
           <ReportPanel title="Reporte de Clientes" columns={reportColumns} rows={reportRows} filters={reportFilters} />
-          <div style={{ height: 1, background: 'rgba(255,255,255,0.1)' }} />
-          <div>
-            <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 800, marginBottom: 12 }}>📋 Datos Cliente Variables DIAN</h2>
+          <div style={{ height: 4, background: '#fbbf24' }} />
+          <div style={{ background: 'rgba(220,38,38,0.15)', border: '3px solid #dc2626', borderRadius: 12, padding: 16 }}>
+            <h2 style={{ color: '#fbbf24', fontSize: 22, fontWeight: 900, marginBottom: 12 }}>📋 DATOS CLIENTE VARIABLES DIAN ⬇️</h2>
             <ReportPanel title="Datos Cliente Variables DIAN" columns={dianColumns} rows={dianRows} filters={dianFilters} />
           </div>
         </div>
