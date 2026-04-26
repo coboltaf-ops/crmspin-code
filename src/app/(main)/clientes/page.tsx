@@ -1124,44 +1124,36 @@ export default function ClientesPage() {
     { label: 'Clase Cliente', key: 'clase_cliente', options: [...new Set(clientes.map(c => c.clase_cliente).filter(Boolean))] },
   ]
 
-  // Reporte DIAN — Variables de Cálculos según DIAN
+  // Reporte: Datos Cliente Variables DIAN
   const dianColumns = [
     { header: 'Razón Social', key: 'razon_social', width: 28 },
     { header: 'Tipo Documento', key: 'tipo_identificacion', width: 14 },
-    { header: 'Nro. Documento', key: 'nro_documento', width: 14 },
-    { header: 'DV', key: 'digito_verificacion', width: 6 },
-    { header: 'Régimen IVA', key: 'regimen_iva', width: 14 },
-    { header: 'Clasif. Tributaria', key: 'clasificacion_tributaria', width: 16 },
-    { header: 'Clase Cliente', key: 'clase_cliente', width: 14 },
-    { header: 'Gran Contrib.', key: 'gran_contribuyente', width: 12 },
-    { header: 'Autoretenedor', key: 'autoretenedor', width: 12 },
-    { header: 'Agente Retenedor', key: 'agente_retenedor', width: 14 },
-    { header: 'Ret. Fuente %', key: 'retencion_fuente_pct', width: 10 },
+    { header: 'Número', key: 'nro_documento', width: 14 },
+    { header: 'Dígito Validador', key: 'digito_verificacion', width: 10 },
     { header: 'Tipo Ret. Fuente', key: 'tipo_retencion_fuente', width: 14 },
-    { header: 'Ret. IVA %', key: 'retencion_iva_pct', width: 10 },
     { header: 'Tipo Ret. IVA', key: 'tipo_retencion_iva', width: 14 },
-    { header: 'Ret. ICA %', key: 'retencion_ica_pct', width: 10 },
+    { header: 'Naturaleza Cuenta', key: 'naturaleza_cuenta', width: 14 },
+    { header: 'Clasif. Tributaria', key: 'clasificacion_tributaria', width: 16 },
+    { header: 'Responsable IVA', key: 'regimen_iva', width: 14 },
+    { header: 'Auto Retenedor', key: 'autoretenedor', width: 12 },
+    { header: 'Gran Contribuyente', key: 'gran_contribuyente', width: 14 },
   ]
   const dianRows = filtered.map(c => ({
     razon_social: c.razon_social,
     tipo_identificacion: c.tipo_identificacion || '',
     nro_documento: c.nro_documento,
     digito_verificacion: c.digito_verificacion || '',
-    regimen_iva: c.regimen_iva || '',
-    clasificacion_tributaria: c.clasificacion_tributaria || '',
-    clase_cliente: c.clase_cliente || '',
-    gran_contribuyente: c.gran_contribuyente || '',
-    autoretenedor: c.autoretenedor || '',
-    agente_retenedor: c.agente_retenedor || '',
-    retencion_fuente_pct: c.retencion_fuente_pct || 0,
     tipo_retencion_fuente: c.tipo_retencion_fuente || '',
-    retencion_iva_pct: c.retencion_iva_pct || 0,
     tipo_retencion_iva: c.tipo_retencion_iva || '',
-    retencion_ica_pct: c.retencion_ica_pct || 0,
+    naturaleza_cuenta: c.naturaleza_cuenta || '',
+    clasificacion_tributaria: c.clasificacion_tributaria || '',
+    regimen_iva: c.regimen_iva || '',
+    autoretenedor: c.autoretenedor || '',
+    gran_contribuyente: c.gran_contribuyente || '',
   }))
   const dianFilters = [
     { label: 'Clase Cliente', key: 'clase_cliente', options: [...new Set(clientes.map(c => c.clase_cliente).filter(Boolean))] },
-    { label: 'Régimen IVA', key: 'regimen_iva', options: [...new Set(clientes.map(c => c.regimen_iva).filter(Boolean))] },
+    { label: 'Responsable IVA', key: 'regimen_iva', options: [...new Set(clientes.map(c => c.regimen_iva).filter(Boolean))] },
     { label: 'Clasif. Tributaria', key: 'clasificacion_tributaria', options: [...new Set(clientes.map(c => c.clasificacion_tributaria).filter(Boolean))] },
     { label: 'Gran Contribuyente', key: 'gran_contribuyente', options: [...new Set(clientes.map(c => c.gran_contribuyente).filter(Boolean))] },
   ]
@@ -1261,8 +1253,8 @@ export default function ClientesPage() {
           <ReportPanel title="Reporte de Clientes" columns={reportColumns} rows={reportRows} filters={reportFilters} />
           <div style={{ height: 1, background: 'rgba(255,255,255,0.1)' }} />
           <div>
-            <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 800, marginBottom: 12 }}>📋 Variables de Cálculos según DIAN</h2>
-            <ReportPanel title="Variables de Cálculos según DIAN" columns={dianColumns} rows={dianRows} filters={dianFilters} />
+            <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 800, marginBottom: 12 }}>📋 Datos Cliente Variables DIAN</h2>
+            <ReportPanel title="Datos Cliente Variables DIAN" columns={dianColumns} rows={dianRows} filters={dianFilters} />
           </div>
         </div>
       )}
