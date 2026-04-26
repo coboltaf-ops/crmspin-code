@@ -207,27 +207,14 @@ export default function ProductosPage() {
         <form onSubmit={handleSave} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nuevo'} Producto</h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16 }}>
             <div>
               <label style={labelStyle}>Código *</label>
               <input value={selected.codigo} onChange={e => setSelected({ ...selected, codigo: e.target.value })} required style={inputStyle} placeholder="Ej. PRD-001" />
             </div>
             <div>
-              <label style={labelStyle}>Fecha Registro</label>
-              <input value={fDate(selected.fecha_registro)} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
-            </div>
-            <div>
               <label style={labelStyle}>Descripción *</label>
               <input value={selected.descripcion} onChange={e => setSelected({ ...selected, descripcion: e.target.value })} required style={inputStyle} />
-            </div>
-            <div>
-              <label style={labelStyle}>Razón Social</label>
-              <select value={selected.razon_social} onChange={e => setSelected({ ...selected, razon_social: e.target.value })} style={inputStyle}>
-                <option value="">— Sin asignar —</option>
-                {clientes.filter(c => c.situacion === 'Activo').map(c => (
-                  <option key={c.id} value={c.razon_social}>{c.razon_social}</option>
-                ))}
-              </select>
             </div>
             <div>
               <label style={labelStyle}>Tipo Empaque</label>
@@ -244,10 +231,10 @@ export default function ProductosPage() {
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Tipo de Precio</label>
-              <select value={selected.tipo_precio} onChange={e => setSelected({ ...selected, tipo_precio: e.target.value })} style={inputStyle}>
+              <label style={labelStyle}>Unid/Medida</label>
+              <select value={selected.unidad_medida} onChange={e => setSelected({ ...selected, unidad_medida: e.target.value })} style={inputStyle}>
                 <option value="">Seleccione...</option>
-                {refOptions('tipo_precio').map(o => <option key={o} value={o}>{o}</option>)}
+                {refOptions('unidad_medida').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
             </div>
             <div>
@@ -255,7 +242,7 @@ export default function ProductosPage() {
               {numberInput(selected.precio_unitario, v => setSelected({ ...selected, precio_unitario: Math.round(v) }), { step: '1' })}
             </div>
             <div>
-              <label style={labelStyle}>Fecha Vigencia Precio</label>
+              <label style={labelStyle}>Fecha Vigencia</label>
               <input type="date" value={selected.fecha_vigencia_precio} onChange={e => setSelected({ ...selected, fecha_vigencia_precio: e.target.value })} style={inputStyle} />
             </div>
             <div>
@@ -263,6 +250,29 @@ export default function ProductosPage() {
               <select value={selected.situacion} onChange={e => setSelected({ ...selected, situacion: e.target.value })} style={inputStyle}>
                 {refOptions('situacion_lista').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginTop: 16 }}>
+            <div>
+              <label style={labelStyle}>Razón Social</label>
+              <select value={selected.razon_social} onChange={e => setSelected({ ...selected, razon_social: e.target.value })} style={inputStyle}>
+                <option value="">— Sin asignar —</option>
+                {clientes.filter(c => c.situacion === 'Activo').map(c => (
+                  <option key={c.id} value={c.razon_social}>{c.razon_social}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Tipo de Precio</label>
+              <select value={selected.tipo_precio} onChange={e => setSelected({ ...selected, tipo_precio: e.target.value })} style={inputStyle}>
+                <option value="">Seleccione...</option>
+                {refOptions('tipo_precio').map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Fecha Registro</label>
+              <input value={fDate(selected.fecha_registro)} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
             </div>
           </div>
 
@@ -304,14 +314,7 @@ export default function ProductosPage() {
 
           <div style={sectionStyle}>
             <p style={sectionTitleStyle}>Datos Inventario</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16 }}>
-              <div>
-                <label style={labelStyle}>Unid/Medida</label>
-                <select value={selected.unidad_medida} onChange={e => setSelected({ ...selected, unidad_medida: e.target.value })} style={inputStyle}>
-                  <option value="">Seleccione...</option>
-                  {refOptions('unidad_medida').map(o => <option key={o} value={o}>{o}</option>)}
-                </select>
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
               <div>
                 <label style={labelStyle}>Existencia Actual</label>
                 {numberInput(selected.existencia_actual, v => setSelected({ ...selected, existencia_actual: v }), { step: '1' })}
