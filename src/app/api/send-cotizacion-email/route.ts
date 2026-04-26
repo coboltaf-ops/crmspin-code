@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
-import jsPDF from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import { generarCotizacionPdf } from '@/shared/lib/pdf-cotizacion'
 
 function fmtMoney(n: number) {
   return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -30,86 +29,43 @@ export async function POST(req: Request) {
     const retencion = subtotal * ((cotizacion.pct_retencion || 0) / 100)
     const total = subtotal + impuesto - retencion
 
-    // Generate PDF
-    const doc = new jsPDF()
-    doc.setFillColor(30, 27, 75)
-    doc.rect(0, 0, 210, 32, 'F')
-
-    // Logo si existe
-    const logoUrl = empresa?.logo_url || ''
-    let logoFmt: 'PNG' | 'JPEG' | null = null
-    if (logoUrl.startsWith('data:image/png')) logoFmt = 'PNG'
-    else if (logoUrl.startsWith('data:image/jpeg') || logoUrl.startsWith('data:image/jpg')) logoFmt = 'JPEG'
-    if (logoFmt) { try { doc.addImage(logoUrl, logoFmt, 6, 3, 26, 26) } catch { /* ignore bad logo */ } }
-
-    const xText = logoFmt ? 38 : 14
-    doc.setTextColor(255, 255, 255)
-    doc.setFontSize(16)
-    doc.text(empresa?.nombre || 'COTIZACIÓN', xText, 12)
-    doc.setFontSize(9)
-    if (empresa?.nro_documento) doc.text(`NIT: ${empresa.nro_documento}`, xText, 18)
-    const empSub = [empresa?.direccion, empresa?.ciudad].filter(Boolean).join(', ')
-    if (empSub) doc.text(empSub, xText, 23)
-    doc.setFontSize(13)
-    doc.text(`COTIZACIÓN ${cotizacion.codigo}`, xText, 29)
-    doc.setFontSize(10)
-    doc.text(`Fecha: ${fDate(cotizacion.fecha_emision)}`, 150, 16)
-    doc.text(`Vence: ${fDate(cotizacion.fecha_vencimiento)}`, 150, 22)
-
-    doc.setTextColor(0, 0, 0)
-
-    // Bloque DATOS DEL CLIENTE
-    let y = 40
-    doc.setFillColor(245, 247, 250)
-    doc.rect(10, y - 4, 190, 36, 'F')
-    doc.setFontSize(10)
-    doc.setFont('helvetica', 'bold')
-    doc.setTextColor(30, 58, 138)
-    doc.text('DATOS DEL CLIENTE', 14, y)
-    doc.setFont('helvetica', 'normal')
-    doc.setTextColor(0, 0, 0)
-    doc.setFontSize(9)
-    doc.text(`Empresa: ${cliente?.razon_social || cotizacion.cliente_nombre || '—'}`, 14, y + 6)
-    doc.text(`${cliente?.tipo_identificacion || 'ID'}: ${cliente?.nro_documento || '—'}`, 110, y + 6)
-    doc.text(`Dirección: ${cliente?.direccion || '—'}`, 14, y + 12)
-    doc.text(`Ciudad: ${cliente?.ciudad || '—'}`, 110, y + 12)
-    doc.text(`País: ${cliente?.pais || '—'}`, 14, y + 18)
-    doc.text(`Contacto: ${cotizacion.contacto_nombre || '—'}`, 110, y + 18)
-    doc.text(`Condición de Pago: ${cotizacion.condicion_pago}`, 14, y + 24)
-    doc.text(`Moneda: ${cotizacion.tipo_moneda || 'Pesos Colombianos'}`, 110, y + 24)
-    doc.text(`Vendedor: ${cotizacion.vendedor || cotizacion.responsable}`, 14, y + 30)
-    doc.text(`Fecha Aprobación: ${cotizacion.fecha_aprobacion ? fDate(cotizacion.fecha_aprobacion) : '—'}`, 110, y + 30)
-    y += 36
-
-    autoTable(doc, {
-      startY: y + 4,
-      head: [['Código', 'Descripción', 'Unidad Medida', 'Cantidad', 'Precio', 'Subtotal']],
-      body: cotizacion.detalles.map((d: { codigo_producto: string; descripcion: string; cantidad: number; unidad_medida: string; precio_unitario: number; subtotal: number }) => [
-        d.codigo_producto, d.descripcion, d.unidad_medida, d.cantidad,
-        `${fmtMoney(d.precio_unitario)}`, `${fmtMoney(d.subtotal)}`
-      ]),
-      styles: { fontSize: 8, cellPadding: 3 },
-      headStyles: { fillColor: [30, 27, 75], textColor: 255 },
-      alternateRowStyles: { fillColor: [245, 247, 250] },
+    // Generate PDF con el formato SPIN
+    const doc = generarCotizacionPdf({
+      empresa: {
+        nombre: empresa?.nombre || 'COTIZACIÓN',
+        logo_url: empresa?.logo_url,
+        nit: empresa?.nro_documento,
+        direccion: empresa?.direccion,
+        telefono: empresa?.telefono,
+        ciudad: empresa?.ciudad,
+        correo: empresa?.correo,
+        pagina_web: empresa?.pagina_web,
+      },
+      cliente: {
+        razon_social: cliente?.razon_social || cotizacion.cliente_nombre || '—',
+        nit: cliente?.nro_documento,
+        direccion: cliente?.direccion,
+        ciudad: cliente?.ciudad,
+        vendedor: cotizacion.vendedor || cotizacion.responsable,
+      },
+      cotizacion: {
+        codigo: cotizacion.codigo,
+        fecha_emision: cotizacion.fecha_emision,
+        fecha_vencimiento: cotizacion.fecha_vencimiento,
+        condicion_pago: cotizacion.condicion_pago,
+        pct_impuesto: cotizacion.pct_impuesto || 19,
+        pct_retencion: cotizacion.pct_retencion || 0,
+        observaciones: cotizacion.observaciones,
+        detalles: cotizacion.detalles.map((d: { codigo_producto: string; descripcion: string; cantidad: number; precio_unitario: number; subtotal: number }) => ({
+          codigo: d.codigo_producto,
+          descripcion: d.descripcion,
+          precio_unitario: d.precio_unitario,
+          cantidad: d.cantidad,
+          subtotal: d.subtotal,
+        })),
+        anulada: cotizacion.situacion === 'Anulada',
+      },
     })
-
-    const finalY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable?.finalY || 150
-    doc.setFontSize(10)
-    doc.text(`Subtotal antes de impuestos: ${fmtMoney(subtotal)}`, 130, finalY + 10)
-    doc.text(`Monto IVA (${cotizacion.pct_impuesto || 0}%): ${fmtMoney(impuesto)}`, 130, finalY + 16)
-    doc.setTextColor(180, 30, 30)
-    doc.text(`Retención (${cotizacion.pct_retencion || 0}%): -${fmtMoney(retencion)}`, 130, finalY + 22)
-    doc.setTextColor(30, 58, 138)
-    doc.setFontSize(12)
-    doc.setFont('helvetica', 'bold')
-    doc.text(`VALOR NETO A PAGAR: ${fmtMoney(total)}`, 130, finalY + 32)
-    doc.setTextColor(0, 0, 0)
-
-    if (cotizacion.observaciones) {
-      doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9)
-      doc.text(`Observaciones: ${cotizacion.observaciones}`, 14, finalY + 10)
-    }
 
     const pdfBuffer = Buffer.from(doc.output('arraybuffer'))
 

@@ -18,6 +18,7 @@ import SeguimientoPanel from '@/shared/components/seguimiento-panel'
 import DocumentosPanel from '@/shared/components/documentos-panel'
 import { useAsistenteStore } from '@/shared/stores/asistente-store'
 import { Seguimiento } from '@/shared/types/seguimiento'
+import { generarCotizacionPdf } from '@/shared/lib/pdf-cotizacion'
 
 const today = todayColombia()
 
@@ -162,67 +163,44 @@ export default function CotizacionesPage() {
   }
 
   const generatePDF = (cot: Cotizacion) => {
-    const { subtotal, impuesto, retencion, total } = calcTotals(cot.detalles, cot.pct_impuesto, cot.pct_retencion || 0)
     const cli = clientes.find(c => c.id === cot.cliente_id)
-    const rows = cot.detalles.map((d, i) => `
-      <tr style="background:${i % 2 === 0 ? '#f9fafb' : '#fff'}">
-        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-family:monospace;font-size:12px">${d.codigo_producto}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb">${d.descripcion}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center">${d.unidad_medida}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center">${d.cantidad}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:right">${fmtMoney(d.precio_unitario)}</td>
-        <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:right;font-weight:600">${fmtMoney(d.subtotal)}</td>
-      </tr>`).join('')
-    const emp = empresa
-    const html = `<!DOCTYPE html><html><head><title>Cotización ${cot.codigo}</title>
-      <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Segoe UI',Arial;font-size:13px;padding:32px}</style></head><body>
-      <div style="display:flex;justify-content:space-between;border-bottom:3px solid #1e3a8a;padding-bottom:20px;margin-bottom:24px">
-        <div>
-          ${emp ? `<h2 style="font-size:18px;color:#1e3a8a;font-weight:800">${emp.nombre}</h2>
-          <p style="color:#6b7280;font-size:12px">${emp.direccion || ''}${emp.ciudad ? ', ' + emp.ciudad : ''}</p>
-          <p style="color:#6b7280;font-size:12px">NIT: ${emp.nro_documento || ''}</p>` : ''}
-          <h1 style="font-size:22px;color:#8b0000;margin-top:12px;font-weight:900">COTIZACIÓN</h1>
-          <p style="font-family:monospace;font-size:18px;font-weight:900;color:#8b0000">${cot.codigo}</p>
-        </div>
-        <div style="text-align:right"><p style="font-size:16px;font-weight:600;color:#4169E1">Fecha: ${fDate(cot.fecha_emision)}</p><p style="font-size:16px;font-weight:600;color:#4169E1">Vence: ${fDate(cot.fecha_vencimiento)}</p></div>
-      </div>
-      <div style="background:#f9fafb;padding:16px;border-radius:8px;margin-bottom:24px;border:1px solid #e5e7eb">
-        <p style="color:#4169E1;font-size:11px;font-weight:700;margin-bottom:8px;font-weight:700">DATOS DEL CLIENTE</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div><p style="color:#4169E1;font-size:11px;font-weight:700">EMPRESA</p><p style="font-weight:700">${cot.cliente_nombre}</p></div>
-          <div><p style="color:#4169E1;font-size:11px;font-weight:700">TIPO DOCUMENTO / NRO</p><p style="font-weight:700">${cli?.tipo_identificacion || '—'} ${cli?.nro_documento || '—'}</p></div>
-          <div><p style="color:#4169E1;font-size:11px;font-weight:700">DIRECCIÓN</p><p>${cli?.direccion || '—'}</p></div>
-          <div><p style="color:#4169E1;font-size:11px;font-weight:700">CIUDAD</p><p>${cli?.ciudad || '—'}</p></div>
-          <div><p style="color:#4169E1;font-size:11px;font-weight:700">PAÍS</p><p>${cli?.pais || '—'}</p></div>
-          <div><p style="color:#4169E1;font-size:11px;font-weight:700">CONTACTO</p><p>${cot.contacto_nombre || '—'}</p></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:16px;margin-bottom:24px">
-        <div><p style="color:#4169E1;font-size:11px;font-weight:700">CONDICIÓN DE PAGO</p><p>${cot.condicion_pago}</p></div>
-        <div><p style="color:#4169E1;font-size:11px;font-weight:700">MONEDA</p><p>${cot.tipo_moneda || 'Pesos Colombianos'}</p></div>
-        <div><p style="color:#4169E1;font-size:11px;font-weight:700">VENDEDOR</p><p>${cot.vendedor || '—'}</p></div>
-        <div><p style="color:#4169E1;font-size:11px;font-weight:700">FECHA APROBACIÓN</p><p>${cot.fecha_aprobacion ? fDate(cot.fecha_aprobacion) : '—'}</p></div>
-      </div>
-      <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
-        <thead><tr style="background:#1e3a8a">
-          ${['Código','Descripción','Unidad Medida','Cantidad','Precio','Subtotal'].map(h => `<th style="padding:10px 12px;color:#fff;font-size:11px;text-align:left">${h}</th>`).join('')}
-        </tr></thead><tbody>${rows}</tbody>
-      </table>
-      <div style="text-align:right;margin-bottom:24px;background:#f9fafb;padding:14px 16px;border-radius:8px;border:1px solid #e5e7eb">
-        <p style="margin:4px 0">Subtotal antes de impuestos: <strong>${fmtMoney(subtotal)}</strong></p>
-        <p style="margin:4px 0">Monto IVA (${cot.pct_impuesto}%): <strong>${fmtMoney(impuesto)}</strong></p>
-        <p style="margin:4px 0;color:#b91c1c">Retención (${cot.pct_retencion || 0}%): <strong>−${fmtMoney(retencion)}</strong></p>
-        <p style="font-size:18px;color:#1e3a8a;border-top:2px solid #1e3a8a;padding-top:8px;margin-top:8px">VALOR NETO A PAGAR: <strong>${fmtMoney(total)}</strong></p>
-      </div>
-      ${cot.observaciones ? `<div style="background:#f9fafb;padding:12px;border-radius:8px;margin-bottom:24px"><p style="color:#4169E1;font-size:11px;font-weight:700">OBSERVACIONES</p><p>${cot.observaciones}</p></div>` : ''}
-      ${cot.situacion === 'Anulada' ? `<div style="text-align:center;margin:32px 0;padding:24px;border:6px solid #dc2626;border-radius:12px;background:rgba(220,38,38,0.05)"><p style="color:#dc2626;font-size:64px;font-weight:900;letter-spacing:8px;margin:0;text-shadow:2px 2px 0 rgba(220,38,38,0.2)">A N U L A D A</p></div>` : ''}
-      <div style="display:flex;justify-content:space-around;margin-top:40px">
-        <div style="text-align:center;width:200px"><div style="border-top:1px solid #000;padding-top:4px;font-size:11px">Elaborado por</div><p style="font-weight:700;font-size:11px">${cot.vendedor || cot.responsable}</p></div>
-        <div style="text-align:center;width:200px"><div style="border-top:1px solid #000;padding-top:4px;font-size:11px">Aprobado por</div></div>
-      </div>
-      <script>window.onload=()=>window.print()<\/script></body></html>`
-    const win = window.open('', '_blank', 'width=900,height=700')
-    if (win) { win.document.write(html); win.document.close() }
+    const doc = generarCotizacionPdf({
+      empresa: {
+        nombre: empresa?.nombre || 'COTIZACIÓN',
+        logo_url: empresa?.logo_url,
+        nit: empresa?.nro_documento,
+        direccion: empresa?.direccion,
+        telefono: empresa?.telefono,
+        ciudad: empresa?.ciudad,
+        correo: empresa?.correo,
+        pagina_web: empresa?.pagina_web,
+      },
+      cliente: {
+        razon_social: cli?.razon_social || cot.cliente_nombre || '—',
+        nit: cli?.nro_documento,
+        direccion: cli?.direccion,
+        ciudad: cli?.ciudad,
+        vendedor: cot.vendedor || cot.responsable,
+      },
+      cotizacion: {
+        codigo: cot.codigo,
+        fecha_emision: cot.fecha_emision,
+        fecha_vencimiento: cot.fecha_vencimiento,
+        condicion_pago: cot.condicion_pago,
+        pct_impuesto: cot.pct_impuesto || 19,
+        pct_retencion: cot.pct_retencion || 0,
+        observaciones: cot.observaciones,
+        detalles: cot.detalles.map(d => ({
+          codigo: d.codigo_producto,
+          descripcion: d.descripcion,
+          precio_unitario: d.precio_unitario,
+          cantidad: d.cantidad,
+          subtotal: d.subtotal,
+        })),
+        anulada: cot.situacion === 'Anulada',
+      },
+    })
+    doc.save(`Cotizacion_${cot.codigo}.pdf`)
   }
 
   const statusStyle = (s: string): React.CSSProperties => {
