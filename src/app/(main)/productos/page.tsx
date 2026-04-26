@@ -244,13 +244,6 @@ export default function ProductosPage() {
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Porcentaje IVA</label>
-              <select value={selected.porcentaje_iva} onChange={e => setSelected({ ...selected, porcentaje_iva: e.target.value })} style={inputStyle}>
-                <option value="">Seleccione...</option>
-                {refOptions('porcentaje_impuestos').map(o => <option key={o} value={o}>{o}</option>)}
-              </select>
-            </div>
-            <div>
               <label style={labelStyle}>Tipo de Precio</label>
               <select value={selected.tipo_precio} onChange={e => setSelected({ ...selected, tipo_precio: e.target.value })} style={inputStyle}>
                 <option value="">Seleccione...</option>
@@ -313,7 +306,7 @@ export default function ProductosPage() {
             <p style={sectionTitleStyle}>Datos Inventario</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16 }}>
               <div>
-                <label style={labelStyle}>Tiene Unidad de Medida</label>
+                <label style={labelStyle}>Unid/Medida</label>
                 <select value={selected.unidad_medida} onChange={e => setSelected({ ...selected, unidad_medida: e.target.value })} style={inputStyle}>
                   <option value="">Seleccione...</option>
                   {refOptions('unidad_medida').map(o => <option key={o} value={o}>{o}</option>)}
