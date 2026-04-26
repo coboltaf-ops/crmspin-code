@@ -57,7 +57,7 @@ export default function DatosEmpresaPage() {
 
   const refOptions = (table: string) => (refData[table as keyof typeof refData] || []).filter(r => r.situacion).map(r => r.descripcion)
 
-  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none' }
+  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
   const labelStyle: React.CSSProperties = { color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }
 
@@ -82,7 +82,7 @@ export default function DatosEmpresaPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {[
               { label: 'Código', value: viewDetail.codigo },
-              { label: 'Tipo Identificación', value: viewDetail.tipo_identificacion },
+              { label: 'Tipo Documento', value: viewDetail.tipo_identificacion },
               { label: 'Nro. Documento', value: viewDetail.nro_documento },
               { label: 'Correo', value: viewDetail.correo },
               { label: 'Teléfono', value: viewDetail.telefono },
@@ -115,7 +115,7 @@ export default function DatosEmpresaPage() {
             </div>
           </div>
 
-          <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a', marginTop: 16 }}>Editar</button>
+          <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', marginTop: 16 }}>Editar</button>
           <SeguimientoPanel
             seguimientos={viewDetail.seguimientos || []}
             usuario={`${currentUser?.nombre} ${currentUser?.apellido}`}
@@ -149,7 +149,7 @@ export default function DatosEmpresaPage() {
               <input value={selected.nombre} onChange={e => setSelected({ ...selected, nombre: e.target.value })} required style={inputStyle} />
             </div>
             <div>
-              <label style={labelStyle}>Tipo Identificación</label>
+              <label style={labelStyle}>Tipo Documento</label>
               <select value={selected.tipo_identificacion} onChange={e => setSelected({ ...selected, tipo_identificacion: e.target.value })} style={inputStyle}>
                 {refOptions('tipo_identificacion').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
@@ -190,7 +190,7 @@ export default function DatosEmpresaPage() {
                 )}
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input ref={fileRef} type="file" accept="image/*" onChange={handleLogoUpload} style={{ display: 'none' }} />
-                  <button type="button" onClick={() => fileRef.current?.click()} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Subir Logo</button>
+                  <button type="button" onClick={() => fileRef.current?.click()} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Subir Logo</button>
                   {selected.logo_url && <button type="button" onClick={() => setSelected({ ...selected, logo_url: '' })} style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Quitar</button>}
                 </div>
               </div>
@@ -227,7 +227,7 @@ export default function DatosEmpresaPage() {
           </div>
 
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -243,7 +243,7 @@ export default function DatosEmpresaPage() {
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>Datos Empresa</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Información de las empresas del sistema</p>
         </div>
-        <button onClick={() => { setSelected(emptyEmpresa()); setIsForm(true) }} style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>+ Nueva Empresa</button>
+        <button onClick={() => { setSelected(emptyEmpresa()); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nueva Empresa</button>
       </div>
 
       <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
@@ -251,7 +251,7 @@ export default function DatosEmpresaPage() {
           <thead>
             <tr>
               {['Logo', 'Código', 'Nombre', 'Documento', 'Correo', 'Teléfono', 'Rep. Legal', 'Acciones'].map(h => (
-                <th key={h} style={{ padding: '12px 14px', background: '#1e3a5f', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -265,7 +265,7 @@ export default function DatosEmpresaPage() {
                     <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>—</div>
                   )}
                 </td>
-                <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#4ade80', fontSize: 13, fontFamily: 'monospace' }}>{emp.codigo}</td>
+                <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13, fontFamily: 'monospace' }}>{emp.codigo}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13, fontWeight: 600 }}>{emp.nombre}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{emp.tipo_identificacion} {emp.nro_documento}</td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{emp.correo}</td>
@@ -274,7 +274,7 @@ export default function DatosEmpresaPage() {
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ display: 'flex', gap: 6 }}>
                     <button onClick={() => setViewDetail(emp)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316' }}>Ver</button>
-                    <button onClick={() => { setSelected(emp); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Editar</button>
+                    <button onClick={() => { setSelected(emp); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
                     <button onClick={() => { if (confirm(`¿Eliminar "${emp.nombre}"?`)) deleteEmpresa(emp.id) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>
                   </div>
                 </td>

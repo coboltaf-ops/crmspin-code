@@ -14,6 +14,8 @@ export interface Prospecto {
   correo: string
   nro_movil: string
   origen_prospecto: string
+  como_nos_conocio: string
+  productos_interes: string[]
   detalle_requerimiento: string
   actividad: string
   ciudad: string

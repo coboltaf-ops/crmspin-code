@@ -5,11 +5,12 @@ import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-u
 import { useModulosStore } from '@/features/modulos/store/modulos-store'
 import { useAsistenteStore } from '@/shared/stores/asistente-store'
 import { useClientesStore } from '@/features/clientes/store/clientes-store'
+import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 import { useFlujoListener } from '@/features/flujos/lib/useFlujoListener'
 import { useAutoSeed } from '@/shared/hooks/use-auto-seed'
 
 const ROUTE_KEYWORDS: { keywords: string[]; href: string; label: string }[] = [
-  { keywords: ['empresa', 'empresas', 'cliente', 'clientes'], href: '/clientes', label: 'Empresas' },
+  { keywords: ['empresa', 'empresas', 'cliente', 'clientes'], href: '/clientes', label: 'Clientes' },
   { keywords: ['contacto', 'contactos'], href: '/contactos', label: 'Contactos' },
   { keywords: ['producto', 'productos', 'servicio', 'servicios'], href: '/productos', label: 'Productos' },
   { keywords: ['cotizacion', 'cotizaciones', 'cotización', 'cotizaciones', 'proforma'], href: '/cotizaciones', label: 'Cotizaciones' },
@@ -44,6 +45,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const logout = useCurrentUserStore(s => s.logout)
   const modulos = useModulosStore(s => s.modulos)
   const clientes = useClientesStore(s => s.clientes)
+  const empresa = useEmpresaStore(s => s.empresas[0])
   const { setPending } = useAsistenteStore()
   const [collapsed, setCollapsed] = useState(false)
   const [showAsistente, setShowAsistente] = useState(false)
@@ -67,6 +69,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       body: JSON.stringify({ clientes: activos.map(c => ({ id: c.id, codigo: c.codigo, razon_social: c.razon_social, codigo_acceso: c.codigo_acceso })) }),
     }).catch(() => {})
   }, [clientes])
+
+  // Sincronizar info de la empresa (logo + nombre) al servidor para formularios públicos
+  useEffect(() => {
+    if (!empresa) return
+    fetch('/api/empresa-publico', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        nombre: empresa.nombre,
+        logo_url: empresa.logo_url,
+        nro_documento: empresa.nro_documento,
+        ciudad: empresa.ciudad,
+      }),
+    }).catch(() => {})
+  }, [empresa])
 
   useEffect(() => {
     if (user && !sessionStorage.getItem('asistente-shown')) {
@@ -149,7 +166,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   if (!user) return null
 
   const isAdmin = user.rol.toLowerCase() === 'admin'
-  const configModuleIds = ['usuarios', 'email-marketing', 'flujos', 'datos-empresa', 'disenador-correos', 'modulos']
+  const configModuleIds = ['usuarios', 'email-marketing', 'flujos', 'datos-empresa', 'disenador-correos', 'modulos', 'auditoria']
   const mainItems = modulos
     .filter(m => m.activo && (m.grupo === 'principal' || !configModuleIds.includes(m.id)))
     .filter(m => m.grupo === 'principal')
@@ -166,7 +183,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       {/* Asistente de bienvenida */}
       {showAsistente && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: '#0f1b3d', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 16, padding: 36, width: 480, boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}>
+          <div style={{ background: '#172554', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 16, padding: 36, width: 480, boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginBottom: 8 }}>Hola, {user.nombre} 👋</p>
             <h2 style={{ color: '#ffffff', fontSize: 22, fontWeight: 800, marginBottom: 24 }}>¿Qué deseas hacer?</h2>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -183,7 +200,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 title={listening ? 'Escuchando...' : 'Hablar'}
                 style={{
                   padding: '0 18px', borderRadius: 10, border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer', fontSize: 22,
-                  background: listening ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.2)',
+                  background: listening ? 'rgba(239,68,68,0.3)' : 'rgba(59,130,246,0.2)',
                   color: listening ? '#fca5a5' : '#86efac',
                   animation: listening ? 'pulse 1s infinite' : 'none',
                   transition: 'all 0.2s',
@@ -204,7 +221,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       {pathname === '/dashboard' && (
       <aside style={{
         width: sideW, transition: 'width 0.3s ease', flexShrink: 0,
-        background: '#0f1b3d',
+        background: '#172554',
         borderRight: '1px solid rgba(255,255,255,0.1)',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
@@ -214,9 +231,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             {collapsed ? '☰' : '✕'}
           </button>
           {!collapsed && (
-            <div>
-              <p style={{ color: '#ffffff', fontWeight: 800, fontSize: 16, lineHeight: 1.2 }}>CRM SPIN</p>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>Sistema de Gestión</p>
+            <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+              {empresa?.logo_url ? (
+                <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 48, maxWidth: 160, objectFit: 'contain' }} />
+              ) : (
+                <p style={{ color: '#ffffff', fontWeight: 800, fontSize: 16, lineHeight: 1.2 }}>CRM SPIN</p>
+              )}
             </div>
           )}
         </div>
@@ -320,7 +340,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <main style={{ flex: 1, padding: 24, overflow: 'auto' }}>
         {/* Top bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: '10px 16px', background: 'rgba(255,255,255,0.08)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', position: 'relative' }}>
-          <div />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {empresa?.logo_url ? (
+              <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 40, maxWidth: 120, objectFit: 'contain', background: '#ffffff', borderRadius: 6, padding: 3 }} />
+            ) : (
+              <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 14 }}>{empresa?.nombre || 'CRM SPIN'}</span>
+            )}
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontWeight: 900, fontSize: 14 }}>
               {user.nombre[0]}{user.apellido[0]}
@@ -335,8 +361,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               <button onClick={() => router.push('/dashboard')}
                 style={{
                   padding: '8px 20px', borderRadius: 8,
-                  background: '#1d4ed8', border: '1px solid #2563eb',
-                  color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                  background: '#dc2626', border: '1px solid #ef4444',
+                  color: '#ffffff', fontSize: 13, fontWeight: 800, cursor: 'pointer',
                 }}>
                 Menú Principal
               </button>

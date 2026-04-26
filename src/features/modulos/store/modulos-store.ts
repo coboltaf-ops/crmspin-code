@@ -18,12 +18,12 @@ interface ModulosState {
 const defaultModulos: Modulo[] = [
   // ── Módulos Principales ──
   { id: 'dashboard', label: 'Dashboard', icon: '📊', href: '/dashboard', activo: true, grupo: 'principal' },
-  { id: 'clientes', label: 'Empresas', icon: '🏢', href: '/clientes', activo: true, grupo: 'principal' },
+  { id: 'clientes', label: 'Clientes', icon: '🏢', href: '/clientes', activo: true, grupo: 'principal' },
   { id: 'contactos', label: 'Contactos', icon: '👤', href: '/contactos', activo: true, grupo: 'principal' },
+  { id: 'prospectos', label: 'Prospectos', icon: '🧲', href: '/prospectos', activo: true, grupo: 'principal' },
   { id: 'oportunidades', label: 'Oportunidades', icon: '🎯', href: '/oportunidades', activo: true, grupo: 'principal' },
   { id: 'productos', label: 'Productos', icon: '📦', href: '/productos', activo: true, grupo: 'principal' },
   { id: 'cotizaciones', label: 'Cotizaciones', icon: '📋', href: '/cotizaciones', activo: true, grupo: 'principal' },
-  { id: 'prospectos', label: 'Prospectos', icon: '🧲', href: '/prospectos', activo: true, grupo: 'principal' },
   { id: 'pqrs', label: 'PQRS', icon: '📩', href: '/pqrs', activo: true, grupo: 'principal' },
   { id: 'correos', label: 'Correos Enviados', icon: '📧', href: '/correos', activo: true, grupo: 'principal' },
   { id: 'tareas', label: 'Tareas', icon: '✅', href: '/tareas', activo: true, grupo: 'principal' },
@@ -36,6 +36,7 @@ const defaultModulos: Modulo[] = [
   { id: 'datos-empresa', label: 'Mi Empresa', icon: '🏛️', href: '/datos-empresa', activo: true, grupo: 'configuracion' },
   { id: 'disenador-correos', label: 'Diseñador Correos', icon: '🎨', href: '/disenador-correos', activo: true, grupo: 'configuracion' },
   { id: 'modulos', label: 'Módulos', icon: '🧩', href: '/modulos', activo: true, grupo: 'configuracion' },
+  { id: 'auditoria', label: 'Auditoría', icon: '🔍', href: '/auditoria', activo: true, grupo: 'configuracion' },
 ]
 
 export const useModulosStore = create<ModulosState>()(

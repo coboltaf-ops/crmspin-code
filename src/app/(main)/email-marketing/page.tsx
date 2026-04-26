@@ -7,6 +7,7 @@ import { useContactosStore } from '@/features/contactos/store/contactos-store'
 import { useProspectosStore } from '@/features/prospectos/store/prospectos-store'
 import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 import { useDirenadorStore } from '@/features/disenador-correos/store/disenador-store'
+import { fDate } from '@/shared/lib/format-date'
 
 function todayCO() {
   return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' })
@@ -62,7 +63,7 @@ export default function EmailMarketingPage() {
 
   // Styles
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%' }
+  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%', boxSizing: 'border-box', height: 38 }
   const labelStyle: React.CSSProperties = { color: 'rgba(255,255,255,0.6)', fontSize: 11, marginBottom: 4, display: 'block' }
   const cardStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 16, border: '1px solid rgba(255,255,255,0.1)' }
 
@@ -70,7 +71,7 @@ export default function EmailMarketingPage() {
     const colors: Record<string, { bg: string; color: string; border: string }> = {
       'Borrador': { bg: 'rgba(156,163,175,0.15)', color: '#9ca3af', border: 'rgba(156,163,175,0.3)' },
       'Enviando': { bg: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
-      'Enviada': { bg: 'rgba(34,197,94,0.15)', color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
+      'Enviada': { bg: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: 'rgba(59,130,246,0.3)' },
       'Error Parcial': { bg: 'rgba(245,158,11,0.15)', color: '#f59e0b', border: 'rgba(245,158,11,0.3)' },
     }
     const c = colors[estado] || colors['Borrador']
@@ -156,7 +157,7 @@ export default function EmailMarketingPage() {
                 <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10, margin: '0 0 6px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{img.filename}</p>
                 <div style={{ display: 'flex', gap: 4 }}>
                   <button onClick={() => insertarImgEnHTML(img, target)}
-                    style={{ ...btnStyle, padding: '3px 8px', fontSize: 10, background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)', flex: 1 }}>
+                    style={{ ...btnStyle, padding: '3px 8px', fontSize: 10, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)', flex: 1 }}>
                     Insertar
                   </button>
                   <button onClick={() => eliminarImg(img.cid, target)}
@@ -186,7 +187,7 @@ export default function EmailMarketingPage() {
   }).sort((a, b) => b.fecha_creacion.localeCompare(a.fecha_creacion))
 
   // Destinatarios disponibles
-  const clientesDisp = clientes.filter(c => c.situacion === 'Activo' && c.email).map(c => ({ email: c.email, nombre: c.razon_social || c.nombre_comercial, origen: 'clientes' as const, origen_id: c.id }))
+  const clientesDisp = clientes.filter(c => c.situacion === 'Activo' && c.email).map(c => ({ email: c.email, nombre: c.razon_social, origen: 'clientes' as const, origen_id: c.id }))
   const contactosDisp = contactos.filter(c => c.situacion === 'Activo' && c.email).map(c => ({ email: c.email, nombre: `${c.nombre} ${c.apellido}`, origen: 'contactos' as const, origen_id: c.id }))
   const prospectosDisp = prospectos.filter(c => c.situacion !== 'Descartado' && c.correo).map(c => ({ email: c.correo, nombre: `${c.nombre} ${c.apellido}`, origen: 'prospectos' as const, origen_id: c.id }))
 
@@ -369,7 +370,7 @@ export default function EmailMarketingPage() {
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <button onClick={() => setVista('lista')} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Volver</button>
           <button onClick={() => { setTplNombre(''); setTplAsunto(''); setTplContenido(''); setTplImagenes([]); setEditingTpl(null); setVista('editarPlantilla') }}
-            style={{ ...btnStyle, background: '#1e3a8a', color: '#fff', border: '1px solid #2563eb' }}>+ Nueva Plantilla</button>
+            style={{ ...btnStyle, background: '#4169E1', color: '#fff', border: '1px solid #3b82f6' }}>+ Nueva Plantilla</button>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
           <div style={{ width: 42, height: 42, borderRadius: 12, background: 'rgba(139,92,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📝</div>
@@ -389,7 +390,7 @@ export default function EmailMarketingPage() {
               <div key={tpl.id} style={cardStyle}>
                 <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, margin: '0 0 8px' }}>{tpl.nombre}</h3>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginBottom: 4 }}>Asunto: {tpl.asunto}</p>
-                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginBottom: 4 }}>Creada: {tpl.fecha_creacion}</p>
+                <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginBottom: 4 }}>Creada: {fDate(tpl.fecha_creacion)}</p>
                 {(tpl.imagenes?.length || 0) > 0 && (
                   <p style={{ color: '#a78bfa', fontSize: 11, marginBottom: 8 }}>{tpl.imagenes.length} imagen(es)</p>
                 )}
@@ -428,11 +429,11 @@ export default function EmailMarketingPage() {
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Contenido HTML</label>
               <textarea value={tplContenido} onChange={e => setTplContenido(e.target.value)}
-                style={{ ...inputStyle, minHeight: 250, fontFamily: 'monospace', fontSize: 12 }}
+                style={{ ...inputStyle, minHeight: 250, height: 'auto', fontFamily: 'monospace', fontSize: 12 }}
                 placeholder="Escriba el HTML del email. Use {{nombre}} y {{empresa}} como variables." />
             </div>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginBottom: 16 }}>Variables: {'{{nombre}}'} = nombre destinatario, {'{{empresa}}'} = nombre empresa</p>
-            <button onClick={guardarPlantilla} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>
+            <button onClick={guardarPlantilla} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>
               {editingTpl ? 'Actualizar Plantilla' : 'Guardar Plantilla'}
             </button>
           </div>
@@ -463,7 +464,7 @@ export default function EmailMarketingPage() {
             <>
               <button onClick={() => abrirEditar(selected)} style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
               <button onClick={() => enviarCampana(selected)} disabled={sending}
-                style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a', opacity: sending ? 0.5 : 1 }}>
+                style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6', opacity: sending ? 0.5 : 1 }}>
                 {sending ? 'Enviando...' : 'Enviar Campana'}
               </button>
             </>
@@ -487,8 +488,8 @@ export default function EmailMarketingPage() {
             {[
               { label: 'Asunto', value: selected.asunto },
               { label: 'Responsable', value: selected.responsable },
-              { label: 'Fecha Creacion', value: selected.fecha_creacion },
-              { label: 'Fecha Envio', value: selected.fecha_envio || '—' },
+              { label: 'Fecha Creacion', value: fDate(selected.fecha_creacion) },
+              { label: 'Fecha Envio', value: selected.fecha_envio ? fDate(selected.fecha_envio) : '—' },
               { label: 'Destinatarios', value: String(selected.destinatarios.length) },
               { label: 'Enviados / Errores', value: `${selected.total_enviados} / ${selected.total_errores}` },
             ].map(f => (
@@ -504,7 +505,7 @@ export default function EmailMarketingPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
               <div style={{ ...cardStyle, textAlign: 'center' }}>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Enviados</p>
-                <p style={{ color: '#22c55e', fontSize: 28, fontWeight: 800 }}>{selected.total_enviados}</p>
+                <p style={{ color: '#3b82f6', fontSize: 28, fontWeight: 800 }}>{selected.total_enviados}</p>
               </div>
               <div style={{ ...cardStyle, textAlign: 'center' }}>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Errores</p>
@@ -599,7 +600,7 @@ export default function EmailMarketingPage() {
             <div style={{ marginBottom: 14 }}>
               <label style={labelStyle}>Contenido HTML *</label>
               <textarea value={formContenido} onChange={e => setFormContenido(e.target.value)}
-                style={{ ...inputStyle, minHeight: 200, fontFamily: 'monospace', fontSize: 12 }}
+                style={{ ...inputStyle, minHeight: 200, height: 'auto', fontFamily: 'monospace', fontSize: 12 }}
                 placeholder="HTML del email. Use {{nombre}} y {{empresa}}" />
             </div>
 
@@ -625,7 +626,7 @@ export default function EmailMarketingPage() {
               {(['clientes', 'contactos', 'prospectos', 'manual'] as const).map(tab => (
                 <button key={tab} onClick={() => setTabDest(tab)}
                   style={{ ...btnStyle, padding: '6px 14px', fontSize: 12, background: tabDest === tab ? 'rgba(59,130,246,0.3)' : 'rgba(255,255,255,0.05)', color: tabDest === tab ? '#60a5fa' : 'rgba(255,255,255,0.6)', border: `1px solid ${tabDest === tab ? 'rgba(59,130,246,0.4)' : 'rgba(255,255,255,0.1)'}` }}>
-                  {tab === 'clientes' ? 'Empresas' : tab.charAt(0).toUpperCase() + tab.slice(1)}
+                  {tab === 'clientes' ? 'Clientes' : tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               ))}
             </div>
@@ -635,7 +636,7 @@ export default function EmailMarketingPage() {
                 <input value={searchDest} onChange={e => setSearchDest(e.target.value)}
                   placeholder={`Buscar ${tabDest}...`} style={{ ...inputStyle, marginBottom: 8 }} />
                 <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
-                  <button onClick={selectAll} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)' }}>
+                  <button onClick={selectAll} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)' }}>
                     Seleccionar todos ({destFiltrados.length})
                   </button>
                 </div>
@@ -646,8 +647,8 @@ export default function EmailMarketingPage() {
                     const checked = !!formDestinatarios.find(fd => fd.email === d.email)
                     return (
                       <div key={i} onClick={() => toggleDestinatario(d)}
-                        style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.06)', background: checked ? 'rgba(34,197,94,0.08)' : 'transparent' }}>
-                        <div style={{ width: 18, height: 18, borderRadius: 4, border: `2px solid ${checked ? '#22c55e' : 'rgba(255,255,255,0.3)'}`, background: checked ? '#22c55e' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, flexShrink: 0 }}>
+                        style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', cursor: 'pointer', borderBottom: '1px solid rgba(255,255,255,0.06)', background: checked ? 'rgba(59,130,246,0.08)' : 'transparent' }}>
+                        <div style={{ width: 18, height: 18, borderRadius: 4, border: `2px solid ${checked ? '#3b82f6' : 'rgba(255,255,255,0.3)'}`, background: checked ? '#3b82f6' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, flexShrink: 0 }}>
                           {checked && '✓'}
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
@@ -664,7 +665,7 @@ export default function EmailMarketingPage() {
                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                   <input value={formManualNombre} onChange={e => setFormManualNombre(e.target.value)} placeholder="Nombre" style={{ ...inputStyle, flex: 1 }} />
                   <input value={formManualEmail} onChange={e => setFormManualEmail(e.target.value)} placeholder="Email" style={{ ...inputStyle, flex: 1 }} />
-                  <button onClick={addManual} style={{ ...btnStyle, background: '#1e3a8a', color: '#fff', border: '1px solid #2563eb', flexShrink: 0 }}>+</button>
+                  <button onClick={addManual} style={{ ...btnStyle, background: '#4169E1', color: '#fff', border: '1px solid #3b82f6', flexShrink: 0 }}>+</button>
                 </div>
               </div>
             )}
@@ -690,7 +691,7 @@ export default function EmailMarketingPage() {
 
             {/* Boton guardar */}
             <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
-              <button onClick={guardarCampana} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a', flex: 1 }}>
+              <button onClick={guardarCampana} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6', flex: 1 }}>
                 {vista === 'editar' ? 'Actualizar Campana' : 'Guardar como Borrador'}
               </button>
             </div>
@@ -716,7 +717,7 @@ export default function EmailMarketingPage() {
           <button onClick={() => setVista('plantillas')} style={{ ...btnStyle, background: 'rgba(139,92,246,0.15)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.3)' }}>
             📝 Plantillas
           </button>
-          <button onClick={() => { resetForm(); setVista('nueva') }} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>
+          <button onClick={() => { resetForm(); setVista('nueva') }} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>
             + Nueva Campana
           </button>
         </div>
@@ -727,7 +728,7 @@ export default function EmailMarketingPage() {
         {[
           { label: 'Total Campanas', value: stats.total, color: '#3b82f6' },
           { label: 'Borradores', value: stats.borradores, color: '#9ca3af' },
-          { label: 'Enviadas', value: stats.enviadas, color: '#22c55e' },
+          { label: 'Enviadas', value: stats.enviadas, color: '#3b82f6' },
           { label: 'Emails Enviados', value: stats.totalEnviados, color: '#a78bfa' },
         ].map(s => (
           <div key={s.label} style={{ ...cardStyle, textAlign: 'center' }}>
@@ -774,16 +775,16 @@ export default function EmailMarketingPage() {
                   <td style={{ padding: '10px 14px', color: '#fff', fontSize: 13 }}>{c.nombre}</td>
                   <td style={{ padding: '10px 14px', color: 'rgba(255,255,255,0.7)', fontSize: 13, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.asunto}</td>
                   <td style={{ padding: '10px 14px', color: '#fff', fontSize: 13, textAlign: 'center' }}>{c.destinatarios.length}</td>
-                  <td style={{ padding: '10px 14px', color: '#22c55e', fontSize: 13, textAlign: 'center' }}>{c.total_enviados}</td>
+                  <td style={{ padding: '10px 14px', color: '#3b82f6', fontSize: 13, textAlign: 'center' }}>{c.total_enviados}</td>
                   <td style={{ padding: '10px 14px' }}><span style={estadoBadge(c.estado)}>{c.estado}</span></td>
-                  <td style={{ padding: '10px 14px', color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>{c.fecha_creacion}</td>
+                  <td style={{ padding: '10px 14px', color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>{fDate(c.fecha_creacion)}</td>
                   <td style={{ padding: '10px 14px' }}>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button onClick={() => { setSelected(c); setVista('detalle') }}
                         style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)', padding: '5px 10px', fontSize: 12 }}>Ver</button>
                       {c.estado === 'Borrador' && (
                         <button onClick={() => enviarCampana(c)} disabled={sending}
-                          style={{ ...btnStyle, background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)', padding: '5px 10px', fontSize: 12 }}>Enviar</button>
+                          style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)', padding: '5px 10px', fontSize: 12 }}>Enviar</button>
                       )}
                     </div>
                   </td>

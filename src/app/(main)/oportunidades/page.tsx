@@ -1,4 +1,5 @@
 'use client'
+import { logAudit, computarDiff } from '@/shared/lib/audit'
 import { useState } from 'react'
 import { useOportunidadesStore, Oportunidad } from '@/features/oportunidades/store/oportunidades-store'
 import { useClientesStore } from '@/features/clientes/store/clientes-store'
@@ -19,6 +20,10 @@ const emptyOportunidad = (codigo: string, responsable: string): Oportunidad => (
   id: '', codigo, nombre: '', cliente_id: '', cliente_nombre: '',
   contacto_id: '', contacto_nombre: '', valor_estimado: 0, tipo_moneda: 'Pesos Colombianos',
   probabilidad: 50, etapa: 'Prospección', origen: '', fecha_cierre_estimada: '',
+  fecha_inicio_diagnostico: '', fecha_inicio_visita: '', fecha_inicio_proceso_muestra: '',
+  fecha_inicio_ensayo_laboratorio: '', fecha_inicio_ensayo_industrial: '',
+  fecha_inicio_seguimiento_ensayos: '', fecha_presentacion_oferta: '',
+  fecha_inicio_evaluacion_oferta: '', fecha_cierre: '', fecha_descartada: '', porque_descartada: '',
   responsable, observaciones: '', situacion: 'Abierta', fecha_registro: today, seguimientos: [],
 })
 
@@ -42,22 +47,29 @@ export default function OportunidadesPage() {
     o.cliente_nombre.toLowerCase().includes(search.toLowerCase())
   )
 
+  const auditParams = () => ({
+    usuario: currentUser?.usuario || 'desconocido',
+    usuario_nombre: `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`.trim(),
+    rol: currentUser?.rol || '',
+    modulo: 'oportunidades',
+  })
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!selected) return
     const cli = clientes.find(c => c.id === selected.cliente_id)
     const con = allContactos.find(c => c.id === selected.contacto_id)
     const toSave = { ...selected, cliente_nombre: cli?.razon_social || selected.cliente_nombre, contacto_nombre: con ? `${con.nombre} ${con.apellido}` : selected.contacto_nombre }
-    if (toSave.id) { updateOportunidad(toSave.id, toSave) }
+    if (toSave.id) { const _anterior = oportunidades.find(x => x.id === toSave.id); updateOportunidad(toSave.id, toSave); logAudit({ ...auditParams(), accion: "MODIFICAR", registro_codigo: toSave.codigo, registro_nombre: toSave.nombre, detalle: computarDiff(_anterior as unknown as Record<string, unknown>, toSave as unknown as Record<string, unknown>) }) }
     else { addOportunidad({ ...toSave, id: crypto.randomUUID() }) }
     setIsForm(false); setSelected(null)
   }
 
   const statusStyle = (s: string): React.CSSProperties => {
     const map: Record<string, React.CSSProperties> = {
-      'Abierta': { background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' },
+      'Abierta': { background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' },
       'En Negociación': { background: 'rgba(245,158,11,0.2)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.3)' },
-      'Ganada': { background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' },
+      'Ganada': { background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' },
       'Perdida': { background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' },
     }
     return map[s] || {}
@@ -65,9 +77,9 @@ export default function OportunidadesPage() {
 
   const probColor = (p: number) => p >= 75 ? '#86efac' : p >= 50 ? '#fcd34d' : p >= 25 ? '#fdba74' : '#fca5a5'
 
-  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none' }
+  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#1e3a8a' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #2563eb' : '1px solid rgba(255,255,255,0.2)' })
+  const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#4169E1' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)' })
   const refOptions = (table: string) => (refData[table as keyof typeof refData] || []).filter(r => r.situacion).map(r => r.descripcion)
 
   const contactosDelCliente = selected ? allContactos.filter(c => c.cliente_id === selected.cliente_id) : []
@@ -77,7 +89,7 @@ export default function OportunidadesPage() {
     const fields = [
       { label: 'Código', value: viewDetail.codigo },
       { label: 'Nombre', value: viewDetail.nombre },
-      { label: 'Empresa', value: viewDetail.cliente_nombre },
+      { label: 'Cliente', value: viewDetail.cliente_nombre },
       { label: 'Contacto', value: viewDetail.contacto_nombre },
       { label: 'Valor Estimado', value: `$${fmtMoney(viewDetail.valor_estimado)}` },
       { label: 'Moneda', value: viewDetail.tipo_moneda },
@@ -103,8 +115,35 @@ export default function OportunidadesPage() {
               </div>
             ))}
           </div>
+
+          {/* ─── EVOLUCIÓN ESTADO OPORTUNIDAD EN LAS FASES (detalle) ─── */}
+          <div style={{ marginTop: 16, padding: 16, background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 12 }}>
+            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Evolución Estado Oportunidad en las Fases</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+              {[
+                { label: '1. Inicio Diagnóstico', value: fDate(viewDetail.fecha_inicio_diagnostico) },
+                { label: '2. Inicio Visita', value: fDate(viewDetail.fecha_inicio_visita) },
+                { label: '3. Inicio Proceso Muestra', value: fDate(viewDetail.fecha_inicio_proceso_muestra) },
+                { label: '4. Inicio Ensayo Laboratorio', value: fDate(viewDetail.fecha_inicio_ensayo_laboratorio) },
+                { label: '5. Inicio Ensayo Industrial', value: fDate(viewDetail.fecha_inicio_ensayo_industrial) },
+                { label: '6. Inicio Seguimiento Ensayos', value: fDate(viewDetail.fecha_inicio_seguimiento_ensayos) },
+                { label: '7. Presentación Oferta', value: fDate(viewDetail.fecha_presentacion_oferta) },
+                { label: '8. Inicio Evaluación Oferta', value: fDate(viewDetail.fecha_inicio_evaluacion_oferta) },
+                { label: '9. Fecha de Cierre', value: fDate(viewDetail.fecha_cierre) },
+                { label: 'Fecha Descartada', value: fDate(viewDetail.fecha_descartada) },
+                { label: 'Por qué fue Descartada', value: viewDetail.porque_descartada || '' },
+                { label: 'Probabilidad de Cierre', value: `${viewDetail.probabilidad}%` },
+              ].map(f => (
+                <div key={f.label}>
+                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                  <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {permisos.editar && (
-            <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a', marginTop: 16 }}>Editar</button>
+            <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', marginTop: 16 }}>Editar</button>
           )}
           <SeguimientoPanel
             seguimientos={viewDetail.seguimientos || []}
@@ -134,17 +173,21 @@ export default function OportunidadesPage() {
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Código</label>
               <input value={selected.codigo} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
             </div>
-            <div style={{ gridColumn: 'span 2' }}>
+            <div>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Registro</label>
+              <input value={fDate(selected.fecha_registro)} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
+            </div>
+            <div>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Nombre Oportunidad *</label>
               <input value={selected.nombre} onChange={e => setSelected({ ...selected, nombre: e.target.value })} required style={inputStyle} />
             </div>
             <div style={{ gridColumn: 'span 2' }}>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Empresa *</label>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Cliente *</label>
               <select value={selected.cliente_id} onChange={e => {
                 const cli = clientes.find(c => c.id === e.target.value)
                 setSelected({ ...selected, cliente_id: e.target.value, cliente_nombre: cli?.razon_social || '', contacto_id: '', contacto_nombre: '' })
               }} required style={inputStyle}>
-                <option value="">Seleccionar empresa...</option>
+                <option value="">Seleccionar cliente...</option>
                 {clientes.map(c => <option key={c.id} value={c.id}>{c.razon_social}</option>)}
               </select>
             </div>
@@ -167,10 +210,6 @@ export default function OportunidadesPage() {
               <select value={selected.tipo_moneda} onChange={e => setSelected({ ...selected, tipo_moneda: e.target.value })} style={inputStyle}>
                 {refOptions('tipo_moneda').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
-            </div>
-            <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Probabilidad (%): {selected.probabilidad}%</label>
-              <input type="range" min="0" max="100" step="5" value={selected.probabilidad} onChange={e => setSelected({ ...selected, probabilidad: parseInt(e.target.value) })} style={{ width: '100%', accentColor: probColor(selected.probabilidad) }} />
             </div>
             <div>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Etapa</label>
@@ -201,11 +240,79 @@ export default function OportunidadesPage() {
             </div>
             <div style={{ gridColumn: 'span 3' }}>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Observaciones</label>
-              <textarea value={selected.observaciones} onChange={e => setSelected({ ...selected, observaciones: e.target.value })} rows={3} style={{ ...inputStyle, resize: 'vertical' }} />
+              <textarea value={selected.observaciones} onChange={e => setSelected({ ...selected, observaciones: e.target.value })} rows={3} style={{ ...inputStyle, resize: "vertical", height: "auto" }} />
             </div>
           </div>
+
+          {/* ─── EVOLUCIÓN ESTADO OPORTUNIDAD EN LAS FASES ─── */}
+          {(() => {
+            const fasesOrden: Array<{ key: keyof Oportunidad; label: string }> = [
+              { key: 'fecha_inicio_diagnostico', label: 'Fecha Inicio Diagnóstico' },
+              { key: 'fecha_inicio_visita', label: 'Fecha Inicio Visita' },
+              { key: 'fecha_inicio_proceso_muestra', label: 'Fecha Inicio Proceso Muestra' },
+              { key: 'fecha_inicio_ensayo_laboratorio', label: 'Fecha Inicio Ensayo Laboratorio' },
+              { key: 'fecha_inicio_ensayo_industrial', label: 'Fecha Inicio Ensayo Industrial' },
+              { key: 'fecha_inicio_seguimiento_ensayos', label: 'Fecha Inicio Seguimiento Ensayos' },
+              { key: 'fecha_presentacion_oferta', label: 'Fecha Presentación Oferta' },
+              { key: 'fecha_inicio_evaluacion_oferta', label: 'Fecha Inicio Evaluación Oferta' },
+              { key: 'fecha_cierre', label: 'Fecha de Cierre' },
+            ]
+            const onChangeFase = (idx: number, value: string) => {
+              if (!selected) return
+              const fase = fasesOrden[idx]
+              if (value && idx > 0) {
+                const prev = fasesOrden[idx - 1]
+                if (!selected[prev.key]) {
+                  alert(`No puedes establecer "${fase.label}" sin antes haber registrado "${prev.label}".`)
+                  return
+                }
+              }
+              setSelected({ ...selected, [fase.key]: value })
+            }
+            return (
+              <div style={{ marginTop: 20, padding: 16, background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 12 }}>
+                <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Evolución Estado Oportunidad en las Fases</h3>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+                  {fasesOrden.map((fase, idx) => {
+                    const prev = idx > 0 ? fasesOrden[idx - 1] : null
+                    const disabled = prev ? !selected[prev.key] : false
+                    return (
+                      <div key={fase.key as string}>
+                        <label style={{ color: '#ffffff', fontSize: 13, fontWeight: 800, display: 'block', marginBottom: 4 }}>
+                          {idx + 1}. {fase.label}
+                          {disabled && <span style={{ color: '#facc15', fontSize: 10, marginLeft: 6, fontWeight: 700 }}>🔒 Requiere paso anterior</span>}
+                        </label>
+                        <input
+                          type="date"
+                          value={(selected[fase.key] as string) || ''}
+                          onChange={e => onChangeFase(idx, e.target.value)}
+                          disabled={disabled}
+                          style={{ ...inputStyle, opacity: disabled ? 0.4 : 1, cursor: disabled ? 'not-allowed' : 'auto' }}
+                        />
+                      </div>
+                    )
+                  })}
+                  <div>
+                    <label style={{ color: '#ffffff', fontSize: 13, fontWeight: 800, display: 'block', marginBottom: 4 }}>Fecha Descartada</label>
+                    <input type="date" value={selected.fecha_descartada || ''} onChange={e => setSelected({ ...selected, fecha_descartada: e.target.value })} style={inputStyle} />
+                  </div>
+                  <div style={{ gridColumn: 'span 2' }}>
+                    <label style={{ color: '#ffffff', fontSize: 13, fontWeight: 800, display: 'block', marginBottom: 4 }}>
+                      Por qué fue Descartada {!selected.fecha_descartada && <span style={{ color: '#facc15', fontSize: 10, marginLeft: 6, fontWeight: 700 }}>🔒 Requiere Fecha Descartada</span>}
+                    </label>
+                    <input value={selected.porque_descartada || ''} onChange={e => setSelected({ ...selected, porque_descartada: e.target.value })} disabled={!selected.fecha_descartada} style={{ ...inputStyle, opacity: !selected.fecha_descartada ? 0.4 : 1, cursor: !selected.fecha_descartada ? 'not-allowed' : 'auto' }} placeholder="Motivo del descarte..." />
+                  </div>
+                  <div>
+                    <label style={{ color: '#ffffff', fontSize: 13, fontWeight: 800, display: 'block', marginBottom: 4 }}>Probabilidad de Cierre %</label>
+                    <input type="number" min="0" max="100" step="1" value={selected.probabilidad} onChange={e => setSelected({ ...selected, probabilidad: parseInt(e.target.value) || 0 })} style={inputStyle} />
+                  </div>
+                </div>
+              </div>
+            )
+          })()}
+
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -225,7 +332,7 @@ export default function OportunidadesPage() {
   const reportColumns = [
     { header: 'Código', key: 'codigo', width: 10 },
     { header: 'Nombre', key: 'nombre', width: 20 },
-    { header: 'Empresa', key: 'cliente_nombre', width: 18 },
+    { header: 'Cliente', key: 'cliente_nombre', width: 18 },
     { header: 'Valor', key: 'valor', width: 14 },
     { header: 'Prob.', key: 'probabilidad', width: 8 },
     { header: 'Etapa', key: 'etapa', width: 12 },
@@ -246,7 +353,7 @@ export default function OportunidadesPage() {
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Pipeline de ventas</p>
         </div>
         {permisos.editar && tab !== 'reportes' && (
-          <button onClick={() => { setSelected(emptyOportunidad(nextConsecutivo('OPO-', oportunidades.map(o => o.codigo)).codigo, `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`)); setIsForm(true) }} style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>+ Nueva Oportunidad</button>
+          <button onClick={() => { setSelected(emptyOportunidad(nextConsecutivo('OPO-', oportunidades.map(o => o.codigo)).codigo, `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`)); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nueva Oportunidad</button>
         )}
       </div>
 
@@ -263,7 +370,7 @@ export default function OportunidadesPage() {
             <div key={col.etapa} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', padding: 12, minWidth: 180 }}>
               <div style={{ marginBottom: 12, textAlign: 'center' }}>
                 <p style={{ color: '#ffffff', fontSize: 13, fontWeight: 700 }}>{col.etapa}</p>
-                <p style={{ color: '#4ade80', fontSize: 12 }}>{col.items.length} | ${fmtMoney(col.total)}</p>
+                <p style={{ color: '#60a5fa', fontSize: 12 }}>{col.items.length} | ${fmtMoney(col.total)}</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {col.items.map(o => (
@@ -271,7 +378,7 @@ export default function OportunidadesPage() {
                     <p style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{o.nombre}</p>
                     <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 11 }}>{o.cliente_nombre}</p>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
-                      <span style={{ color: '#34d399', fontSize: 11, fontWeight: 600 }}>${fmtMoney(o.valor_estimado)}</span>
+                      <span style={{ color: '#93c5fd', fontSize: 11, fontWeight: 600 }}>${fmtMoney(o.valor_estimado)}</span>
                       <span style={{ color: probColor(o.probabilidad), fontSize: 11 }}>{o.probabilidad}%</span>
                     </div>
                   </div>
@@ -286,24 +393,24 @@ export default function OportunidadesPage() {
       {/* TABLE VIEW */}
       {tab === 'registros' && (
         <>
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por nombre, código o empresa..."
+          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por nombre, código o cliente..."
             style={{ ...inputStyle, maxWidth: 400, marginBottom: 16 }} />
           <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
-                  {['Código', 'Nombre', 'Empresa', 'Valor', 'Prob.', 'Etapa', 'Situación', 'Acciones'].map(h => (
-                    <th key={h} style={{ padding: '12px 14px', background: '#1e3a5f', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                  {['Código', 'Nombre', 'Cliente', 'Valor', 'Prob.', 'Etapa', 'Situación', 'Acciones'].map(h => (
+                    <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((o, i) => (
                   <tr key={o.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
-                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#4ade80', fontSize: 13, fontFamily: 'monospace' }}>{o.codigo}</td>
+                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13, fontFamily: 'monospace' }}>{o.codigo}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13 }}>{o.nombre}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{o.cliente_nombre}</td>
-                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#34d399', fontSize: 13, fontWeight: 600 }}>${fmtMoney(o.valor_estimado)}</td>
+                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#93c5fd', fontSize: 13, fontWeight: 600 }}>${fmtMoney(o.valor_estimado)}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: probColor(o.probabilidad), fontSize: 13, fontWeight: 600 }}>{o.probabilidad}%</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{o.etapa}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
@@ -312,8 +419,8 @@ export default function OportunidadesPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button onClick={() => setViewDetail(o)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316' }}>Ver</button>
-                        {permisos.editar && <button onClick={() => { setSelected(o); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Editar</button>}
-                        {permisos.eliminar && <button onClick={() => { if (confirm(`¿Eliminar "${o.nombre}"?`)) deleteOportunidad(o.id) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>}
+                        {permisos.editar && <button onClick={() => { setSelected(o); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>}
+                        {permisos.eliminar && <button onClick={() => { if (confirm(`¿Eliminar "${o.nombre}"?`)) deleteOportunidad(o.id); logAudit({ ...auditParams(), accion: "ELIMINAR", registro_codigo: o.codigo, registro_nombre: o.nombre }) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>}
                       </div>
                     </td>
                   </tr>

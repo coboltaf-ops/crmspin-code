@@ -5,11 +5,13 @@ import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-u
 import { useRolesStore } from '@/features/usuarios-gestion/store/roles-store'
 import { Usuario, MODULOS_CRM, ESTADOS_CONFIG } from '@/features/usuarios-gestion/types'
 import { exportToPDF, exportToExcel } from '@/shared/lib/export-report'
+import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 
 export default function UsuariosPage() {
   const { usuarios, addUsuario, updateUsuario, deleteUsuario } = useUsuariosStore()
   const currentUser = useCurrentUserStore(s => s.user)
   const { roles, addRol, updateRol, deleteRol } = useRolesStore()
+  const empresa = useEmpresaStore(s => s.empresas[0])
 
   const [selected, setSelected] = useState<Usuario | null>(null)
   const [isForm, setIsForm] = useState(false)
@@ -34,9 +36,18 @@ export default function UsuariosPage() {
     }
   }
 
+  const MAX_USUARIOS_ACTIVOS = 10
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!selected) return
+    // Validar límite de usuarios activos
+    const activosActuales = usuarios.filter(u => u.situacion === 'Activo' && u.id !== selected.id).length
+    const seraActivo = selected.situacion === 'Activo'
+    if (seraActivo && activosActuales >= MAX_USUARIOS_ACTIVOS) {
+      alert(`Límite alcanzado: máximo ${MAX_USUARIOS_ACTIVOS} usuarios activos permitidos.\n\nDesactive un usuario antes de crear o activar otro.`)
+      return
+    }
     // Assign permisos from the role
     const rol = roles.find(r => r.nombre === selected.rol)
     const withPermisos = { ...selected, permisos: rol?.permisos || selected.permisos }
@@ -91,9 +102,9 @@ export default function UsuariosPage() {
     usuarios.filter(u => u.rol === selectedRolObj.nombre).forEach(u => updateUsuario(u.id, { permisos: newPermisos }))
   }
 
-  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none' }
+  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#1e3a8a' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #2563eb' : '1px solid rgba(255,255,255,0.2)' })
+  const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#4169E1' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)' })
 
   const reportOpts = {
     title: 'Gestión de Usuarios',
@@ -103,6 +114,7 @@ export default function UsuariosPage() {
       { header: 'Rol', key: 'rol' }, { header: 'Estado', key: 'situacion' },
     ],
     rows: usuarios.map(u => ({ usuario: u.usuario, nombre: u.nombre, apellido: u.apellido, correo: u.correo, rol: u.rol, situacion: u.situacion })),
+    empresa: empresa ? { nombre: empresa.nombre, nro_documento: empresa.nro_documento, direccion: empresa.direccion, ciudad: empresa.ciudad, logo_url: empresa.logo_url } : undefined,
   }
 
   return (
@@ -112,7 +124,7 @@ export default function UsuariosPage() {
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>Gestión de Usuarios</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Administra usuarios, roles y permisos del sistema</p>
         </div>
-        {tab === 'usuarios' && !isForm && <button onClick={() => { setSelected(emptyUser()); setIsForm(true) }} style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>+ Nuevo Usuario</button>}
+        {tab === 'usuarios' && !isForm && <button onClick={() => { setSelected(emptyUser()); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nuevo Usuario</button>}
       </div>
 
       {/* Tabs */}
@@ -129,7 +141,7 @@ export default function UsuariosPage() {
             <thead>
               <tr>
                 {['Usuario', 'Nombre', 'Apellido', 'Correo', 'Rol', 'Estado', 'Acciones'].map(h => (
-                  <th key={h} style={{ padding: '12px 14px', background: '#1e3a5f', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                  <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr>
             </thead>
@@ -142,13 +154,13 @@ export default function UsuariosPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13 }}>{u.nombre}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13 }}>{u.apellido}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{u.correo}</td>
-                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#4ade80', fontSize: 13 }}>{u.rol}</td>
+                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13 }}>{u.rol}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: est.bg, color: est.color, border: est.border }}>{u.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button onClick={() => { setSelected(u); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Editar</button>
+                        <button onClick={() => { setSelected(u); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
                         {u.id !== 'admin-1' && <button onClick={() => { if (confirm(`¿Eliminar usuario "${u.usuario}"?`)) deleteUsuario(u.id) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>}
                       </div>
                     </td>
@@ -195,7 +207,7 @@ export default function UsuariosPage() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -216,11 +228,11 @@ export default function UsuariosPage() {
               </button>
             ))}
             {!showNewRol ? (
-              <button onClick={() => setShowNewRol(true)} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>+ Nuevo Rol</button>
+              <button onClick={() => setShowNewRol(true)} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>+ Nuevo Rol</button>
             ) : (
               <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                 <input value={nuevoRolNombre} onChange={e => setNuevoRolNombre(e.target.value)} placeholder="Nombre del rol..." style={{ ...inputStyle, width: 180 }} onKeyDown={e => e.key === 'Enter' && handleCreateRol()} autoFocus />
-                <button onClick={handleCreateRol} style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>Crear</button>
+                <button onClick={handleCreateRol} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Crear</button>
                 <button onClick={() => { setShowNewRol(false); setNuevoRolNombre('') }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>×</button>
               </div>
             )}
@@ -237,7 +249,7 @@ export default function UsuariosPage() {
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <span style={{ padding: '4px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>
+                  <span style={{ padding: '4px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>
                     {usuarios.filter(u => u.rol === selectedRolObj.nombre).length} usuario(s)
                   </span>
                   {selectedRolObj.nombre !== 'Admin' && (
@@ -262,9 +274,9 @@ export default function UsuariosPage() {
                               checked={perms?.[p] ?? false}
                               disabled={isAdmin}
                               onChange={e => updateRolPermiso(m.id, p, e.target.checked)}
-                              style={{ accentColor: p === 'leer' ? '#16a34a' : p === 'editar' ? '#1e3a8a' : '#dc2626', width: 18, height: 18, cursor: isAdmin ? 'not-allowed' : 'pointer' }}
+                              style={{ accentColor: p === 'leer' ? '#3b82f6' : p === 'editar' ? '#4169E1' : '#dc2626', width: 18, height: 18, cursor: isAdmin ? 'not-allowed' : 'pointer' }}
                             />
-                            <span style={{ color: p === 'leer' ? '#22c55e' : p === 'editar' ? '#3b82f6' : '#ef4444', fontSize: 13, fontWeight: 600 }}>
+                            <span style={{ color: p === 'leer' ? '#3b82f6' : p === 'editar' ? '#3b82f6' : '#ef4444', fontSize: 13, fontWeight: 600 }}>
                               {p === 'leer' ? 'Leer' : p === 'editar' ? 'Editar' : 'Eliminar'}
                             </span>
                           </label>
@@ -277,7 +289,7 @@ export default function UsuariosPage() {
 
               {selectedRolObj.nombre !== 'Admin' && (
                 <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-                  <button onClick={() => setAllPermisos(true)} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Marcar Todos</button>
+                  <button onClick={() => setAllPermisos(true)} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Marcar Todos</button>
                   <button onClick={() => setAllPermisos(false)} style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Desmarcar Todos</button>
                 </div>
               )}
@@ -290,7 +302,7 @@ export default function UsuariosPage() {
               <p style={{ color: '#ffffff', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Usuarios con rol {selectedRolObj.nombre}:</p>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 {usuarios.filter(u => u.rol === selectedRolObj.nombre).map(u => (
-                  <span key={u.id} style={{ padding: '4px 12px', borderRadius: 20, fontSize: 12, background: 'rgba(34,197,94,0.15)', color: '#86efac', border: '1px solid rgba(34,197,94,0.2)' }}>
+                  <span key={u.id} style={{ padding: '4px 12px', borderRadius: 20, fontSize: 12, background: 'rgba(59,130,246,0.15)', color: '#86efac', border: '1px solid rgba(59,130,246,0.2)' }}>
                     {u.nombre} {u.apellido}
                   </span>
                 ))}
@@ -304,7 +316,7 @@ export default function UsuariosPage() {
       {tab === 'reportes' && (
         <div style={{ display: 'flex', gap: 10 }}>
           <button onClick={() => exportToPDF(reportOpts)} style={{ ...btnStyle, background: '#b91c1c', color: '#ffffff', border: '1px solid #dc2626' }}>Exportar PDF</button>
-          <button onClick={() => exportToExcel(reportOpts)} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Exportar Excel</button>
+          <button onClick={() => exportToExcel(reportOpts)} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Exportar Excel</button>
         </div>
       )}
     </div>

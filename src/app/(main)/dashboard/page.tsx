@@ -30,12 +30,12 @@ export default function DashboardPage() {
   }
 
   const cards = [
-    { label: 'Empresas', value: clientes.length, icon: '🏢', color: '#4ade80', href: '/clientes' },
+    { label: 'Clientes', value: clientes.length, icon: '🏢', color: '#60a5fa', href: '/clientes' },
     { label: 'Contactos', value: contactos.length, icon: '👤', color: '#a78bfa', href: '/contactos' },
-    { label: 'Oportunidades', value: opoAbiertas.length, icon: '🎯', color: '#34d399', href: '/oportunidades' },
+    { label: 'Oportunidades', value: opoAbiertas.length, icon: '🎯', color: '#93c5fd', href: '/oportunidades' },
     { label: 'Cotizaciones', value: cotizaciones.length, icon: '📋', color: '#fbbf24', href: '/cotizaciones' },
     { label: 'PQRS Abiertas', value: pqrsAbiertas.length, icon: '📩', color: '#f87171', href: '/pqrs' },
-    { label: 'Productos', value: productos.length, icon: '📦', color: '#4ade80', href: '/productos' },
+    { label: 'Productos', value: productos.length, icon: '📦', color: '#60a5fa', href: '/productos' },
   ]
 
   const clickable: React.CSSProperties = { cursor: 'pointer', transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease' }
@@ -68,7 +68,17 @@ export default function DashboardPage() {
   }
   const prospectosPorSituacion = groupCount('situacion')
   const prospectosPorOrigen = groupCount('origen_prospecto')
-  const barColors = ['#3b82f6', '#a855f7', '#f59e0b', '#22c55e', '#ec4899', '#06b6d4', '#ef4444', '#84cc16', '#eab308', '#14b8a6']
+  const barColors = ['#3b82f6', '#a855f7', '#f59e0b', '#3b82f6', '#ec4899', '#06b6d4', '#ef4444', '#84cc16', '#eab308', '#14b8a6']
+
+  // Clientes por Macro Sector
+  const clientesPorMacroSector = (() => {
+    const map = new Map<string, number>()
+    for (const c of clientes) {
+      const v = (c.macro_sector || 'Sin definir').toString().trim() || 'Sin definir'
+      map.set(v, (map.get(v) || 0) + 1)
+    }
+    return Array.from(map.entries()).map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count)
+  })()
 
   // Oportunidades por etapa
   const etapas = ['Prospección', 'Calificación', 'Propuesta', 'Negociación', 'Cierre']
@@ -110,7 +120,7 @@ export default function DashboardPage() {
             </div>
           </div>
           {(() => {
-            const funnelColors = ['#3b82f6', '#a855f7', '#f59e0b', '#22c55e', '#ec4899']
+            const funnelColors = ['#3b82f6', '#a855f7', '#f59e0b', '#3b82f6', '#ec4899']
             const funnelData = opoPorEtapa.filter(e => e.count > 0)
             const maxCount = Math.max(...opoPorEtapa.map(e => e.count), 1)
             return (
@@ -152,7 +162,7 @@ export default function DashboardPage() {
               const items = cotizaciones.filter(c => c.situacion === s)
               if (items.length === 0) return null
               const valor = items.reduce((sum, c) => sum + (c.detalles || []).reduce((sd: number, d: { subtotal: number }) => sd + d.subtotal, 0), 0)
-              const colors: Record<string, string> = { 'En Construcción': '#93c5fd', 'Enviada': '#86efac', 'Aprobada': '#4ade80', 'Rechazada': '#fca5a5', 'Vencida': '#fcd34d', 'Anulada': '#d1d5db' }
+              const colors: Record<string, string> = { 'En Construcción': '#93c5fd', 'Enviada': '#86efac', 'Aprobada': '#60a5fa', 'Rechazada': '#fca5a5', 'Vencida': '#fcd34d', 'Anulada': '#d1d5db' }
               return (
                 <div key={s} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                   <span style={{ color: colors[s] || '#fff', fontSize: 12, fontWeight: 600 }}>{s}</span>
@@ -252,15 +262,69 @@ export default function DashboardPage() {
           })()}
         </div>
 
+        {/* Clientes por Macro Sector — Pie */}
+        <div onClick={() => router.push('/clientes')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
+          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Clientes por Macro Sector</h2>
+          {clientesPorMacroSector.length === 0 ? (
+            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin clientes registrados</p>
+          ) : (() => {
+            const total = clientesPorMacroSector.reduce((s, x) => s + x.count, 0)
+            const cx = 110, cy = 110, r = 95
+            let startAngle = -Math.PI / 2
+            const slices = clientesPorMacroSector.map((s, i) => {
+              const angle = (s.count / total) * Math.PI * 2
+              const endAngle = startAngle + angle
+              const x1 = cx + r * Math.cos(startAngle)
+              const y1 = cy + r * Math.sin(startAngle)
+              const x2 = cx + r * Math.cos(endAngle)
+              const y2 = cy + r * Math.sin(endAngle)
+              const largeArc = angle > Math.PI ? 1 : 0
+              const path = clientesPorMacroSector.length === 1
+                ? `M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy} A ${r} ${r} 0 1 1 ${cx - r} ${cy} Z`
+                : `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`
+              const midAngle = startAngle + angle / 2
+              const labelX = cx + (r * 0.62) * Math.cos(midAngle)
+              const labelY = cy + (r * 0.62) * Math.sin(midAngle)
+              const pct = ((s.count / total) * 100).toFixed(0)
+              startAngle = endAngle
+              return { path, color: barColors[i % barColors.length], label: s.label, count: s.count, pct, labelX, labelY }
+            })
+            return (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+                <svg width={220} height={220} viewBox="0 0 220 220" style={{ flexShrink: 0 }}>
+                  {slices.map((s, i) => (
+                    <g key={i}>
+                      <path d={s.path} fill={s.color} stroke="#172554" strokeWidth={2} />
+                      {parseInt(s.pct) >= 6 && (
+                        <text x={s.labelX} y={s.labelY} fill="#ffffff" fontSize={11} fontWeight={800} textAnchor="middle" dominantBaseline="middle">{s.pct}%</text>
+                      )}
+                    </g>
+                  ))}
+                </svg>
+                <div style={{ flex: 1, minWidth: 180, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {slices.map((s, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+                      <span style={{ width: 12, height: 12, background: s.color, borderRadius: 3, flexShrink: 0 }} />
+                      <span style={{ color: '#ffffff', flex: 1, fontWeight: 600 }}>{s.label}</span>
+                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>{s.count}</span>
+                      <span style={{ color: 'rgba(255,255,255,0.5)', width: 36, textAlign: 'right' }}>{s.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )
+          })()}
+        </div>
+
         {/* Actividad reciente */}
         <div style={cardStyle}>
           <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Resumen General</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
-              { l: 'Empresas Activas', v: clientes.filter(c => c.situacion === 'Activo').length, c: '#4ade80', href: '/clientes' },
+              { l: 'Clientes Activos', v: clientes.filter(c => c.situacion === 'Activo').length, c: '#60a5fa', href: '/clientes' },
               { l: 'Contactos Principales', v: contactos.filter(c => c.es_principal).length, c: '#a78bfa', href: '/contactos' },
-              { l: 'Productos Activos', v: productos.filter(p => p.situacion === 'Activo').length, c: '#4ade80', href: '/productos' },
-              { l: 'Oportunidades Ganadas', v: oportunidades.filter(o => o.situacion === 'Ganada').length, c: '#34d399', href: '/oportunidades' },
+              { l: 'Productos Activos', v: productos.filter(p => p.situacion === 'Activo').length, c: '#60a5fa', href: '/productos' },
+              { l: 'Oportunidades Ganadas', v: oportunidades.filter(o => o.situacion === 'Ganada').length, c: '#93c5fd', href: '/oportunidades' },
               { l: 'PQRS Urgentes', v: pqrs.filter(p => p.prioridad === 'Urgente' && p.situacion !== 'Cerrada').length, c: '#fca5a5', href: '/pqrs' },
             ].map((row, idx, arr) => (
               <div key={row.l} onClick={() => router.push(row.href)}

@@ -18,6 +18,17 @@ export interface Oportunidad {
   etapa: string
   origen: string
   fecha_cierre_estimada: string
+  fecha_inicio_diagnostico: string
+  fecha_inicio_visita: string
+  fecha_inicio_proceso_muestra: string
+  fecha_inicio_ensayo_laboratorio: string
+  fecha_inicio_ensayo_industrial: string
+  fecha_inicio_seguimiento_ensayos: string
+  fecha_presentacion_oferta: string
+  fecha_inicio_evaluacion_oferta: string
+  fecha_cierre: string
+  fecha_descartada: string
+  porque_descartada: string
   responsable: string
   observaciones: string
   situacion: string

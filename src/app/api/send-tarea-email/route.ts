@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const html = `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-        <div style="background:#1e3a8a;padding:20px;border-radius:10px 10px 0 0">
+        <div style="background:#4169E1;padding:20px;border-radius:10px 10px 0 0">
           <h2 style="color:#fff;margin:0;font-size:18px">Nueva Tarea Asignada</h2>
           <p style="color:rgba(255,255,255,0.7);margin:4px 0 0;font-size:13px">${codigo}</p>
         </div>

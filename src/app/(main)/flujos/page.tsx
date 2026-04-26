@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useFlujosStore, Flujo, Condicion, Accion, MODULOS_FLUJO, TRIGGERS, OPERADORES, TIPOS_ACCION } from '@/features/flujos/store/flujos-store'
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
 import { useReferenceStore } from '@/features/referencias/store/reference-store'
+import { fDate } from '@/shared/lib/format-date'
 
 function todayCO() { return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' }) }
 function fDateTime(d: string) {
@@ -38,7 +39,7 @@ export default function FlujosPage() {
   if (!user) return null
 
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%' }
+  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%', boxSizing: 'border-box', height: 38 }
   const labelStyle: React.CSSProperties = { color: 'rgba(255,255,255,0.6)', fontSize: 11, marginBottom: 4, display: 'block' }
   const cardStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 16, border: '1px solid rgba(255,255,255,0.1)' }
   const nodeStyle = (color: string): React.CSSProperties => ({ background: `${color}15`, border: `2px solid ${color}40`, borderRadius: 12, padding: '16px 20px', position: 'relative' as const })
@@ -140,7 +141,7 @@ export default function FlujosPage() {
           <button onClick={() => { setViewDetail(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Volver</button>
           <button onClick={() => abrirEditar(viewDetail)} style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
           <button onClick={() => { toggleActivo(viewDetail.id); setViewDetail({ ...viewDetail, activo: !viewDetail.activo }) }}
-            style={{ ...btnStyle, background: viewDetail.activo ? 'rgba(239,68,68,0.15)' : 'rgba(34,197,94,0.15)', color: viewDetail.activo ? '#ef4444' : '#22c55e', border: `1px solid ${viewDetail.activo ? 'rgba(239,68,68,0.3)' : 'rgba(34,197,94,0.3)'}` }}>
+            style={{ ...btnStyle, background: viewDetail.activo ? 'rgba(239,68,68,0.15)' : 'rgba(59,130,246,0.15)', color: viewDetail.activo ? '#ef4444' : '#3b82f6', border: `1px solid ${viewDetail.activo ? 'rgba(239,68,68,0.3)' : 'rgba(59,130,246,0.3)'}` }}>
             {viewDetail.activo ? 'Desactivar' : 'Activar'}
           </button>
         </div>
@@ -151,7 +152,7 @@ export default function FlujosPage() {
               <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 700, margin: 0 }}>{viewDetail.nombre}</h2>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>{viewDetail.codigo} · {moduloLabel(viewDetail.modulo)} · {triggerLabel(viewDetail.trigger)}</p>
             </div>
-            <span style={{ padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: viewDetail.activo ? 'rgba(34,197,94,0.15)' : 'rgba(156,163,175,0.15)', color: viewDetail.activo ? '#22c55e' : '#9ca3af', border: `1px solid ${viewDetail.activo ? 'rgba(34,197,94,0.3)' : 'rgba(156,163,175,0.3)'}` }}>
+            <span style={{ padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: viewDetail.activo ? 'rgba(59,130,246,0.15)' : 'rgba(156,163,175,0.15)', color: viewDetail.activo ? '#3b82f6' : '#9ca3af', border: `1px solid ${viewDetail.activo ? 'rgba(59,130,246,0.3)' : 'rgba(156,163,175,0.3)'}` }}>
               {viewDetail.activo ? 'Activo' : 'Inactivo'}
             </span>
           </div>
@@ -162,7 +163,7 @@ export default function FlujosPage() {
             </div>
             <div style={{ ...cardStyle, textAlign: 'center' }}>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Exitosas</p>
-              <p style={{ color: '#22c55e', fontSize: 28, fontWeight: 800 }}>{totalExitosas}</p>
+              <p style={{ color: '#3b82f6', fontSize: 28, fontWeight: 800 }}>{totalExitosas}</p>
             </div>
             <div style={{ ...cardStyle, textAlign: 'center' }}>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Errores</p>
@@ -189,10 +190,10 @@ export default function FlujosPage() {
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                   <tr>
-                    <th style={{ padding: '10px 14px', background: '#1e3a5f', color: '#fff', fontSize: 11, textAlign: 'left' }}>Fecha</th>
-                    <th style={{ padding: '10px 14px', background: '#1e3a5f', color: '#fff', fontSize: 11, textAlign: 'left' }}>Registro</th>
-                    <th style={{ padding: '10px 14px', background: '#1e3a5f', color: '#fff', fontSize: 11, textAlign: 'left' }}>Estado</th>
-                    <th style={{ padding: '10px 14px', background: '#1e3a5f', color: '#fff', fontSize: 11, textAlign: 'left' }}>Detalle</th>
+                    <th style={{ padding: '10px 14px', background: '#1e3a8a', color: '#fff', fontSize: 11, textAlign: 'left' }}>Fecha</th>
+                    <th style={{ padding: '10px 14px', background: '#1e3a8a', color: '#fff', fontSize: 11, textAlign: 'left' }}>Registro</th>
+                    <th style={{ padding: '10px 14px', background: '#1e3a8a', color: '#fff', fontSize: 11, textAlign: 'left' }}>Estado</th>
+                    <th style={{ padding: '10px 14px', background: '#1e3a8a', color: '#fff', fontSize: 11, textAlign: 'left' }}>Detalle</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -201,7 +202,7 @@ export default function FlujosPage() {
                       <td style={{ padding: '8px 14px', color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>{fDateTime(e.fecha)}</td>
                       <td style={{ padding: '8px 14px', color: '#60a5fa', fontSize: 12, fontWeight: 600 }}>{e.registro_codigo}</td>
                       <td style={{ padding: '8px 14px' }}>
-                        <span style={{ padding: '3px 10px', borderRadius: 12, fontSize: 10, fontWeight: 700, background: e.estado === 'exitoso' ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)', color: e.estado === 'exitoso' ? '#22c55e' : '#ef4444' }}>{e.estado}</span>
+                        <span style={{ padding: '3px 10px', borderRadius: 12, fontSize: 10, fontWeight: 700, background: e.estado === 'exitoso' ? 'rgba(59,130,246,0.15)' : 'rgba(239,68,68,0.15)', color: e.estado === 'exitoso' ? '#3b82f6' : '#ef4444' }}>{e.estado}</span>
                       </td>
                       <td style={{ padding: '8px 14px', color: 'rgba(255,255,255,0.6)', fontSize: 11, maxWidth: 300 }}>{e.detalle}</td>
                     </tr>
@@ -222,7 +223,7 @@ export default function FlujosPage() {
       <div>
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <button onClick={() => { setEditing(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Cancelar</button>
-          <button onClick={guardar} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>Guardar Flujo</button>
+          <button onClick={guardar} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>Guardar Flujo</button>
         </div>
         <h1 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginBottom: 20 }}>{editing.id ? 'Editar' : 'Nuevo'} Flujo de Automatización</h1>
 
@@ -287,8 +288,8 @@ export default function FlujosPage() {
               {/* Acciones */}
               {editing.acciones.map((a, i) => (
                 <div key={a.id}>
-                  <div style={nodeStyle('#22c55e')}>
-                    <p style={{ color: '#22c55e', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Acción {i + 1}</p>
+                  <div style={nodeStyle('#3b82f6')}>
+                    <p style={{ color: '#3b82f6', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Acción {i + 1}</p>
                     <p style={{ color: '#fff', fontSize: 13 }}>{accionIcon(a.tipo)} {accionLabel(a.tipo)}</p>
                     <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>→ {moduloLabel(a.modulo_destino)}</p>
                   </div>
@@ -377,8 +378,8 @@ export default function FlujosPage() {
             {/* Acciones */}
             <div style={cardStyle}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                <h3 style={{ color: '#22c55e', fontSize: 14, fontWeight: 700, margin: 0 }}>🎯 Acciones</h3>
-                <button onClick={addAccion} style={{ ...btnStyle, padding: '5px 12px', fontSize: 11, background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)' }}>+ Acción</button>
+                <h3 style={{ color: '#3b82f6', fontSize: 14, fontWeight: 700, margin: 0 }}>🎯 Acciones</h3>
+                <button onClick={addAccion} style={{ ...btnStyle, padding: '5px 12px', fontSize: 11, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)' }}>+ Acción</button>
               </div>
               {editing.acciones.length === 0 && (
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, textAlign: 'center', padding: 12 }}>Agregue al menos una acción</p>
@@ -386,7 +387,7 @@ export default function FlujosPage() {
               {editing.acciones.map((a, i) => (
                 <div key={a.id} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 14, marginBottom: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ display: 'flex', gap: 6, marginBottom: 10, alignItems: 'center' }}>
-                    <span style={{ color: '#22c55e', fontSize: 12, fontWeight: 700 }}>Acción {i + 1}</span>
+                    <span style={{ color: '#3b82f6', fontSize: 12, fontWeight: 700 }}>Acción {i + 1}</span>
                     <select value={a.tipo} onChange={e => updateAccion(i, { tipo: e.target.value })} style={{ ...inputStyle, flex: 1 }}>
                       {TIPOS_ACCION.map(t => <option key={t.id} value={t.id}>{t.icon} {t.label}</option>)}
                     </select>
@@ -401,7 +402,7 @@ export default function FlujosPage() {
                       <div><label style={labelStyle}>Para (email)</label><input value={a.config.to || ''} onChange={e => updateAccionConfig(i, 'to', e.target.value)} placeholder="{{correo}} o email fijo" style={inputStyle} /></div>
                       <div><label style={labelStyle}>Nombre destino</label><input value={a.config.nombre_destino || ''} onChange={e => updateAccionConfig(i, 'nombre_destino', e.target.value)} placeholder="{{nombre}}" style={inputStyle} /></div>
                       <div style={{ gridColumn: 'span 2' }}><label style={labelStyle}>Asunto</label><input value={a.config.asunto || ''} onChange={e => updateAccionConfig(i, 'asunto', e.target.value)} placeholder="Asunto del email" style={inputStyle} /></div>
-                      <div style={{ gridColumn: 'span 2' }}><label style={labelStyle}>Contenido HTML</label><textarea value={a.config.contenido || ''} onChange={e => updateAccionConfig(i, 'contenido', e.target.value)} placeholder="<p>Hola {{nombre}}...</p>" style={{ ...inputStyle, minHeight: 80 }} /></div>
+                      <div style={{ gridColumn: 'span 2' }}><label style={labelStyle}>Contenido HTML</label><textarea value={a.config.contenido || ''} onChange={e => updateAccionConfig(i, 'contenido', e.target.value)} placeholder="<p>Hola {{nombre}}...</p>" style={{ ...inputStyle, minHeight: 80, height: "auto" }} /></div>
                     </div>
                   )}
                   {a.tipo === 'create_tarea' && (
@@ -461,7 +462,7 @@ export default function FlujosPage() {
   // ═══════════ LISTA PRINCIPAL ═══════════
   const stats = [
     { label: 'Total Flujos', value: flujos.length, color: '#3b82f6' },
-    { label: 'Activos', value: flujos.filter(f => f.activo).length, color: '#22c55e' },
+    { label: 'Activos', value: flujos.filter(f => f.activo).length, color: '#3b82f6' },
     { label: 'Inactivos', value: flujos.filter(f => !f.activo).length, color: '#9ca3af' },
     { label: 'Ejecuciones', value: flujos.reduce((s, f) => s + f.ejecuciones.length, 0), color: '#a78bfa' },
   ]
@@ -476,7 +477,7 @@ export default function FlujosPage() {
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: 0 }}>Automatice acciones entre módulos del CRM</p>
           </div>
         </div>
-        <button onClick={abrirNuevo} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>+ Nuevo Flujo</button>
+        <button onClick={abrirNuevo} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>+ Nuevo Flujo</button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
@@ -514,11 +515,11 @@ export default function FlujosPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
                 <div>
                   <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, margin: '0 0 4px' }}>{f.nombre}</h3>
-                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>{f.codigo} · {f.fecha_creacion}</p>
+                  <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, margin: 0 }}>{f.codigo} · {fDate(f.fecha_creacion)}</p>
                 </div>
                 <button onClick={e => { e.stopPropagation(); toggleActivo(f.id) }}
                   style={{ padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, cursor: 'pointer', border: 'none',
-                    background: f.activo ? 'rgba(34,197,94,0.15)' : 'rgba(156,163,175,0.15)', color: f.activo ? '#22c55e' : '#9ca3af' }}>
+                    background: f.activo ? 'rgba(59,130,246,0.15)' : 'rgba(156,163,175,0.15)', color: f.activo ? '#3b82f6' : '#9ca3af' }}>
                   {f.activo ? 'Activo' : 'Inactivo'}
                 </button>
               </div>
@@ -526,7 +527,7 @@ export default function FlujosPage() {
               <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
                 <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(59,130,246,0.15)', color: '#60a5fa' }}>{moduloLabel(f.modulo)}</span>
                 <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(234,179,8,0.15)', color: '#eab308' }}>{triggerLabel(f.trigger)}</span>
-                <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(34,197,94,0.15)', color: '#22c55e' }}>{f.acciones.length} acción(es)</span>
+                <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(59,130,246,0.15)', color: '#3b82f6' }}>{f.acciones.length} acción(es)</span>
                 {f.ejecuciones.length > 0 && (
                   <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(139,92,246,0.15)', color: '#a78bfa' }}>{f.ejecuciones.length} ejecución(es)</span>
                 )}

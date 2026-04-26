@@ -19,7 +19,7 @@ const moduloLabels: Record<string, string> = {
   cotizaciones: 'Cotizaciones',
   prospectos: 'Prospectos',
   pqrs: 'PQRS',
-  clientes: 'Empresas',
+  clientes: 'Clientes',
   oportunidades: 'Oportunidades',
   'email-marketing': 'Email Marketing',
 }
@@ -73,13 +73,13 @@ export default function CorreosPage() {
   })
 
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none' }
+  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
 
   const estadoBadge = (estado: string): React.CSSProperties => ({
     padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700,
-    background: estado === 'Enviado' ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
-    color: estado === 'Enviado' ? '#22c55e' : '#ef4444',
-    border: `1px solid ${estado === 'Enviado' ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)'}`,
+    background: estado === 'Enviado' ? 'rgba(59,130,246,0.15)' : 'rgba(239,68,68,0.15)',
+    color: estado === 'Enviado' ? '#3b82f6' : '#ef4444',
+    border: `1px solid ${estado === 'Enviado' ? 'rgba(59,130,246,0.3)' : 'rgba(239,68,68,0.3)'}`,
   })
 
   const moduloBadge = (modulo: string): React.CSSProperties => ({
@@ -144,7 +144,7 @@ export default function CorreosPage() {
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: 0 }}>Historial de correos enviados desde el sistema</p>
           </div>
         </div>
-        <button onClick={cargar} style={{ ...btnStyle, background: '#1e3a8a', color: '#ffffff', border: '1px solid #2563eb' }}>
+        <button onClick={cargar} style={{ ...btnStyle, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6' }}>
           🔄 Actualizar
         </button>
       </div>
@@ -159,7 +159,7 @@ export default function CorreosPage() {
           <option value="cotizaciones">Cotizaciones</option>
           <option value="prospectos">Prospectos</option>
           <option value="pqrs">PQRS</option>
-          <option value="clientes">Empresas</option>
+          <option value="clientes">Clientes</option>
           <option value="oportunidades">Oportunidades</option>
         </select>
         <select value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)} style={inputStyle}>
@@ -174,7 +174,7 @@ export default function CorreosPage() {
         {[
           { label: 'Total Enviados', value: correos.filter(c => c.estado === 'Enviado').length, color: '#3b82f6' },
           { label: 'Cotizaciones', value: correos.filter(c => c.modulo === 'cotizaciones').length, color: '#8b5cf6' },
-          { label: 'Prospectos', value: correos.filter(c => c.modulo === 'prospectos').length, color: '#22c55e' },
+          { label: 'Prospectos', value: correos.filter(c => c.modulo === 'prospectos').length, color: '#3b82f6' },
           { label: 'Errores', value: correos.filter(c => c.estado === 'Error').length, color: '#ef4444' },
         ].map(s => (
           <div key={s.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '14px 16px', border: '1px solid rgba(255,255,255,0.1)' }}>

@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { BaseReference, ReferenceTableId, Vendedor } from '../types'
+import { DEPARTAMENTOS_CO, CIUDADES_CO } from '../data/divipola'
 
 type RefData = Record<ReferenceTableId, BaseReference[]>
 
@@ -23,18 +24,15 @@ const initialData: RefData = {
     { id: '4', descripcion: 'Perú', situacion: true },
     { id: '5', descripcion: 'Panamá', situacion: true },
   ],
-  ciudad: [
-    { id: '1', descripcion: 'Bogotá', situacion: true },
-    { id: '2', descripcion: 'Medellín', situacion: true },
-    { id: '3', descripcion: 'Cali', situacion: true },
-    { id: '4', descripcion: 'Barranquilla', situacion: true },
-  ],
+  departamento: DEPARTAMENTOS_CO,
+  ciudad: CIUDADES_CO,
+  macro_sector: [],
   actividad_cliente: [
-    { id: '1', descripcion: 'Construcción', situacion: true },
-    { id: '2', descripcion: 'Tecnología', situacion: true },
-    { id: '3', descripcion: 'Comercio', situacion: true },
-    { id: '4', descripcion: 'Servicios', situacion: true },
-    { id: '5', descripcion: 'Manufactura', situacion: true },
+    { id: '1', codigo: '4100', descripcion: 'Construcción', situacion: true },
+    { id: '2', codigo: '6201', descripcion: 'Tecnología', situacion: true },
+    { id: '3', codigo: '4690', descripcion: 'Comercio', situacion: true },
+    { id: '4', codigo: '8299', descripcion: 'Servicios', situacion: true },
+    { id: '5', codigo: '2599', descripcion: 'Manufactura', situacion: true },
   ],
   situacion_cliente: [
     { id: '1', descripcion: 'Activo', situacion: true },
@@ -135,6 +133,24 @@ const initialData: RefData = {
     { id: '5', descripcion: '19%', situacion: true },
   ],
   categoria_productos: [],
+  tipo_empaque: [
+    { id: '1', descripcion: 'Caja', situacion: true },
+    { id: '2', descripcion: 'Bolsa', situacion: true },
+    { id: '3', descripcion: 'Frasco', situacion: true },
+    { id: '4', descripcion: 'Blíster', situacion: true },
+    { id: '5', descripcion: 'Granel', situacion: true },
+  ],
+  tipo_formula: [
+    { id: '1', descripcion: 'Estándar', situacion: true },
+    { id: '2', descripcion: 'Personalizada', situacion: true },
+    { id: '3', descripcion: 'Magistral', situacion: true },
+  ],
+  tipo_precio: [
+    { id: '1', descripcion: 'Lista', situacion: true },
+    { id: '2', descripcion: 'Mayorista', situacion: true },
+    { id: '3', descripcion: 'Promocional', situacion: true },
+    { id: '4', descripcion: 'Especial', situacion: true },
+  ],
   unidad_medida: [
     { id: '1', descripcion: 'Unidad', situacion: true },
     { id: '2', descripcion: 'Kilogramo', situacion: true },
@@ -161,6 +177,36 @@ const initialData: RefData = {
     { id: '6', descripcion: 'Email', situacion: true },
     { id: '7', descripcion: 'Otro', situacion: true },
   ],
+  como_nos_conocio: [
+    { id: '1', descripcion: 'Referido por un Cliente', situacion: true },
+    { id: '2', descripcion: 'En Internet', situacion: true },
+    { id: '3', descripcion: 'Referido por un Socio', situacion: true },
+    { id: '4', descripcion: 'Lo Visitó un Comercial', situacion: true },
+    { id: '5', descripcion: 'Por una Llamada Telefónica', situacion: true },
+    { id: '6', descripcion: 'Por contacto WhatsApp', situacion: true },
+    { id: '7', descripcion: 'Visita Cliente a Oficina', situacion: true },
+  ],
+  producto_interes: [],
+  tipo_retencion_fuente: [],
+  tipo_retencion_iva: [],
+  naturaleza_cuenta: [],
+  tipo_cuenta: [
+    { id: '1', descripcion: 'Ahorro', situacion: true },
+    { id: '2', descripcion: 'Corriente', situacion: true },
+  ],
+  tipo_cuenta_cliente: [
+    { id: '1', descripcion: 'Cliente Nuevo', situacion: true },
+    { id: '2', descripcion: 'Cliente VIP', situacion: true },
+    { id: '3', descripcion: 'Cliente Mayorista', situacion: true },
+    { id: '4', descripcion: 'Cliente Distribuidor', situacion: true },
+    { id: '5', descripcion: 'Cliente Final', situacion: true },
+  ],
+  clase_cliente: [
+    { id: '1', descripcion: 'Especiales', situacion: true },
+    { id: '2', descripcion: 'Otros Clientes', situacion: true },
+  ],
+  clasificacion_tributaria: [],
+  calificacion_pagador: [],
   vendedores: [],
 }
 
@@ -192,6 +238,14 @@ export const useReferenceStore = create<ReferenceState>()(
     }),
     {
       name: 'crm-referencias-storage',
+      version: 2,
+      migrate: (persisted, version) => {
+        const p = (persisted as Partial<ReferenceState> | undefined) || {}
+        if (version < 2 && p.data) {
+          p.data = { ...p.data, departamento: DEPARTAMENTOS_CO, ciudad: CIUDADES_CO }
+        }
+        return p as ReferenceState
+      },
       merge: (persisted, current) => {
         const p = persisted as Partial<ReferenceState> | undefined
         const merged = { ...current }

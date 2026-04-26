@@ -82,7 +82,7 @@ export default function DocumentosPanel({ modulo, registroId }: Props) {
     overflow: 'hidden',
   }
   const headerStyle: React.CSSProperties = {
-    background: '#1e3a5f',
+    background: '#1e3a8a',
     padding: '12px 16px',
     display: 'flex',
     alignItems: 'center',
@@ -112,7 +112,7 @@ export default function DocumentosPanel({ modulo, registroId }: Props) {
       <label
         htmlFor={inputId}
         style={labelStyle}
-        onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)')}
+        onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(59,130,246,0.5)')}
         onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)')}
       >
         <div style={{ fontSize: 24, marginBottom: 6 }}>⬆️</div>
@@ -154,7 +154,7 @@ export default function DocumentosPanel({ modulo, registroId }: Props) {
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 4 }}>
-                <a href={f.url} target="_blank" rel="noopener noreferrer" style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(34,197,94,0.15)', color: '#86efac', fontSize: 11, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(34,197,94,0.25)' }}>
+                <a href={f.url} target="_blank" rel="noopener noreferrer" style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(59,130,246,0.15)', color: '#86efac', fontSize: 11, fontWeight: 600, textDecoration: 'none', border: '1px solid rgba(59,130,246,0.25)' }}>
                   Ver
                 </a>
                 <button onClick={() => handleDelete(f)} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(239,68,68,0.15)', color: '#fca5a5', fontSize: 11, fontWeight: 600, border: '1px solid rgba(239,68,68,0.25)', cursor: 'pointer' }}>

@@ -1,4 +1,5 @@
 'use client'
+import { logAudit, computarDiff } from '@/shared/lib/audit'
 import { useState } from 'react'
 import { useTareasStore, Tarea } from '@/features/tareas/store/tareas-store'
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
@@ -21,7 +22,7 @@ const emptyTarea = (codigo: string): Tarea => ({
 const colorMap: Record<string, { bg: string; color: string; border: string }> = {
   yellow: { bg: 'rgba(234,179,8,0.15)', color: '#eab308', border: 'rgba(234,179,8,0.3)' },
   blue: { bg: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
-  green: { bg: 'rgba(34,197,94,0.15)', color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
+  green: { bg: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: 'rgba(59,130,246,0.3)' },
   gray: { bg: 'rgba(156,163,175,0.15)', color: '#9ca3af', border: 'rgba(156,163,175,0.3)' },
   red: { bg: 'rgba(239,68,68,0.15)', color: '#ef4444', border: 'rgba(239,68,68,0.3)' },
 }
@@ -51,7 +52,7 @@ export default function TareasPage() {
 
   // Styles
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%' }
+  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%', boxSizing: 'border-box', height: 38 }
   const labelStyle: React.CSSProperties = { color: 'rgba(255,255,255,0.6)', fontSize: 11, marginBottom: 4, display: 'block' }
   const cardStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 16, border: '1px solid rgba(255,255,255,0.1)' }
 
@@ -70,6 +71,13 @@ export default function TareasPage() {
     return true
   }).sort((a, b) => b.fecha_registro.localeCompare(a.fecha_registro))
 
+  const auditParams = () => ({
+    usuario: user?.usuario || 'desconocido',
+    usuario_nombre: `${user?.nombre || ''} ${user?.apellido || ''}`.trim(),
+    rol: user?.rol || '',
+    modulo: 'tareas',
+  })
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selected) return
@@ -80,7 +88,7 @@ export default function TareasPage() {
     const tareaFinal = esNueva ? { ...selected, id: crypto.randomUUID() } : selected
 
     if (esNueva) {
-      addTarea(tareaFinal)
+      addTarea(tareaFinal); logAudit({ ...auditParams(), accion: "CREAR", registro_codigo: selected.codigo, registro_nombre: selected.descripcion })
       // Enviar correo al ejecutor
       const ejecutor = vendedores.find(v => `${v.nombre} ${v.apellido}` === selected.persona_ejecuta && v.correo)
       if (ejecutor?.correo) {
@@ -100,7 +108,7 @@ export default function TareasPage() {
         } catch { /* no bloquear si falla el email */ }
       }
     } else {
-      updateTarea(selected.id, selected)
+      const _anterior = tareas.find(x => x.id === selected.id); updateTarea(selected.id, selected); logAudit({ ...auditParams(), accion: "MODIFICAR", registro_codigo: selected.codigo, registro_nombre: selected.descripcion, detalle: computarDiff(_anterior as unknown as Record<string, unknown>, selected as unknown as Record<string, unknown>) })
     }
     setSelected(null)
     setVista('lista')
@@ -187,10 +195,14 @@ export default function TareasPage() {
         <button onClick={() => { setSelected(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333', marginBottom: 16 }}>← Cancelar</button>
         <form onSubmit={handleSave} style={cardStyle}>
           <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 700, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nueva'} Tarea</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }}>
             <div>
               <label style={labelStyle}>Código</label>
               <input value={selected.codigo} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
+            </div>
+            <div>
+              <label style={labelStyle}>Fecha Registro</label>
+              <input value={fDate(selected.fecha_registro)} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
             </div>
             <div>
               <label style={labelStyle}>Fecha Asignación *</label>
@@ -233,11 +245,11 @@ export default function TareasPage() {
               <label style={labelStyle}>Descripción *</label>
               <textarea value={selected.descripcion} onChange={e => setSelected({ ...selected, descripcion: e.target.value })} required rows={4}
                 placeholder="Describa la tarea con detalle..."
-                style={{ ...inputStyle, resize: 'vertical', minHeight: 100 }} />
+                style={{ ...inputStyle, resize: 'vertical', minHeight: 100, height: 'auto' }} />
             </div>
           </div>
           <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>
+            <button type="submit" style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>
               {selected.id ? 'Actualizar' : 'Guardar'} Tarea
             </button>
             <button type="button" onClick={() => { setSelected(null); setVista('lista') }} style={{ ...btnStyle, background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.2)' }}>
@@ -310,7 +322,7 @@ export default function TareasPage() {
     { label: 'Total', value: tareas.length, color: '#3b82f6' },
     { label: 'Pendientes', value: tareas.filter(t => t.situacion === 'Pendiente').length, color: '#eab308' },
     { label: 'En Proceso', value: tareas.filter(t => t.situacion === 'En Proceso').length, color: '#60a5fa' },
-    { label: 'Completadas', value: tareas.filter(t => t.situacion === 'Completada').length, color: '#22c55e' },
+    { label: 'Completadas', value: tareas.filter(t => t.situacion === 'Completada').length, color: '#3b82f6' },
   ]
 
   // Report columns
@@ -357,7 +369,7 @@ export default function TareasPage() {
           </div>
           {permisos.editar && (
             <button onClick={() => { setSelected(emptyTarea(nextConsecutivo('TAR-', tareas.map(t => t.codigo)).codigo)); setVista('form') }}
-              style={{ ...btnStyle, background: '#0f1b3d', color: '#fff' }}>+ Nueva Tarea</button>
+              style={{ ...btnStyle, background: '#172554', color: '#fff' }}>+ Nueva Tarea</button>
           )}
         </div>
       </div>
@@ -411,7 +423,7 @@ export default function TareasPage() {
                       <td style={{ padding: '10px 14px', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{t.persona_asigna}</td>
                       <td style={{ padding: '10px 14px', color: '#fff', fontSize: 13 }}>{t.persona_ejecuta}</td>
                       <td style={{ padding: '10px 14px', color: '#eab308', fontSize: 13 }}>{fDate(t.fecha_requerida_fin)}</td>
-                      <td style={{ padding: '10px 14px', color: t.fecha_real_fin ? '#22c55e' : 'rgba(255,255,255,0.3)', fontSize: 13 }}>{fDate(t.fecha_real_fin)}</td>
+                      <td style={{ padding: '10px 14px', color: t.fecha_real_fin ? '#3b82f6' : 'rgba(255,255,255,0.3)', fontSize: 13 }}>{fDate(t.fecha_real_fin)}</td>
                       <td style={{ padding: '10px 14px', color: 'rgba(255,255,255,0.7)', fontSize: 12, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.descripcion}</td>
                       <td style={{ padding: '10px 14px' }}><span style={situacionBadge(t.situacion)}>{t.situacion}</span></td>
                       <td style={{ padding: '10px 14px' }}>
@@ -420,7 +432,7 @@ export default function TareasPage() {
                             style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)', padding: '4px 12px', fontSize: 11 }}>Ver</button>
                           {permisos.editar && (
                             <button onClick={() => { setSelected(t); setVista('form') }}
-                              style={{ ...btnStyle, background: 'rgba(34,197,94,0.15)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)', padding: '4px 12px', fontSize: 11 }}>Editar</button>
+                              style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)', padding: '4px 12px', fontSize: 11 }}>Editar</button>
                           )}
                           {permisos.eliminar && (
                             <button onClick={() => { if (confirm(`¿Eliminar tarea "${t.codigo}"?`)) deleteTarea(t.id) }}

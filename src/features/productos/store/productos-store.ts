@@ -8,13 +8,29 @@ export interface Producto {
   id: string
   codigo: string
   descripcion: string
-  categoria: string
-  unidad_medida: string
+  tipo_empaque: string
+  tipo_formula: string
+  porcentaje_iva: string
+  tipo_precio: string
   precio_unitario: number
-  tipo_moneda: string
-  observaciones: string
+  fecha_vigencia_precio: string
   situacion: string
+  observaciones: string
   fecha_registro: string
+
+  costo_producto: number
+  margen_contribucion_pct: number
+  margen_calculo_pct: number
+
+  valor_trm: number
+  conversion_cop: number
+  valor_usd: number
+
+  unidad_medida: string
+  existencia_actual: number
+  valor_permanente_stock: number
+  costo_inventario: number
+
   seguimientos: Seguimiento[]
 }
 

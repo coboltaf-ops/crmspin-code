@@ -41,9 +41,9 @@ export default function SeguimientoPanel({ seguimientos, usuario, situacionActua
     setFecha(todayColombia())
   }
 
-  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: 13, outline: 'none' }
+  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const thStyle: React.CSSProperties = { padding: '10px 14px', background: '#1e3a5f', color: '#fff', fontSize: 11, fontWeight: 700, textAlign: 'left', textTransform: 'uppercase', letterSpacing: 0.5 }
+  const thStyle: React.CSSProperties = { padding: '10px 14px', background: '#1e3a8a', color: '#fff', fontSize: 11, fontWeight: 700, textAlign: 'left', textTransform: 'uppercase', letterSpacing: 0.5 }
 
   const sorted = [...seguimientos].reverse()
 
@@ -100,7 +100,7 @@ export default function SeguimientoPanel({ seguimientos, usuario, situacionActua
                   <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', color: '#ffffff', fontSize: 13, lineHeight: 1.5 }}>
                     {s.detalle}
                   </td>
-                  <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', color: '#4ade80', fontSize: 12, fontWeight: 600 }}>
+                  <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)', color: '#60a5fa', fontSize: 12, fontWeight: 600 }}>
                     {s.persona_actividad || s.usuario || '—'}
                   </td>
                   <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>

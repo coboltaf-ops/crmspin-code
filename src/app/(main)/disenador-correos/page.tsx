@@ -2,18 +2,19 @@
 import { useState, useRef } from 'react'
 import { useDirenadorStore, PlantillaCorreo } from '@/features/disenador-correos/store/disenador-store'
 import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
+import { fDate } from '@/shared/lib/format-date'
 
 function todayCO() { return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' }) }
 
 const categorias = ['Comercial', 'Marketing', 'Servicio', 'Cobranza', 'Informativo', 'Otro']
 
 const bloques = [
-  { id: 'header-azul', label: 'Encabezado Azul', html: `<div style="background:#1e3a8a;padding:28px;border-radius:12px 12px 0 0;text-align:center">\n  <h1 style="color:#fff;margin:0;font-size:24px">Titulo del Correo</h1>\n  <p style="color:rgba(255,255,255,0.7);margin:6px 0 0;font-size:13px">Subtitulo descriptivo</p>\n</div>` },
+  { id: 'header-azul', label: 'Encabezado Azul', html: `<div style="background:#4169E1;padding:28px;border-radius:12px 12px 0 0;text-align:center">\n  <h1 style="color:#fff;margin:0;font-size:24px">Titulo del Correo</h1>\n  <p style="color:rgba(255,255,255,0.7);margin:6px 0 0;font-size:13px">Subtitulo descriptivo</p>\n</div>` },
   { id: 'header-rojo', label: 'Encabezado Rojo', html: `<div style="background:#b91c1c;padding:24px;border-radius:12px 12px 0 0;text-align:center">\n  <h1 style="color:#fff;margin:0;font-size:22px">Titulo Importante</h1>\n</div>` },
-  { id: 'header-gradiente', label: 'Encabezado Gradiente', html: `<div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);padding:32px;border-radius:12px 12px 0 0;text-align:center">\n  <h1 style="color:#fff;margin:0;font-size:26px">Titulo Destacado</h1>\n</div>` },
+  { id: 'header-gradiente', label: 'Encabezado Gradiente', html: `<div style="background:linear-gradient(135deg,#4169E1,#3b82f6);padding:32px;border-radius:12px 12px 0 0;text-align:center">\n  <h1 style="color:#fff;margin:0;font-size:26px">Titulo Destacado</h1>\n</div>` },
   { id: 'cuerpo', label: 'Cuerpo del Email', html: `<div style="padding:28px;border:1px solid #e5e7eb;background:#ffffff">\n  <p style="font-size:15px;color:#1e293b">Hola <strong>{{nombre}}</strong>,</p>\n  <p style="font-size:14px;color:#475569;line-height:1.7">Escriba aqui el contenido del correo...</p>\n</div>` },
-  { id: 'boton', label: 'Boton de Accion', html: `<div style="text-align:center;margin:24px 0">\n  <span style="display:inline-block;background:#1e3a8a;color:#fff;padding:14px 36px;border-radius:8px;font-weight:bold;font-size:15px">Texto del Boton</span>\n</div>` },
-  { id: 'destacado', label: 'Caja Destacada', html: `<div style="background:#f0f9ff;border:2px dashed #3b82f6;border-radius:12px;padding:24px;text-align:center;margin:24px 0">\n  <p style="font-size:16px;color:#1e3a8a;font-weight:700;margin:0">Informacion Destacada</p>\n  <p style="font-size:14px;color:#64748b;margin:8px 0 0">Detalle adicional aqui</p>\n</div>` },
+  { id: 'boton', label: 'Boton de Accion', html: `<div style="text-align:center;margin:24px 0">\n  <span style="display:inline-block;background:#4169E1;color:#fff;padding:14px 36px;border-radius:8px;font-weight:bold;font-size:15px">Texto del Boton</span>\n</div>` },
+  { id: 'destacado', label: 'Caja Destacada', html: `<div style="background:#f0f9ff;border:2px dashed #3b82f6;border-radius:12px;padding:24px;text-align:center;margin:24px 0">\n  <p style="font-size:16px;color:#4169E1;font-weight:700;margin:0">Informacion Destacada</p>\n  <p style="font-size:14px;color:#64748b;margin:8px 0 0">Detalle adicional aqui</p>\n</div>` },
   { id: 'separador', label: 'Separador', html: `<hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0" />` },
   { id: 'firma', label: 'Firma / Cierre', html: `<p style="font-size:14px;color:#475569;margin-top:24px">Cordialmente,<br><strong>{{empresa}}</strong></p>` },
   { id: 'footer', label: 'Pie de Pagina', html: `<p style="text-align:center;color:#9ca3af;font-size:11px;margin-top:16px">{{empresa}} - Todos los derechos reservados</p>` },
@@ -36,7 +37,7 @@ export default function DisenadorCorreosPage() {
 
   // Styles
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%' }
+  const inputStyle: React.CSSProperties = { padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', width: '100%', boxSizing: 'border-box', height: 38 }
   const labelStyle: React.CSSProperties = { color: 'rgba(255,255,255,0.6)', fontSize: 11, marginBottom: 4, display: 'block' }
   const cardStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 16, border: '1px solid rgba(255,255,255,0.1)' }
 
@@ -107,7 +108,7 @@ export default function DisenadorCorreosPage() {
       <div>
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <button onClick={() => { setEditing(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Volver</button>
-          <button onClick={guardar} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>Guardar Plantilla</button>
+          <button onClick={guardar} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>Guardar Plantilla</button>
         </div>
         <h1 style={{ color: '#fff', fontSize: 22, fontWeight: 800, marginBottom: 20 }}>{editing.id ? 'Editar' : 'Nueva'} Plantilla de Correo</h1>
 
@@ -160,7 +161,7 @@ export default function DisenadorCorreosPage() {
             <div>
               <label style={labelStyle}>Contenido HTML</label>
               <textarea value={editing.contenido} onChange={e => setEditing({ ...editing, contenido: e.target.value })}
-                style={{ ...inputStyle, minHeight: 420, fontFamily: 'monospace', fontSize: 12, lineHeight: 1.5 }}
+                style={{ ...inputStyle, minHeight: 420, height: 'auto', fontFamily: 'monospace', fontSize: 12, lineHeight: 1.5 }}
                 placeholder="Escriba o inserte bloques HTML..." />
             </div>
           </div>
@@ -196,7 +197,7 @@ export default function DisenadorCorreosPage() {
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, margin: 0 }}>Cree y guarde plantillas de email reutilizables</p>
           </div>
         </div>
-        <button onClick={abrirNueva} style={{ ...btnStyle, background: '#22c55e', color: '#fff', border: '1px solid #16a34a' }}>
+        <button onClick={abrirNueva} style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6' }}>
           + Nueva Plantilla
         </button>
       </div>
@@ -207,7 +208,7 @@ export default function DisenadorCorreosPage() {
           { label: 'Total', value: plantillas.length, color: '#3b82f6' },
           { label: 'Favoritas', value: plantillas.filter(p => p.favorito).length, color: '#eab308' },
           { label: 'Marketing', value: plantillas.filter(p => p.categoria === 'Marketing').length, color: '#a78bfa' },
-          { label: 'Comercial', value: plantillas.filter(p => p.categoria === 'Comercial').length, color: '#22c55e' },
+          { label: 'Comercial', value: plantillas.filter(p => p.categoria === 'Comercial').length, color: '#3b82f6' },
         ].map(s => (
           <div key={s.label} style={{ ...cardStyle, textAlign: 'center' }}>
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{s.label}</p>
@@ -251,7 +252,7 @@ export default function DisenadorCorreosPage() {
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{p.asunto}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <span style={{ padding: '3px 10px', borderRadius: 12, fontSize: 10, fontWeight: 600, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.25)' }}>{p.categoria}</span>
-                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>{p.fecha_modificacion}</span>
+                <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>{fDate(p.fecha_modificacion)}</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
                 <button onClick={e => { e.stopPropagation(); abrirEditar(p) }}

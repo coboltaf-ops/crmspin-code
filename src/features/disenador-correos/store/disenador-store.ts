@@ -27,7 +27,7 @@ const plantillasPredefinidas: PlantillaCorreo[] = [
     id: 'pre-bienvenida', nombre: 'Bienvenida al Cliente', categoria: 'Comercial', asunto: 'Bienvenido a {{empresa}}', favorito: true,
     fecha_creacion: todayCO(), fecha_modificacion: todayCO(),
     contenido: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:#1e3a8a;padding:28px;border-radius:12px 12px 0 0;text-align:center">
+  <div style="background:#4169E1;padding:28px;border-radius:12px 12px 0 0;text-align:center">
     <h1 style="color:#fff;margin:0;font-size:24px">Bienvenido</h1>
     <p style="color:rgba(255,255,255,0.7);margin:6px 0 0;font-size:13px">Nos alegra tenerle con nosotros</p>
   </div>
@@ -36,7 +36,7 @@ const plantillasPredefinidas: PlantillaCorreo[] = [
     <p style="font-size:14px;color:#475569;line-height:1.7">Gracias por confiar en nosotros. Estamos encantados de tenerle como parte de nuestra comunidad.</p>
     <p style="font-size:14px;color:#475569;line-height:1.7">Nuestro equipo esta disponible para atenderle en lo que necesite. No dude en contactarnos.</p>
     <div style="text-align:center;margin:28px 0">
-      <span style="display:inline-block;background:#1e3a8a;color:#fff;padding:14px 36px;border-radius:8px;font-weight:bold;font-size:15px;text-decoration:none">Conocer Nuestros Servicios</span>
+      <span style="display:inline-block;background:#4169E1;color:#fff;padding:14px 36px;border-radius:8px;font-weight:bold;font-size:15px;text-decoration:none">Conocer Nuestros Servicios</span>
     </div>
     <p style="font-size:14px;color:#475569;margin-top:24px">Cordialmente,<br><strong>{{empresa}}</strong></p>
   </div>
@@ -47,7 +47,7 @@ const plantillasPredefinidas: PlantillaCorreo[] = [
     id: 'pre-promocion', nombre: 'Oferta Especial', categoria: 'Marketing', asunto: 'Oferta exclusiva para ti - {{empresa}}', favorito: false,
     fecha_creacion: todayCO(), fecha_modificacion: todayCO(),
     contenido: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6);padding:32px;border-radius:12px 12px 0 0;text-align:center">
+  <div style="background:linear-gradient(135deg,#4169E1,#3b82f6);padding:32px;border-radius:12px 12px 0 0;text-align:center">
     <h1 style="color:#fff;margin:0;font-size:26px">Oferta Especial</h1>
     <p style="color:rgba(255,255,255,0.8);margin:8px 0 0;font-size:16px">Solo por tiempo limitado</p>
   </div>
@@ -56,11 +56,11 @@ const plantillasPredefinidas: PlantillaCorreo[] = [
     <p style="font-size:14px;color:#475569;line-height:1.7">Tenemos una oferta exclusiva diseñada especialmente para usted.</p>
     <div style="background:#f0f9ff;border:2px dashed #3b82f6;border-radius:12px;padding:24px;text-align:center;margin:24px 0">
       <p style="font-size:13px;color:#3b82f6;font-weight:600;margin:0">DESCUENTO ESPECIAL</p>
-      <p style="font-size:42px;color:#1e3a8a;font-weight:900;margin:8px 0">20% OFF</p>
+      <p style="font-size:42px;color:#4169E1;font-weight:900;margin:8px 0">20% OFF</p>
       <p style="font-size:13px;color:#64748b;margin:0">En todos nuestros productos y servicios</p>
     </div>
     <div style="text-align:center;margin:24px 0">
-      <span style="display:inline-block;background:#1e3a8a;color:#fff;padding:14px 36px;border-radius:8px;font-weight:bold;font-size:15px">Aprovechar Oferta</span>
+      <span style="display:inline-block;background:#4169E1;color:#fff;padding:14px 36px;border-radius:8px;font-weight:bold;font-size:15px">Aprovechar Oferta</span>
     </div>
     <p style="font-size:12px;color:#94a3b8;text-align:center">Oferta valida hasta agotar existencias. Aplican condiciones.</p>
     <p style="font-size:14px;color:#475569;margin-top:20px">Saludos,<br><strong>{{empresa}}</strong></p>
@@ -71,7 +71,7 @@ const plantillasPredefinidas: PlantillaCorreo[] = [
     id: 'pre-seguimiento', nombre: 'Seguimiento Post-Venta', categoria: 'Servicio', asunto: 'Como fue su experiencia? - {{empresa}}', favorito: false,
     fecha_creacion: todayCO(), fecha_modificacion: todayCO(),
     contenido: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:#1e3a8a;padding:28px;border-radius:12px 12px 0 0;text-align:center">
+  <div style="background:#4169E1;padding:28px;border-radius:12px 12px 0 0;text-align:center">
     <h1 style="color:#fff;margin:0;font-size:22px">Queremos Saber de Usted</h1>
   </div>
   <div style="padding:28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;background:#ffffff">

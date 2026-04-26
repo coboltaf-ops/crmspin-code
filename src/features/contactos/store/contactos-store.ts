@@ -13,7 +13,6 @@ export interface Contacto {
   apellido: string
   cargo: string
   departamento: string
-  telefono: string
   celular: string
   email: string
   fecha_nacimiento: string

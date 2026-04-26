@@ -22,7 +22,7 @@ export default function ModulosPage() {
 
       {/* Resumen */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        <div style={{ background: '#0f1b3d', borderRadius: 12, padding: '12px 24px', border: '1px solid #1e3a5f', textAlign: 'center' }}>
+        <div style={{ background: '#172554', borderRadius: 12, padding: '12px 24px', border: '1px solid #1e3a8a', textAlign: 'center' }}>
           <p style={{ color: '#ffffff', fontSize: 28, fontWeight: 800 }}>{activos}</p>
           <p style={{ color: '#ffffff', fontSize: 12 }}>Activos</p>
         </div>
@@ -50,7 +50,7 @@ export default function ModulosPage() {
               {isProtected ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>Siempre activo</span>
-                  <div style={{ width: 48, height: 26, borderRadius: 13, background: '#22c55e', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px', opacity: 0.5 }}>
+                  <div style={{ width: 48, height: 26, borderRadius: 13, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px', opacity: 0.5 }}>
                     <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff' }} />
                   </div>
                 </div>
@@ -61,7 +61,7 @@ export default function ModulosPage() {
                   </span>
                   <div style={{
                     width: 48, height: 26, borderRadius: 13,
-                    background: m.activo ? '#0f1b3d' : '#b91c1c',
+                    background: m.activo ? '#172554' : '#b91c1c',
                     display: 'flex', alignItems: 'center',
                     justifyContent: m.activo ? 'flex-end' : 'flex-start',
                     padding: '0 3px', transition: 'all 0.3s',

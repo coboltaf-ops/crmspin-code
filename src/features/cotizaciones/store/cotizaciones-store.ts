@@ -31,6 +31,9 @@ export interface Cotizacion {
   tipo_moneda: string
   condicion_pago: string
   pct_impuesto: number
+  pct_retencion: number
+  fecha_aprobacion: string
+  tiene_flete: string
   observaciones: string
   detalles: DetalleCotizacion[]
   situacion: string

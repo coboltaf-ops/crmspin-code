@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 type ClienteInfo = { cliente_id: string; cliente_codigo: string; cliente_nombre: string }
 
@@ -31,7 +31,7 @@ const tipos = [
 ]
 
 const prioridades = [
-  { id: 'Baja', color: '#22c55e' }, { id: 'Media', color: '#eab308' },
+  { id: 'Baja', color: '#3b82f6' }, { id: 'Media', color: '#eab308' },
   { id: 'Alta', color: '#f97316' }, { id: 'Urgente', color: '#ef4444' },
 ]
 
@@ -48,6 +48,14 @@ export default function PQRSPublicoPage() {
   const [salir, setSalir] = useState(false)
 
   const [tiposRef, setTiposRef] = useState<{ id: string; icon: string }[]>(tipos)
+  const [empresa, setEmpresa] = useState<{ nombre: string; logo_url: string }>({ nombre: '', logo_url: '' })
+
+  useEffect(() => {
+    fetch('/api/empresa-publico')
+      .then(r => r.json())
+      .then(d => setEmpresa({ nombre: d.nombre || '', logo_url: d.logo_url || '' }))
+      .catch(() => {})
+  }, [])
 
   const set = (field: keyof FormData, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }))
@@ -117,6 +125,7 @@ export default function PQRSPublicoPage() {
     width: '100%', padding: '9px 12px', borderRadius: 8,
     background: 'rgba(255,255,255,0.1)', border: '1.5px solid rgba(255,255,255,0.25)', color: '#ffffff',
     fontSize: 13, outline: 'none', transition: 'border-color 0.2s',
+    boxSizing: 'border-box', height: 40,
   }
   const inputErr: React.CSSProperties = { ...inputStyle, borderColor: '#fca5a5', boxShadow: '0 0 0 3px rgba(239,68,68,0.2)' }
   const labelStyle: React.CSSProperties = { color: 'rgba(255,255,255,0.8)', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }
@@ -126,20 +135,20 @@ export default function PQRSPublicoPage() {
   // ═══════════ PANTALLA DE ÉXITO ═══════════
   if (result?.ok) {
     return (
-      <div style={{ minHeight: '100vh', background: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-        <div style={{ background: '#0f1b3d', borderRadius: 16, padding: '36px 32px', maxWidth: 400, width: '100%', textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 30 }}>✅</div>
+      <div style={{ minHeight: '100vh', background: '#002366', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+        <div style={{ background: '#172554', borderRadius: 16, padding: '36px 32px', maxWidth: 400, width: '100%', textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ width: 60, height: 60, borderRadius: '50%', background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: 30 }}>✅</div>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 800, marginBottom: 8 }}>PQRS Radicada Exitosamente</h2>
           {result.radicado && (
-            <div style={{ background: 'rgba(34,197,94,0.1)', borderRadius: 10, padding: '14px 18px', margin: '16px 0', border: '1px solid rgba(34,197,94,0.3)' }}>
+            <div style={{ background: 'rgba(59,130,246,0.1)', borderRadius: 10, padding: '14px 18px', margin: '16px 0', border: '1px solid rgba(59,130,246,0.3)' }}>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>Su número de radicado es:</p>
-              <p style={{ color: '#22c55e', fontSize: 24, fontWeight: 800, fontFamily: 'monospace', letterSpacing: 1 }}>{result.radicado}</p>
+              <p style={{ color: '#3b82f6', fontSize: 24, fontWeight: 800, fontFamily: 'monospace', letterSpacing: 1 }}>{result.radicado}</p>
               <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, marginTop: 4 }}>Guarde este número para consultar el estado</p>
             </div>
           )}
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 13, lineHeight: 1.7, marginBottom: 20 }}>{result.mensaje}</p>
           <button onClick={() => setResult(null)}
-            style={{ padding: '10px 28px', borderRadius: 10, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            style={{ padding: '10px 28px', borderRadius: 10, background: '#3b82f6', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             Radicar otra PQRS
           </button>
         </div>
@@ -150,13 +159,13 @@ export default function PQRSPublicoPage() {
   // ═══════════ PANTALLA DE SALIDA ═══════════
   if (salir) {
     return (
-      <div style={{ minHeight: '100vh', background: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-        <div style={{ background: '#0f1b3d', borderRadius: 16, padding: '36px 32px', maxWidth: 380, width: '100%', textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
+      <div style={{ minHeight: '100vh', background: '#002366', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+        <div style={{ background: '#172554', borderRadius: 16, padding: '36px 32px', maxWidth: 380, width: '100%', textAlign: 'center', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
           <div style={{ fontSize: 42, marginBottom: 12 }}>👋</div>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 800, marginBottom: 8 }}>Gracias por visitarnos</h2>
           <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13, marginBottom: 20 }}>Puede cerrar esta pestaña de forma segura.</p>
           <button onClick={() => setSalir(false)}
-            style={{ padding: '10px 28px', borderRadius: 10, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
+            style={{ padding: '10px 28px', borderRadius: 10, background: '#3b82f6', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>
             Volver al formulario
           </button>
         </div>
@@ -166,15 +175,19 @@ export default function PQRSPublicoPage() {
 
   // ═══════════ PANTALLA PRINCIPAL ═══════════
   return (
-    <div style={{ minHeight: '100vh', background: '#1e3a8a', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-      <div style={{ background: '#0f1b3d', borderRadius: 16, padding: '28px 28px', maxWidth: 500, width: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
+    <div style={{ minHeight: '100vh', background: '#002366', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+      <div style={{ background: '#172554', borderRadius: 16, padding: '28px 28px', maxWidth: 500, width: '100%', boxShadow: '0 20px 50px rgba(0,0,0,0.4)', border: '1px solid rgba(255,255,255,0.1)' }}>
 
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(59,130,246,0.2)', border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📩</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            {empresa.logo_url ? (
+              <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 48, maxWidth: 80, objectFit: 'contain', background: '#ffffff', borderRadius: 8, padding: 4 }} />
+            ) : (
+              <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(59,130,246,0.2)', border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📩</div>
+            )}
             <div>
-              <h1 style={{ color: '#ffffff', fontSize: 17, fontWeight: 800, margin: 0 }}>CRM SPIN · Radicar PQRS</h1>
+              <h1 style={{ color: '#ffffff', fontSize: 17, fontWeight: 800, margin: 0 }}>{empresa.nombre || 'CRM SPIN'} · Radicar PQRS</h1>
               <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, margin: 0 }}>Peticiones, Quejas, Reclamos y Sugerencias</p>
             </div>
           </div>
@@ -210,7 +223,7 @@ export default function PQRSPublicoPage() {
                 <button onClick={validarCodigo} disabled={validando}
                   style={{
                     width: '100%', marginTop: 14, padding: '11px 20px', borderRadius: 10,
-                    background: validando ? 'rgba(255,255,255,0.1)' : '#2563eb', color: '#ffffff',
+                    background: validando ? 'rgba(255,255,255,0.1)' : '#3b82f6', color: '#ffffff',
                     border: validando ? '1px solid rgba(255,255,255,0.2)' : '1px solid #3b82f6',
                     fontSize: 14, fontWeight: 700, cursor: validando ? 'not-allowed' : 'pointer',
                   }}>
@@ -223,11 +236,11 @@ export default function PQRSPublicoPage() {
           /* ═══ FORMULARIO PQRS ═══ */
           <div>
             {/* Banner empresa validada */}
-            <div style={{ background: 'rgba(34,197,94,0.1)', borderRadius: 10, padding: '10px 14px', marginBottom: 16, border: '1px solid rgba(34,197,94,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ background: 'rgba(59,130,246,0.1)', borderRadius: 10, padding: '10px 14px', marginBottom: 16, border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ fontSize: 16 }}>✅</span>
                 <div>
-                  <p style={{ color: '#22c55e', fontSize: 12, fontWeight: 700, margin: 0 }}>{clienteInfo.cliente_nombre}</p>
+                  <p style={{ color: '#3b82f6', fontSize: 12, fontWeight: 700, margin: 0 }}>{clienteInfo.cliente_nombre}</p>
                   <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, margin: 0 }}>Código: {clienteInfo.cliente_codigo}</p>
                 </div>
               </div>
@@ -315,7 +328,7 @@ export default function PQRSPublicoPage() {
                   </div>
                   <textarea value={form.detalle_incidencia} onChange={e => set('detalle_incidencia', e.target.value)} rows={3}
                     placeholder="Describa con detalle la incidencia..."
-                    style={{ ...(errors.detalle_incidencia ? inputErr : inputStyle), resize: 'vertical', minHeight: 70 }} />
+                    style={{ ...(errors.detalle_incidencia ? inputErr : inputStyle), resize: 'vertical', minHeight: 70, height: 'auto' }} />
                   {errors.detalle_incidencia && <p style={errText}>{errors.detalle_incidencia}</p>}
                 </div>
 
@@ -342,7 +355,7 @@ export default function PQRSPublicoPage() {
               <button type="submit" disabled={sending}
                 style={{
                   width: '100%', marginTop: 18, padding: '11px 20px', borderRadius: 10,
-                  background: sending ? 'rgba(255,255,255,0.1)' : '#2563eb',
+                  background: sending ? 'rgba(255,255,255,0.1)' : '#3b82f6',
                   color: '#ffffff', border: sending ? '1px solid rgba(255,255,255,0.2)' : '1px solid #3b82f6',
                   fontSize: 14, fontWeight: 700,
                   cursor: sending ? 'not-allowed' : 'pointer',

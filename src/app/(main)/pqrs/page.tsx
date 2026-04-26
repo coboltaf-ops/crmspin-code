@@ -1,4 +1,5 @@
 'use client'
+import { logAudit, computarDiff } from '@/shared/lib/audit'
 import { useState, useEffect } from 'react'
 import { usePQRSStore, PQRS } from '@/features/pqrs/store/pqrs-store'
 import SeguimientoPanel from '@/shared/components/seguimiento-panel'
@@ -91,7 +92,7 @@ export default function PQRSPage() {
       persona_caso: usuario, movil_caso: '',
       detalle_incidencia: ext.detalle_incidencia,
       responsable: usuario,
-      fecha_registro: ext.fecha || todayColombia(), fecha_cierre: '',
+      fecha_registro: todayColombia(), fecha_cierre: '',
       seguimientos: [{
         id: crypto.randomUUID(), fecha: new Date().toISOString(),
         detalle: `PQRS importada desde formulario público. Radicado: ${ext.radicado} | Persona que avisa: ${ext.persona_avisa} | Móvil: ${ext.movil_avisa || 'N/A'}`,
@@ -116,13 +117,20 @@ export default function PQRSPage() {
     p.cliente_nombre.toLowerCase().includes(search.toLowerCase())
   )
 
+  const auditParams = () => ({
+    usuario: currentUser?.usuario || 'desconocido',
+    usuario_nombre: `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`.trim(),
+    rol: currentUser?.rol || '',
+    modulo: 'pqrs',
+  })
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!selected) return
     const cli = clientes.find(c => c.id === selected.cliente_id)
     const con = allContactos.find(c => c.id === selected.contacto_id)
     const toSave = { ...selected, cliente_nombre: cli?.razon_social || selected.cliente_nombre, contacto_nombre: con ? `${con.nombre} ${con.apellido}` : selected.contacto_nombre }
-    if (toSave.id) { updatePQRS(toSave.id, toSave) }
+    if (toSave.id) { const _anterior = pqrs.find(x => x.id === toSave.id); updatePQRS(toSave.id, toSave); logAudit({ ...auditParams(), accion: "MODIFICAR", registro_codigo: toSave.codigo, registro_nombre: toSave.asunto, detalle: computarDiff(_anterior as unknown as Record<string, unknown>, toSave as unknown as Record<string, unknown>) }) }
     else { addPQRS({ ...toSave, id: crypto.randomUUID() }) }
     setIsForm(false); setSelected(null)
   }
@@ -131,9 +139,9 @@ export default function PQRSPage() {
 
   const statusStyle = (s: string): React.CSSProperties => {
     const map: Record<string, React.CSSProperties> = {
-      'Abierta': { background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' },
+      'Abierta': { background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' },
       'En Proceso': { background: 'rgba(245,158,11,0.2)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.3)' },
-      'Cerrada': { background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' },
+      'Cerrada': { background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' },
       'Escalada': { background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' },
     }
     return map[s] || {}
@@ -141,8 +149,8 @@ export default function PQRSPage() {
 
   const prioridadStyle = (p: string): React.CSSProperties => {
     const map: Record<string, React.CSSProperties> = {
-      'Baja': { background: 'rgba(34,197,94,0.15)', color: '#86efac', border: '1px solid rgba(34,197,94,0.2)' },
-      'Media': { background: 'rgba(34,197,94,0.15)', color: '#86efac', border: '1px solid rgba(34,197,94,0.2)' },
+      'Baja': { background: 'rgba(59,130,246,0.15)', color: '#86efac', border: '1px solid rgba(59,130,246,0.2)' },
+      'Media': { background: 'rgba(59,130,246,0.15)', color: '#86efac', border: '1px solid rgba(59,130,246,0.2)' },
       'Alta': { background: 'rgba(245,158,11,0.15)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.2)' },
       'Urgente': { background: 'rgba(239,68,68,0.15)', color: '#fca5a5', border: '1px solid rgba(239,68,68,0.2)' },
     }
@@ -154,9 +162,9 @@ export default function PQRSPage() {
     return map[t] || '📩'
   }
 
-  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none' }
+  const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#1e3a8a' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #2563eb' : '1px solid rgba(255,255,255,0.2)' })
+  const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#4169E1' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)' })
   const refOptions = (table: string) => (refData[table as keyof typeof refData] || []).filter(r => r.situacion).map(r => r.descripcion)
   const contactosDelCliente = selected ? allContactos.filter(c => c.cliente_id === selected.cliente_id) : []
 
@@ -186,8 +194,8 @@ export default function PQRSPage() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
               {[
                 { l: 'Fecha', v: fDate(viewDetail.fecha_registro) }, { l: 'Tipo', v: viewDetail.tipo },
-                { l: 'Empresa', v: viewDetail.cliente_nombre }, { l: 'Contacto', v: viewDetail.contacto_nombre },
-                { l: 'Fecha Aviso Empresa', v: fDate(viewDetail.fecha_aviso) }, { l: 'Hora Aviso', v: viewDetail.hora_aviso },
+                { l: 'Cliente', v: viewDetail.cliente_nombre }, { l: 'Contacto', v: viewDetail.contacto_nombre },
+                { l: 'Fecha Aviso Cliente', v: fDate(viewDetail.fecha_aviso) }, { l: 'Hora Aviso', v: viewDetail.hora_aviso },
                 { l: 'Persona que Avisa', v: viewDetail.persona_avisa }, { l: 'Móvil que Avisa', v: viewDetail.movil_avisa },
                 { l: 'Persona que Recibe', v: viewDetail.persona_caso }, { l: 'Móvil Recibe', v: viewDetail.movil_caso },
                 { l: 'Prioridad', v: viewDetail.prioridad }, { l: 'Situación', v: viewDetail.situacion },
@@ -206,13 +214,13 @@ export default function PQRSPage() {
 
             <div style={{ display: 'flex', gap: 8 }}>
               {permisos.editar && viewDetail.situacion !== 'Cerrada' && (
-                <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Editar</button>
+                <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
               )}
               {permisos.editar && viewDetail.situacion !== 'Cerrada' && (
                 <button onClick={() => {
                   const updated = { ...viewDetail, situacion: 'Cerrada', fecha_cierre: today }
                   updatePQRS(viewDetail.id, updated); setViewDetail(updated)
-                }} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Cerrar PQRS</button>
+                }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Cerrar PQRS</button>
               )}
             </div>
           </div>
@@ -251,8 +259,8 @@ export default function PQRSPage() {
               <input value={selected.codigo} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha</label>
-              <input type="date" value={selected.fecha_registro} onChange={e => setSelected({ ...selected, fecha_registro: e.target.value })} style={inputStyle} />
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Registro</label>
+              <input value={fDate(selected.fecha_registro)} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
             </div>
             <div>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Tipo *</label>
@@ -261,12 +269,12 @@ export default function PQRSPage() {
               </select>
             </div>
             <div style={{ gridColumn: 'span 2' }}>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Empresa *</label>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Cliente *</label>
               <select value={selected.cliente_id} onChange={e => {
                 const cli = clientes.find(c => c.id === e.target.value)
                 setSelected({ ...selected, cliente_id: e.target.value, cliente_nombre: cli?.razon_social || '', contacto_id: '', contacto_nombre: '' })
               }} required style={inputStyle}>
-                <option value="">Seleccionar empresa...</option>
+                <option value="">Seleccionar cliente...</option>
                 {clientes.map(c => <option key={c.id} value={c.id}>{c.razon_social}</option>)}
               </select>
             </div>
@@ -275,13 +283,10 @@ export default function PQRSPage() {
               <select value={selected.contacto_id} onChange={e => {
                 const con = contactosDelCliente.find(c => c.id === e.target.value)
                 const nombreCon = con ? `${con.nombre} ${con.apellido}` : ''
-                const movilCon = con ? (con.celular || con.telefono || '') : ''
                 setSelected({
                   ...selected,
                   contacto_id: e.target.value,
                   contacto_nombre: nombreCon,
-                  persona_avisa: nombreCon || selected.persona_avisa,
-                  movil_avisa: movilCon || selected.movil_avisa,
                 })
               }} style={inputStyle}>
                 <option value="">Seleccionar...</option>
@@ -289,7 +294,7 @@ export default function PQRSPage() {
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Aviso Empresa</label>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Aviso Cliente</label>
               <input type="date" value={selected.fecha_aviso} onChange={e => setSelected({ ...selected, fecha_aviso: e.target.value })} style={inputStyle} />
             </div>
             <div>
@@ -314,7 +319,7 @@ export default function PQRSPage() {
             </div>
             <div style={{ gridColumn: 'span 3' }}>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Detalle de la Incidencia</label>
-              <textarea value={selected.detalle_incidencia} onChange={e => setSelected({ ...selected, detalle_incidencia: e.target.value })} rows={4} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Describir la incidencia..." />
+              <textarea value={selected.detalle_incidencia} onChange={e => setSelected({ ...selected, detalle_incidencia: e.target.value })} rows={4} style={{ ...inputStyle, resize: "vertical", height: "auto" }} placeholder="Describir la incidencia..." />
             </div>
             <div>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Prioridad</label>
@@ -330,7 +335,7 @@ export default function PQRSPage() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -343,7 +348,7 @@ export default function PQRSPage() {
     { header: 'Código', key: 'codigo', width: 12 },
     { header: 'Tipo', key: 'tipo', width: 10 },
     { header: 'Prioridad', key: 'prioridad', width: 10 },
-    { header: 'Empresa', key: 'cliente_nombre', width: 22 },
+    { header: 'Cliente', key: 'cliente_nombre', width: 22 },
     { header: 'Responsable', key: 'responsable', width: 14 },
     { header: 'Registro', key: 'registro', width: 10 },
     { header: 'Situación', key: 'situacion', width: 10 },
@@ -369,7 +374,7 @@ export default function PQRSPage() {
             </button>
           )}
           {permisos.editar && tab === 'registros' && (
-            <button onClick={() => { { const nc = nextConsecutivo('PQRS-', pqrs.map(p => p.codigo)); setSelected(emptyPQRS(nc.codigo, nc.nro, `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`)) }; setIsForm(true) }} style={{ ...btnStyle, background: '#0f1b3d', color: '#ffffff' }}>+ Nueva PQRS</button>
+            <button onClick={() => { { const nc = nextConsecutivo('PQRS-', pqrs.map(p => p.codigo)); setSelected(emptyPQRS(nc.codigo, nc.nro, `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`)) }; setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nueva PQRS</button>
           )}
         </div>
       </div>
@@ -395,7 +400,7 @@ export default function PQRSPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
             <h3 style={{ color: '#f97316', fontSize: 15, fontWeight: 700 }}>📩 PQRS Recibidas desde Formulario Público ({externas.length})</h3>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={importarTodas} style={{ ...btnStyle, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a', fontSize: 12 }}>Importar Todas</button>
+              <button onClick={importarTodas} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 12 }}>Importar Todas</button>
               <button onClick={() => setShowExternas(false)} style={{ ...btnStyle, background: 'transparent', color: '#f97316', border: '1px solid rgba(234,88,12,0.3)', fontSize: 12 }}>Cerrar</button>
             </div>
           </div>
@@ -413,7 +418,7 @@ export default function PQRSPage() {
                     {ext.cliente_nombre} · Avisa: {ext.persona_avisa} {ext.movil_avisa ? `· ${ext.movil_avisa}` : ''} · Rad: {ext.radicado}
                   </p>
                 </div>
-                <button onClick={() => importarExterna(ext)} style={{ ...btnStyle, background: '#1e3a8a', color: '#ffffff', border: '1px solid #2563eb', fontSize: 12, whiteSpace: 'nowrap' }}>Importar al CRM</button>
+                <button onClick={() => importarExterna(ext)} style={{ ...btnStyle, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 12, whiteSpace: 'nowrap' }}>Importar al CRM</button>
               </div>
             ))}
           </div>
@@ -432,14 +437,14 @@ export default function PQRSPage() {
           <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead><tr>
-                {['Código', 'Tipo', 'Prioridad', 'Empresa', 'Responsable', 'Situación', 'Acciones'].map(h => (
-                  <th key={h} style={{ padding: '12px 14px', background: '#1e3a5f', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                {['Código', 'Tipo', 'Prioridad', 'Cliente', 'Responsable', 'Situación', 'Acciones'].map(h => (
+                  <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
                 {filtered.map((p, i) => (
                   <tr key={p.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
-                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#4ade80', fontSize: 13, fontFamily: 'monospace' }}>{p.codigo}</td>
+                    <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13, fontFamily: 'monospace' }}>{p.codigo}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13 }}>{tipoIcon(p.tipo)} {p.tipo}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...prioridadStyle(p.prioridad) }}>{p.prioridad}</span>
@@ -452,8 +457,8 @@ export default function PQRSPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button onClick={() => setViewDetail(p)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316' }}>Ver</button>
-                        {permisos.editar && p.situacion !== 'Cerrada' && <button onClick={() => { setSelected(p); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#15803d', color: '#ffffff', border: '1px solid #16a34a' }}>Editar</button>}
-                        {permisos.eliminar && <button onClick={() => { if (confirm(`¿Eliminar ${p.codigo}?`)) deletePQRS(p.id) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>}
+                        {permisos.editar && p.situacion !== 'Cerrada' && <button onClick={() => { setSelected(p); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>}
+                        {permisos.eliminar && <button onClick={() => { if (confirm(`¿Eliminar ${p.codigo}?`)) deletePQRS(p.id); logAudit({ ...auditParams(), accion: "ELIMINAR", registro_codigo: p.codigo, registro_nombre: p.asunto }) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>}
                       </div>
                     </td>
                   </tr>

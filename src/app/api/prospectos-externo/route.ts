@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
 
       const html = `
         <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-          <div style="background:#1e3a8a;padding:24px 28px;border-radius:12px 12px 0 0">
+          <div style="background:#4169E1;padding:24px 28px;border-radius:12px 12px 0 0">
             <h2 style="color:#ffffff;margin:0;font-size:20px">Solicitud de Servicio Recibida</h2>
           </div>
           <div style="padding:28px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px;background:#ffffff">

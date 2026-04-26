@@ -58,7 +58,7 @@ const plantillasDefault: Plantilla[] = [
     asunto: 'Bienvenido a {{empresa}}',
     imagenes: [],
     contenido: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:#1e3a8a;padding:24px;border-radius:10px 10px 0 0;text-align:center">
+  <div style="background:#4169E1;padding:24px;border-radius:10px 10px 0 0;text-align:center">
     <h1 style="color:#fff;margin:0;font-size:22px">Bienvenido</h1>
   </div>
   <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">
@@ -76,14 +76,14 @@ const plantillasDefault: Plantilla[] = [
     asunto: 'Oferta especial para ti - {{empresa}}',
     imagenes: [],
     contenido: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:#1e3a8a;padding:24px;border-radius:10px 10px 0 0;text-align:center">
+  <div style="background:#4169E1;padding:24px;border-radius:10px 10px 0 0;text-align:center">
     <h1 style="color:#fff;margin:0;font-size:22px">Oferta Especial</h1>
   </div>
   <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">
     <p>Hola <strong>{{nombre}}</strong>,</p>
     <p>Tenemos una oferta exclusiva para usted. Aproveche nuestros productos y servicios con condiciones especiales.</p>
     <p style="text-align:center;margin:24px 0">
-      <span style="display:inline-block;background:#1e3a8a;color:#fff;padding:12px 32px;border-radius:8px;font-weight:bold;font-size:16px">Contactenos hoy</span>
+      <span style="display:inline-block;background:#4169E1;color:#fff;padding:12px 32px;border-radius:8px;font-weight:bold;font-size:16px">Contactenos hoy</span>
     </p>
     <p>Esta oferta es por tiempo limitado.</p>
     <p style="margin-top:24px">Saludos,<br><strong>{{empresa}}</strong></p>
@@ -97,7 +97,7 @@ const plantillasDefault: Plantilla[] = [
     asunto: 'Seguimiento - {{empresa}}',
     imagenes: [],
     contenido: `<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
-  <div style="background:#1e3a8a;padding:24px;border-radius:10px 10px 0 0;text-align:center">
+  <div style="background:#4169E1;padding:24px;border-radius:10px 10px 0 0;text-align:center">
     <h1 style="color:#fff;margin:0;font-size:22px">Seguimiento</h1>
   </div>
   <div style="padding:24px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">

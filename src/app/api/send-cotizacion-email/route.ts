@@ -26,22 +26,32 @@ export async function POST(req: Request) {
     }
 
     const subtotal = cotizacion.detalles.reduce((s: number, d: { subtotal: number }) => s + d.subtotal, 0)
-    const impuesto = subtotal * (cotizacion.pct_impuesto / 100)
-    const total = subtotal + impuesto
+    const impuesto = subtotal * ((cotizacion.pct_impuesto || 0) / 100)
+    const retencion = subtotal * ((cotizacion.pct_retencion || 0) / 100)
+    const total = subtotal + impuesto - retencion
 
     // Generate PDF
     const doc = new jsPDF()
     doc.setFillColor(30, 27, 75)
     doc.rect(0, 0, 210, 32, 'F')
+
+    // Logo si existe
+    const logoUrl = empresa?.logo_url || ''
+    let logoFmt: 'PNG' | 'JPEG' | null = null
+    if (logoUrl.startsWith('data:image/png')) logoFmt = 'PNG'
+    else if (logoUrl.startsWith('data:image/jpeg') || logoUrl.startsWith('data:image/jpg')) logoFmt = 'JPEG'
+    if (logoFmt) { try { doc.addImage(logoUrl, logoFmt, 6, 3, 26, 26) } catch { /* ignore bad logo */ } }
+
+    const xText = logoFmt ? 38 : 14
     doc.setTextColor(255, 255, 255)
     doc.setFontSize(16)
-    doc.text(empresa?.nombre || 'COTIZACIÓN', 14, 12)
+    doc.text(empresa?.nombre || 'COTIZACIÓN', xText, 12)
     doc.setFontSize(9)
-    if (empresa?.nro_documento) doc.text(`NIT: ${empresa.nro_documento}`, 14, 18)
+    if (empresa?.nro_documento) doc.text(`NIT: ${empresa.nro_documento}`, xText, 18)
     const empSub = [empresa?.direccion, empresa?.ciudad].filter(Boolean).join(', ')
-    if (empSub) doc.text(empSub, 14, 23)
+    if (empSub) doc.text(empSub, xText, 23)
     doc.setFontSize(13)
-    doc.text(`COTIZACIÓN ${cotizacion.codigo}`, 14, 29)
+    doc.text(`COTIZACIÓN ${cotizacion.codigo}`, xText, 29)
     doc.setFontSize(10)
     doc.text(`Fecha: ${fDate(cotizacion.fecha_emision)}`, 150, 16)
     doc.text(`Vence: ${fDate(cotizacion.fecha_vencimiento)}`, 150, 22)
@@ -68,14 +78,15 @@ export async function POST(req: Request) {
     doc.text(`Condición de Pago: ${cotizacion.condicion_pago}`, 14, y + 24)
     doc.text(`Moneda: ${cotizacion.tipo_moneda || 'Pesos Colombianos'}`, 110, y + 24)
     doc.text(`Vendedor: ${cotizacion.vendedor || cotizacion.responsable}`, 14, y + 30)
+    doc.text(`Fecha Aprobación: ${cotizacion.fecha_aprobacion ? fDate(cotizacion.fecha_aprobacion) : '—'}`, 110, y + 30)
     y += 36
 
     autoTable(doc, {
       startY: y + 4,
-      head: [['Código', 'Descripción', 'Cant.', 'Unidad', 'Precio Unit.', 'Desc.%', 'Subtotal']],
-      body: cotizacion.detalles.map((d: { codigo_producto: string; descripcion: string; cantidad: number; unidad_medida: string; precio_unitario: number; descuento_pct: number; subtotal: number }) => [
-        d.codigo_producto, d.descripcion, d.cantidad, d.unidad_medida,
-        `${fmtMoney(d.precio_unitario)}`, `${d.descuento_pct}%`, `${fmtMoney(d.subtotal)}`
+      head: [['Código', 'Descripción', 'Unidad Medida', 'Cantidad', 'Precio', 'Subtotal']],
+      body: cotizacion.detalles.map((d: { codigo_producto: string; descripcion: string; cantidad: number; unidad_medida: string; precio_unitario: number; subtotal: number }) => [
+        d.codigo_producto, d.descripcion, d.unidad_medida, d.cantidad,
+        `${fmtMoney(d.precio_unitario)}`, `${fmtMoney(d.subtotal)}`
       ]),
       styles: { fontSize: 8, cellPadding: 3 },
       headStyles: { fillColor: [30, 27, 75], textColor: 255 },
@@ -84,11 +95,15 @@ export async function POST(req: Request) {
 
     const finalY = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable?.finalY || 150
     doc.setFontSize(10)
-    doc.text(`Subtotal: ${fmtMoney(subtotal)}`, 140, finalY + 10)
-    doc.text(`Impuesto (${cotizacion.pct_impuesto}%): ${fmtMoney(impuesto)}`, 140, finalY + 16)
+    doc.text(`Subtotal antes de impuestos: ${fmtMoney(subtotal)}`, 130, finalY + 10)
+    doc.text(`Monto IVA (${cotizacion.pct_impuesto || 0}%): ${fmtMoney(impuesto)}`, 130, finalY + 16)
+    doc.setTextColor(180, 30, 30)
+    doc.text(`Retención (${cotizacion.pct_retencion || 0}%): -${fmtMoney(retencion)}`, 130, finalY + 22)
+    doc.setTextColor(30, 58, 138)
     doc.setFontSize(12)
     doc.setFont('helvetica', 'bold')
-    doc.text(`TOTAL: ${fmtMoney(total)}`, 140, finalY + 24)
+    doc.text(`VALOR NETO A PAGAR: ${fmtMoney(total)}`, 130, finalY + 32)
+    doc.setTextColor(0, 0, 0)
 
     if (cotizacion.observaciones) {
       doc.setFont('helvetica', 'normal')
@@ -101,7 +116,7 @@ export async function POST(req: Request) {
     // Email HTML
     const html = `
       <div style="font-family:Arial;max-width:600px;margin:0 auto">
-        <div style="background:#1e1b4b;padding:20px;border-radius:10px 10px 0 0">
+        <div style="background:#1e3a8a;padding:20px;border-radius:10px 10px 0 0">
           <h2 style="color:#fff;margin:0">Cotización ${cotizacion.codigo}</h2>
         </div>
         <div style="padding:20px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 10px 10px">
@@ -127,10 +142,11 @@ export async function POST(req: Request) {
                 </tr>`).join('')}
             </tbody>
           </table>
-          <div style="text-align:right;font-size:14px">
-            <p>Subtotal: <strong>${fmtMoney(subtotal)}</strong></p>
-            <p>Impuesto (${cotizacion.pct_impuesto}%): <strong>${fmtMoney(impuesto)}</strong></p>
-            <p style="font-size:18px;color:#1e1b4b">Total: <strong>${fmtMoney(total)}</strong></p>
+          <div style="text-align:right;font-size:14px;background:#f9fafb;padding:14px 16px;border-radius:8px;border:1px solid #e5e7eb">
+            <p style="margin:4px 0">Subtotal antes de impuestos: <strong>${fmtMoney(subtotal)}</strong></p>
+            <p style="margin:4px 0">Monto IVA (${cotizacion.pct_impuesto || 0}%): <strong>${fmtMoney(impuesto)}</strong></p>
+            <p style="margin:4px 0;color:#b91c1c">Retención (${cotizacion.pct_retencion || 0}%): <strong>−${fmtMoney(retencion)}</strong></p>
+            <p style="font-size:18px;color:#1e3a8a;border-top:2px solid #1e3a8a;padding-top:8px;margin-top:8px">VALOR NETO A PAGAR: <strong>${fmtMoney(total)}</strong></p>
           </div>
         </div>
         <p style="text-align:center;color:#9ca3af;font-size:11px;margin-top:16px">CRM SPIN</p>

@@ -40,7 +40,7 @@ export const PERMISOS_DEFAULT: Record<string, PermisoModulo[]> = {
 }
 
 export const ESTADOS_CONFIG: Record<string, { bg: string; color: string; border: string }> = {
-  Activo: { bg: 'rgba(34,197,94,0.2)', color: '#86efac', border: '1px solid rgba(34,197,94,0.3)' },
+  Activo: { bg: 'rgba(59,130,246,0.2)', color: '#86efac', border: '1px solid rgba(59,130,246,0.3)' },
   Inactivo: { bg: 'rgba(245,158,11,0.2)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.3)' },
   Bloqueado: { bg: 'rgba(239,68,68,0.2)', color: '#fca5a5', border: '1px solid rgba(239,68,68,0.3)' },
 }
