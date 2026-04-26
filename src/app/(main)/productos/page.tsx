@@ -2,6 +2,7 @@
 import { logAudit, computarDiff } from '@/shared/lib/audit'
 import { useState, useEffect } from 'react'
 import { useProductosStore, Producto } from '@/features/productos/store/productos-store'
+import { useClientesStore } from '@/features/clientes/store/clientes-store'
 import { useReferenceStore } from '@/features/referencias/store/reference-store'
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
 import { usePermisos } from '@/shared/hooks/use-permisos'
@@ -19,6 +20,7 @@ const emptyProducto = (): Producto => ({
   id: '',
   codigo: '',
   descripcion: '',
+  razon_social: '',
   tipo_empaque: '',
   tipo_formula: '',
   porcentaje_iva: '',
@@ -45,6 +47,7 @@ export default function ProductosPage() {
   const permisos = usePermisos('productos')
   const currentUser = useCurrentUserStore(s => s.user)
   const { productos, addProducto, updateProducto, deleteProducto } = useProductosStore()
+  const clientes = useClientesStore(s => s.clientes)
   const refData = useReferenceStore(s => s.data)
 
   const [selected, setSelected] = useState<Producto | null>(null)
@@ -216,6 +219,15 @@ export default function ProductosPage() {
             <div>
               <label style={labelStyle}>Descripción *</label>
               <input value={selected.descripcion} onChange={e => setSelected({ ...selected, descripcion: e.target.value })} required style={inputStyle} />
+            </div>
+            <div>
+              <label style={labelStyle}>Razón Social</label>
+              <select value={selected.razon_social} onChange={e => setSelected({ ...selected, razon_social: e.target.value })} style={inputStyle}>
+                <option value="">— Sin asignar —</option>
+                {clientes.filter(c => c.situacion === 'Activo').map(c => (
+                  <option key={c.id} value={c.razon_social}>{c.razon_social}</option>
+                ))}
+              </select>
             </div>
             <div>
               <label style={labelStyle}>Tipo Empaque</label>

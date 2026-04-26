@@ -8,6 +8,7 @@ export interface Producto {
   id: string
   codigo: string
   descripcion: string
+  razon_social: string
   tipo_empaque: string
   tipo_formula: string
   porcentaje_iva: string
@@ -49,6 +50,13 @@ export const useProductosStore = create<ProductosState>()(
       updateProducto: (id, p) => set((s) => ({ productos: s.productos.map((r) => r.id === id ? { ...r, ...p } : r) })),
       deleteProducto: (id) => set((s) => ({ productos: s.productos.filter((r) => r.id !== id) })),
     }),
-    { name: 'crm-productos-storage' }
+    {
+      name: 'crm-productos-storage',
+      merge: (persisted, current) => {
+        const state = { ...current, ...(persisted as Partial<ProductosState>) }
+        state.productos = state.productos.map(p => ({ ...p, razon_social: p.razon_social || '' }))
+        return state
+      },
+    }
   )
 )
