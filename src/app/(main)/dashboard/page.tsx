@@ -9,6 +9,7 @@ import { usePQRSStore } from '@/features/pqrs/store/pqrs-store'
 import { useProspectosStore } from '@/features/prospectos/store/prospectos-store'
 import { fmtMoney } from '@/shared/lib/format-number'
 import PieChart from '@/shared/components/pie-chart'
+import BarChart from '@/shared/components/bar-chart'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -340,8 +341,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Cotizaciones Aprobadas por Vendedor */}
+      {/* Cotizaciones — Pie (Aprobadas) + Bar (Mes en curso) */}
       {(() => {
+        // Pie: aprobadas por vendedor con monto
         const aprobadas = ['Aprobada', 'Aceptada', 'Entregada', 'Realizada']
         const counts: Record<string, number> = {}
         const montos: Record<string, number> = {}
@@ -353,12 +355,30 @@ export default function DashboardPage() {
           const total = subtotal + subtotal * ((c.pct_impuesto || 0) / 100) - subtotal * ((c.pct_retencion || 0) / 100)
           montos[v] = (montos[v] || 0) + total
         })
-        const data = Object.entries(counts)
+        const pieData = Object.entries(counts)
           .map(([label, value]) => ({ label, value, extra: `$${fmtMoney(Math.round(montos[label] || 0))}` }))
           .sort((a, b) => b.value - a.value)
+
+        // Bar: cotizaciones del mes en curso por vendedor
+        const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+        const now = new Date()
+        const anio = now.getFullYear()
+        const mesIdx = now.getMonth()
+        const prefijo = `${anio}-${String(mesIdx + 1).padStart(2, '0')}`
+        const barCounts: Record<string, number> = {}
+        cotizaciones.forEach(c => {
+          if (!c.fecha_emision || !c.fecha_emision.startsWith(prefijo)) return
+          const v = (c.vendedor || '').trim() || '(sin vendedor)'
+          barCounts[v] = (barCounts[v] || 0) + 1
+        })
+        const barData = Object.entries(barCounts)
+          .map(([label, value]) => ({ label, value }))
+          .sort((a, b) => b.value - a.value)
+
         return (
-          <div style={{ marginBottom: 24 }}>
-            <PieChart title="Cotizaciones Aprobadas por Vendedor" data={data} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+            <PieChart title="Cotizaciones Aprobadas por Vendedor" data={pieData} />
+            <BarChart title={`Cotizaciones ${meses[mesIdx]} ${anio} por Vendedor`} data={barData} />
           </div>
         )
       })()}
