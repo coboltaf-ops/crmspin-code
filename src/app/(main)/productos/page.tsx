@@ -236,7 +236,7 @@ export default function ProductosPage() {
       { label: 'Valor US$', value: `$${fmtMoney(viewDetail.valor_usd)}` },
     ]
     const invent = [
-      { label: 'Unidad de Medida', value: viewDetail.unidad_medida },
+      { label: 'Unidad Medida', value: viewDetail.unidad_medida },
       { label: 'Existencia Actual', value: String(viewDetail.existencia_actual) },
       { label: 'Valor Permanente de Stock', value: `$${fmtMoney(viewDetail.valor_permanente_stock)}` },
       { label: 'Costo', value: `$${fmtMoney(viewDetail.costo_inventario)}` },
@@ -342,7 +342,7 @@ export default function ProductosPage() {
               </select>
             </div>
             <div>
-              <label style={labelStyle}>Unid/Medida</label>
+              <label style={labelStyle}>Unidad Medida</label>
               <select value={selected.unidad_medida} onChange={e => setSelected({ ...selected, unidad_medida: e.target.value })} style={inputStyle}>
                 <option value="">Seleccione...</option>
                 {refOptions('unidad_medida').map(o => <option key={o} value={o}>{o}</option>)}
