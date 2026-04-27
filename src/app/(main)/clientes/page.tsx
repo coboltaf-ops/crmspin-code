@@ -529,10 +529,29 @@ export default function ClientesPage() {
                 const banner = esEspecial
                   ? { color: '#c084fc', bg: 'linear-gradient(90deg, rgba(88,28,135,0.30) 0%, rgba(124,58,237,0.20) 100%)', border: 'rgba(168,85,247,0.5)', titulo: '💲 Productos y Precios — Clientes Especiales' }
                   : { color: '#93c5fd', bg: 'linear-gradient(90deg, rgba(30,58,138,0.30) 0%, rgba(59,130,246,0.18) 100%)', border: 'rgba(59,130,246,0.5)', titulo: '💲 Productos y Precios — Clase Cliente Otros Clientes' }
-                const headers = esEspecial
-                  ? ['Código', 'Descripción', 'Unid/Medida', 'Empaque', 'Costo', 'Vr.TRM', 'Conversion COP', 'Valor US$', 'Precio']
-                  : ['Código', 'Nombre', 'Uni/Medida', 'Empaque', 'Costo', 'Margen Contribución', 'Margen Cálculo', 'Precio']
-                const thStyled: React.CSSProperties = { padding: '14px 14px', color: '#fff', fontSize: 11, fontWeight: 800, textAlign: 'left', letterSpacing: 0.4, textTransform: 'uppercase' }
+                const headers: { label: string; align: 'left' | 'right' }[] = esEspecial
+                  ? [
+                      { label: 'Código', align: 'left' },
+                      { label: 'Descripción', align: 'left' },
+                      { label: 'Unid/Medida', align: 'left' },
+                      { label: 'Empaque', align: 'left' },
+                      { label: 'Costo', align: 'right' },
+                      { label: 'Vr.TRM', align: 'right' },
+                      { label: 'Conversion COP', align: 'right' },
+                      { label: 'Valor US$', align: 'right' },
+                      { label: 'Precio', align: 'right' },
+                    ]
+                  : [
+                      { label: 'Código', align: 'left' },
+                      { label: 'Nombre', align: 'left' },
+                      { label: 'Uni/Medida', align: 'left' },
+                      { label: 'Empaque', align: 'left' },
+                      { label: 'Costo', align: 'right' },
+                      { label: 'Margen Contribución', align: 'right' },
+                      { label: 'Margen Cálculo', align: 'right' },
+                      { label: 'Precio', align: 'right' },
+                    ]
+                const thStyled = (align: 'left' | 'right'): React.CSSProperties => ({ padding: '14px 14px', color: '#fff', fontSize: 11, fontWeight: 800, textAlign: align, letterSpacing: 0.4, textTransform: 'uppercase' })
                 const tdNum: React.CSSProperties = { ...td, textAlign: 'right', fontFamily: 'ui-monospace, SFMono-Regular, monospace', fontWeight: 600 }
                 return (
                   <>
@@ -548,7 +567,7 @@ export default function ClientesPage() {
                       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead>
                           <tr style={{ background: headerBg }}>
-                            {headers.map(h => <th key={h} style={thStyled}>{h}</th>)}
+                            {headers.map(h => <th key={h.label} style={thStyled(h.align)}>{h.label}</th>)}
                           </tr>
                         </thead>
                         <tbody>
