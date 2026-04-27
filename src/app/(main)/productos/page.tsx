@@ -23,24 +23,41 @@ const NUMERIC_PRODUCTO_FIELDS = new Set<keyof Producto>([
 const norm = (s: string) => s.toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '')
 
 const FIELD_SYNONYMS_PROD: Record<string, keyof Producto> = {
-  'cod': 'codigo', 'codigoproducto': 'codigo',
-  'nombre': 'descripcion', 'producto': 'descripcion', 'nombreproducto': 'descripcion',
-  'cliente': 'razon_social', 'razonsocial': 'razon_social', 'razonsocialcliente': 'razon_social',
-  'empaque': 'tipo_empaque', 'tipoempaque': 'tipo_empaque',
-  'formula': 'tipo_formula', 'tipoformula': 'tipo_formula',
-  'iva': 'porcentaje_iva', 'porcentajeiva': 'porcentaje_iva', 'porciva': 'porcentaje_iva',
-  'tipoprecio': 'tipo_precio',
-  'precio': 'precio_unitario', 'preciounitario': 'precio_unitario', 'preciovta': 'precio_unitario', 'preciovenan': 'precio_unitario',
-  'fechavigencia': 'fecha_vigencia_precio', 'vigencia': 'fecha_vigencia_precio',
-  'unidad': 'unidad_medida', 'unidadmedida': 'unidad_medida', 'unidmedida': 'unidad_medida', 'um': 'unidad_medida',
-  'costo': 'costo_producto', 'costoproducto': 'costo_producto',
-  'margen': 'margen_contribucion_pct', 'margencontribucion': 'margen_contribucion_pct', 'margencalc': 'margen_calculo_pct', 'margencalculo': 'margen_calculo_pct',
+  // Código
+  'cod': 'codigo', 'codigoproducto': 'codigo', 'codigodelproducto': 'codigo',
+  // Descripción / Nombre
+  'nombre': 'descripcion', 'producto': 'descripcion', 'nombreproducto': 'descripcion', 'nombredelproducto': 'descripcion', 'descripciondelproducto': 'descripcion',
+  // Razón social / cliente
+  'cliente': 'razon_social', 'razonsocial': 'razon_social', 'razonsocialcliente': 'razon_social', 'razonsocialdelcliente': 'razon_social', 'nombrecliente': 'razon_social',
+  // Empaque
+  'empaque': 'tipo_empaque', 'tipoempaque': 'tipo_empaque', 'tipodeempaque': 'tipo_empaque',
+  // Fórmula
+  'formula': 'tipo_formula', 'tipoformula': 'tipo_formula', 'tipodeformula': 'tipo_formula',
+  // IVA
+  'iva': 'porcentaje_iva', 'porcentajeiva': 'porcentaje_iva', 'porciva': 'porcentaje_iva', 'porcentajedeiva': 'porcentaje_iva',
+  // Tipo de precio
+  'tipoprecio': 'tipo_precio', 'tipodeprecio': 'tipo_precio',
+  // Precio
+  'precio': 'precio_unitario', 'preciounitario': 'precio_unitario', 'preciovta': 'precio_unitario', 'preciodeventa': 'precio_unitario', 'precioventa': 'precio_unitario',
+  // Fecha vigencia
+  'fechavigencia': 'fecha_vigencia_precio', 'vigencia': 'fecha_vigencia_precio', 'fechavigenciaprecio': 'fecha_vigencia_precio', 'fechadevigencia': 'fecha_vigencia_precio',
+  // Unidad
+  'unidad': 'unidad_medida', 'unidadmedida': 'unidad_medida', 'unidmedida': 'unidad_medida', 'unidaddemedida': 'unidad_medida', 'um': 'unidad_medida',
+  // Costo
+  'costo': 'costo_producto', 'costoproducto': 'costo_producto', 'costodelproducto': 'costo_producto',
+  // Márgenes
+  'margen': 'margen_contribucion_pct',
+  'margencontribucion': 'margen_contribucion_pct', 'margendecontribucion': 'margen_contribucion_pct', 'margendecontribucionpct': 'margen_contribucion_pct', 'margencontribucionpct': 'margen_contribucion_pct',
+  'margencalc': 'margen_calculo_pct', 'margencalculo': 'margen_calculo_pct', 'margenparacalculo': 'margen_calculo_pct', 'margenparaelcalculo': 'margen_calculo_pct', 'margenparacalculopct': 'margen_calculo_pct', 'margencalculopct': 'margen_calculo_pct',
+  // TRM / USD / COP
   'trm': 'valor_trm', 'valortrm': 'valor_trm',
   'conversioncop': 'conversion_cop', 'cop': 'conversion_cop',
-  'usd': 'valor_usd', 'valorusd': 'valor_usd',
-  'existencia': 'existencia_actual', 'stock': 'existencia_actual',
-  'valorstock': 'valor_permanente_stock',
-  'costoinventario': 'costo_inventario',
+  'usd': 'valor_usd', 'valorusd': 'valor_usd', 'valorenusd': 'valor_usd',
+  // Inventario
+  'existencia': 'existencia_actual', 'stock': 'existencia_actual', 'existenciaactual': 'existencia_actual',
+  'valorstock': 'valor_permanente_stock', 'valorpermanentestock': 'valor_permanente_stock', 'valorpermanentedestock': 'valor_permanente_stock',
+  'costoinventario': 'costo_inventario', 'costodeinventario': 'costo_inventario',
+  // Otros
   'observaciones': 'observaciones', 'obs': 'observaciones',
   'situacion': 'situacion', 'estado': 'situacion',
 }
@@ -124,6 +141,7 @@ export default function ProductosPage() {
       if (rows.length === 0) { alert('El Excel está vacío.'); return }
 
       const headerMap: Record<string, keyof Producto> = {}
+      const ignoradas: string[] = []
       const noReconocidos: string[] = []
       const ignored = new Set<keyof Producto>(['codigo', 'situacion', 'fecha_registro'])
       Object.keys(rows[0]).forEach(h => {
@@ -132,6 +150,7 @@ export default function ProductosPage() {
         const synonym = FIELD_SYNONYMS_PROD[n]
         const match = direct || synonym
         if (match && !ignored.has(match)) headerMap[h] = match
+        else if (match && ignored.has(match)) ignoradas.push(h)
         else noReconocidos.push(h)
       })
       if (Object.keys(headerMap).length === 0) {
@@ -139,8 +158,9 @@ export default function ProductosPage() {
         return
       }
       const detectados = Object.entries(headerMap).map(([h, f]) => `  "${h}" → ${f}`).join('\n')
-      const omitidosCols = noReconocidos.length ? `\n\n⚠️ Columnas IGNORADAS:\n  ${noReconocidos.join(', ')}` : ''
-      if (!confirm(`Se detectaron ${Object.keys(headerMap).length} columnas y ${rows.length} filas.\n\n✓ Mapeo:\n${detectados}${omitidosCols}\n\n¿Continuar con la importación?`)) return
+      const ignoradasMsg = ignoradas.length ? `\n\nℹ️ Columnas que el sistema asigna sola (no se importan):\n  ${ignoradas.join(', ')}` : ''
+      const omitidosCols = noReconocidos.length ? `\n\n⚠️ Columnas NO reconocidas (se ignoran):\n  ${noReconocidos.join(', ')}` : ''
+      if (!confirm(`Se detectaron ${Object.keys(headerMap).length} columnas y ${rows.length} filas.\n\n✓ Mapeo:\n${detectados}${ignoradasMsg}${omitidosCols}\n\n¿Continuar con la importación?`)) return
 
       let creados = 0, errores = 0
       let nro = nextConsecutivo('PRD-', productos.map(p => p.codigo)).nro
