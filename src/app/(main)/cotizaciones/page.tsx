@@ -77,10 +77,12 @@ export default function CotizacionesPage() {
   const [emailMsg, setEmailMsg] = useState('')
   const [sending, setSending] = useState(false)
 
-  const filtered = cotizaciones.filter(c =>
-    !search || c.codigo.toLowerCase().includes(search.toLowerCase()) ||
-    c.cliente_nombre.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = cotizaciones.filter(c => {
+    if (!search) return true
+    const s = search.toLowerCase().trim()
+    if (c.codigo.toLowerCase().startsWith(s)) return true
+    return c.cliente_nombre.toLowerCase().split(/\s+/).some(w => w.startsWith(s))
+  })
 
   const recalcDetalle = (d: DetalleCotizacion): DetalleCotizacion => {
     const bruto = d.cantidad * d.precio_unitario
