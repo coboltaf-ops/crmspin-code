@@ -344,13 +344,17 @@ export default function DashboardPage() {
       {(() => {
         const aprobadas = ['Aprobada', 'Aceptada', 'Entregada', 'Realizada']
         const counts: Record<string, number> = {}
+        const montos: Record<string, number> = {}
         cotizaciones.forEach(c => {
           if (!aprobadas.includes(c.situacion)) return
           const v = (c.vendedor || '').trim() || '(sin vendedor)'
           counts[v] = (counts[v] || 0) + 1
+          const subtotal = (c.detalles || []).reduce((s, d) => s + (d.subtotal || 0), 0)
+          const total = subtotal + subtotal * ((c.pct_impuesto || 0) / 100) - subtotal * ((c.pct_retencion || 0) / 100)
+          montos[v] = (montos[v] || 0) + total
         })
         const data = Object.entries(counts)
-          .map(([label, value]) => ({ label, value }))
+          .map(([label, value]) => ({ label, value, extra: `$${fmtMoney(Math.round(montos[label] || 0))}` }))
           .sort((a, b) => b.value - a.value)
         return (
           <div style={{ marginBottom: 24 }}>

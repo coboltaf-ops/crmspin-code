@@ -4,6 +4,7 @@ import React from 'react'
 interface Slice {
   label: string
   value: number
+  extra?: string
 }
 
 interface PieChartProps {
@@ -52,7 +53,7 @@ export default function PieChart({ title, data, size = 280 }: PieChartProps) {
     const ly = cy + labelR * Math.sin(midAngle)
     const pct = (d.value / total) * 100
 
-    return { path, color: PALETTE[i % PALETTE.length], label: d.label, value: d.value, pct, lx, ly }
+    return { path, color: PALETTE[i % PALETTE.length], label: d.label, value: d.value, extra: d.extra, pct, lx, ly }
   })
 
   return (
@@ -75,7 +76,7 @@ export default function PieChart({ title, data, size = 280 }: PieChartProps) {
         </svg>
 
         {/* Leyenda */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 200 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, minWidth: 280 }}>
           {slices.map((s, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 13 }}>
               <span style={{ width: 14, height: 14, background: s.color, borderRadius: 3, flexShrink: 0 }} />
@@ -83,6 +84,11 @@ export default function PieChart({ title, data, size = 280 }: PieChartProps) {
               <span style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'monospace', fontSize: 12 }}>
                 {s.value} ({s.pct.toFixed(1)}%)
               </span>
+              {s.extra && (
+                <span style={{ color: '#93c5fd', fontFamily: 'monospace', fontSize: 12, fontWeight: 600, marginLeft: 8 }}>
+                  {s.extra}
+                </span>
+              )}
             </div>
           ))}
         </div>
