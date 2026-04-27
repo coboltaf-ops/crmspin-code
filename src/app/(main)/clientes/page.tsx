@@ -326,6 +326,8 @@ export default function ClientesPage() {
     const misOportunidades = oportunidades.filter(o => o.cliente_id === cId)
     const misTickets = pqrs.filter(p => p.cliente_id === cId)
     const misTarifas = tarifas.filter(t => t.cliente_id === cId && t.situacion === 'Activo')
+    const normRS = (s: string) => (s || '').toLowerCase().trim()
+    const misProductosCliente = productosAll.filter(p => normRS(p.razon_social) === normRS(viewDetail.razon_social))
     const calcTotalCot = (det: Array<{ subtotal: number }>, pct: number) => {
       const sub = det.reduce((s, d) => s + d.subtotal, 0); return sub + sub * (pct / 100)
     }
@@ -347,7 +349,7 @@ export default function ClientesPage() {
             <button onClick={() => setDetailTab('cotizaciones')} style={tabBtnStyle(detailTab === 'cotizaciones')}>📄 Ver Cotizaciones ({misCotizaciones.length})</button>
             <button onClick={() => setDetailTab('oportunidades')} style={tabBtnStyle(detailTab === 'oportunidades')}>🎯 Ver Oportunidades ({misOportunidades.length})</button>
             <button onClick={() => setDetailTab('tickets')} style={tabBtnStyle(detailTab === 'tickets')}>🎫 Ver Tickets ({misTickets.length})</button>
-            <button onClick={() => setDetailTab('tarifa')} style={tabBtnStyle(detailTab === 'tarifa')}>💲 Ver Productos Precios ({misTarifas.length})</button>
+            <button onClick={() => setDetailTab('tarifa')} style={tabBtnStyle(detailTab === 'tarifa')}>💲 Ver Productos Precios ({misProductosCliente.length})</button>
           </div>
 
           {detailTab === 'contactos' && (
@@ -528,8 +530,8 @@ export default function ClientesPage() {
                   ? { color: '#c084fc', bg: 'linear-gradient(90deg, rgba(88,28,135,0.30) 0%, rgba(124,58,237,0.20) 100%)', border: 'rgba(168,85,247,0.5)', titulo: '💲 Productos y Precios — Clientes Especiales' }
                   : { color: '#93c5fd', bg: 'linear-gradient(90deg, rgba(30,58,138,0.30) 0%, rgba(59,130,246,0.18) 100%)', border: 'rgba(59,130,246,0.5)', titulo: '💲 Productos y Precios — Clase Cliente Otros Clientes' }
                 const headers = esEspecial
-                  ? ['Código', 'Descripción', 'Unid/Medida', 'Empaque', 'Costo', 'Vr.TRM', 'Conversion COP', 'Valor US$', 'Precio', 'Acción']
-                  : ['Código', 'Nombre', 'Uni/Medida', 'Empaque', 'Costo', 'Margen Contribución', 'Margen Cálculo', 'Precio', 'Acción']
+                  ? ['Código', 'Descripción', 'Unid/Medida', 'Empaque', 'Costo', 'Vr.TRM', 'Conversion COP', 'Valor US$', 'Precio']
+                  : ['Código', 'Nombre', 'Uni/Medida', 'Empaque', 'Costo', 'Margen Contribución', 'Margen Cálculo', 'Precio']
                 const thStyled: React.CSSProperties = { padding: '14px 14px', color: '#fff', fontSize: 11, fontWeight: 800, textAlign: 'left', letterSpacing: 0.4, textTransform: 'uppercase' }
                 const tdNum: React.CSSProperties = { ...td, textAlign: 'right', fontFamily: 'ui-monospace, SFMono-Regular, monospace', fontWeight: 600 }
                 return (
@@ -550,73 +552,35 @@ export default function ClientesPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {misTarifas.map((t, i) => {
-                            const prod = productosAll.find(p => p.id === t.producto_id)
-                            return (
-                              <tr key={t.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
-                                <td style={tdMono}>{t.producto_codigo}</td>
-                                <td style={{ ...td, color: '#fff', fontWeight: 700 }}>{t.producto_descripcion}</td>
-                                <td style={td}>{prod?.unidad_medida || '—'}</td>
-                                <td style={td}>{prod?.tipo_empaque || '—'}</td>
-                                {esEspecial ? (
-                                  <>
-                                    <td style={tdNum}>${fmtMoney(prod?.costo_producto || 0)}</td>
-                                    <td style={tdNum}>${fmtMoney(prod?.valor_trm || 0)}</td>
-                                    <td style={tdNum}>${fmtMoney(prod?.conversion_cop || 0)}</td>
-                                    <td style={{ ...tdNum, color: '#d8b4fe' }}>US$ {fmtMoney(prod?.valor_usd || 0)}</td>
-                                    <td style={{ ...tdNum, color: accentColor, fontSize: 14, fontWeight: 800 }}>${fmtMoney(t.precio)}</td>
-                                  </>
-                                ) : (
-                                  <>
-                                    <td style={tdNum}>${fmtMoney(prod?.costo_producto || 0)}</td>
-                                    <td style={{ ...tdNum, color: '#86efac' }}>{(prod?.margen_contribucion_pct || 0).toFixed(2)}%</td>
-                                    <td style={{ ...tdNum, color: '#fcd34d' }}>{(prod?.margen_calculo_pct || 0).toFixed(2)}%</td>
-                                    <td style={{ ...tdNum, color: accentColor, fontSize: 14, fontWeight: 800 }}>${fmtMoney(t.precio)}</td>
-                                  </>
-                                )}
-                                <td style={td}>
-                                  {editTarifaId === t.id ? (
-                                    <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-                                      <input type="number" step="1" min="0" value={editTarifaPrecio || ''} onChange={e => setEditTarifaPrecio(parseFloat(e.target.value) || 0)} style={{ ...inputStyle, width: 90, padding: '4px 6px', height: 28, fontSize: 11 }} placeholder="Precio" />
-                                      <input type="date" value={editTarifaFecha} onChange={e => setEditTarifaFecha(e.target.value)} style={{ ...inputStyle, width: 130, padding: '4px 6px', height: 28, fontSize: 11 }} />
-                                      <select value={editTarifaSituacion} onChange={e => setEditTarifaSituacion(e.target.value)} style={{ ...inputStyle, width: 90, padding: '4px 6px', height: 28, fontSize: 11 }}>
-                                        <option value="Activo">Activo</option>
-                                        <option value="Inactivo">Inactivo</option>
-                                      </select>
-                                      <button type="button" onClick={() => {
-                                        if (editTarifaPrecio <= 0) { alert('Precio debe ser mayor a cero'); return }
-                                        if (!editTarifaFecha) { alert('Fecha de Vigencia es obligatoria'); return }
-                                        updatePrecio(t.id, { precio: Math.round(editTarifaPrecio), fecha_inicio_vigencia: editTarifaFecha, situacion: editTarifaSituacion })
-                                        setEditTarifaId(null)
-                                      }} style={{ ...btnStyle, padding: '4px 8px', fontSize: 11, background: '#059669', color: '#fff', border: '1px solid #10b981', height: 28 }} title="Guardar">✓</button>
-                                      <button type="button" onClick={() => setEditTarifaId(null)} style={{ ...btnStyle, padding: '4px 8px', fontSize: 11, background: '#64748b', color: '#fff', height: 28 }} title="Cancelar">✕</button>
-                                    </div>
-                                  ) : (
-                                    <div style={{ display: 'flex', gap: 4 }}>
-                                      <button onClick={() => {
-                                        setShowAddTarifa(true); setNewProductoId(''); setNewPrecio(0); setNewFechaVigencia(today); setNewSituacion('Activo')
-                                      }} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#059669', color: '#fff', border: '1px solid #10b981' }} title="Agregar nuevo producto al tarifario">➕ Agregar</button>
-                                      <button onClick={() => {
-                                        setEditTarifaId(t.id)
-                                        setEditTarifaPrecio(t.precio)
-                                        setEditTarifaFecha(t.fecha_inicio_vigencia)
-                                        setEditTarifaSituacion(t.situacion)
-                                      }} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#2563eb', color: '#fff', border: '1px solid #3b82f6' }}>✏️ Editar</button>
-                                      <button onClick={() => {
-                                        if (!confirm(`¿Eliminar la tarifa del producto "${t.producto_descripcion}" para ${viewDetail.razon_social}?\n\nEsta acción no se puede deshacer.`)) return
-                                        deletePrecio(t.id)
-                                      }} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#b91c1c', color: '#fff', border: '1px solid #dc2626' }}>🗑️ Eliminar</button>
-                                    </div>
-                                  )}
-                                </td>
-                              </tr>
-                            )
-                          })}
-                          {misTarifas.length === 0 && (
+                          {misProductosCliente.map((p, i) => (
+                            <tr key={p.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
+                              <td style={tdMono}>{p.codigo}</td>
+                              <td style={{ ...td, color: '#fff', fontWeight: 700 }}>{p.descripcion}</td>
+                              <td style={td}>{p.unidad_medida || '—'}</td>
+                              <td style={td}>{p.tipo_empaque || '—'}</td>
+                              {esEspecial ? (
+                                <>
+                                  <td style={tdNum}>${fmtMoney(p.costo_producto || 0)}</td>
+                                  <td style={tdNum}>${fmtMoney(p.valor_trm || 0)}</td>
+                                  <td style={tdNum}>${fmtMoney(p.conversion_cop || 0)}</td>
+                                  <td style={{ ...tdNum, color: '#d8b4fe' }}>US$ {fmtMoney(p.valor_usd || 0)}</td>
+                                  <td style={{ ...tdNum, color: accentColor, fontSize: 14, fontWeight: 800 }}>${fmtMoney(p.precio_unitario)}</td>
+                                </>
+                              ) : (
+                                <>
+                                  <td style={tdNum}>${fmtMoney(p.costo_producto || 0)}</td>
+                                  <td style={{ ...tdNum, color: '#86efac' }}>{(p.margen_contribucion_pct || 0).toFixed(2)}%</td>
+                                  <td style={{ ...tdNum, color: '#fcd34d' }}>{(p.margen_calculo_pct || 0).toFixed(2)}%</td>
+                                  <td style={{ ...tdNum, color: accentColor, fontSize: 14, fontWeight: 800 }}>${fmtMoney(p.precio_unitario)}</td>
+                                </>
+                              )}
+                            </tr>
+                          ))}
+                          {misProductosCliente.length === 0 && (
                             <tr>
                               <td colSpan={headers.length} style={{ padding: 40, textAlign: 'center' }}>
-                                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginBottom: 16 }}>Este cliente no tiene tarifas activas registradas</p>
-                                <button onClick={() => { setShowAddTarifa(true); setNewProductoId(''); setNewPrecio(0); setNewFechaVigencia(today); setNewSituacion('Activo') }} style={{ ...btnStyle, padding: '10px 20px', fontSize: 13, background: '#059669', color: '#fff', border: '1px solid #10b981', fontWeight: 700 }}>➕ Agregar Primer Producto</button>
+                                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>No hay productos del catálogo asociados a la Razón Social <strong style={{ color: '#fff' }}>{viewDetail.razon_social}</strong>.</p>
+                                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginTop: 8 }}>Para asignar productos, edítalos en el módulo Productos y selecciona esta Razón Social.</p>
                               </td>
                             </tr>
                           )}
