@@ -525,7 +525,7 @@ export default function ClientesPage() {
                 const headerBg = esEspecial ? 'linear-gradient(90deg, #581c87 0%, #7c3aed 100%)' : '#1e3a8a'
                 const accentColor = esEspecial ? '#d8b4fe' : '#93c5fd'
                 const banner = esEspecial
-                  ? { color: '#c084fc', bg: 'linear-gradient(90deg, rgba(88,28,135,0.30) 0%, rgba(124,58,237,0.20) 100%)', border: 'rgba(168,85,247,0.5)', titulo: '💲 Productos y Precios — Cliente Especiales' }
+                  ? { color: '#c084fc', bg: 'linear-gradient(90deg, rgba(88,28,135,0.30) 0%, rgba(124,58,237,0.20) 100%)', border: 'rgba(168,85,247,0.5)', titulo: '💲 Productos y Precios — Clientes Especiales' }
                   : { color: '#93c5fd', bg: 'linear-gradient(90deg, rgba(30,58,138,0.30) 0%, rgba(59,130,246,0.18) 100%)', border: 'rgba(59,130,246,0.5)', titulo: '💲 Productos y Precios — Clase Cliente Otros Clientes' }
                 const headers = esEspecial
                   ? ['Código', 'Descripción', 'Unid/Medida', 'Empaque', 'Costo', 'Vr.TRM', 'Conversion COP', 'Valor US$', 'Precio', 'Acción']
@@ -538,7 +538,7 @@ export default function ClientesPage() {
                     <div style={{ background: banner.bg, border: `2px solid ${banner.border}`, borderRadius: 12, padding: '16px 20px', marginBottom: 14, boxShadow: '0 6px 18px rgba(0,0,0,0.25)' }}>
                       <h2 style={{ color: banner.color, fontWeight: 900, fontSize: 20, letterSpacing: 0.4, margin: 0 }}>{banner.titulo}</h2>
                       {!viewDetail.clase_cliente && (
-                        <p style={{ color: '#fca5a5', fontSize: 12, margin: '6px 0 0 0', fontWeight: 700 }}>⚠️ Este cliente no tiene Clase asignada. Edítalo y selecciona "Especiales" u "Otros Clientes" en el form.</p>
+                        <p style={{ color: '#fca5a5', fontSize: 12, margin: '6px 0 0 0', fontWeight: 700 }}>⚠️ Este cliente no tiene Clase asignada. Edítalo y selecciona "Clientes Especiales" u "Otros Clientes" en el form.</p>
                       )}
                     </div>
 
@@ -888,7 +888,7 @@ export default function ClientesPage() {
                 style={{ ...inputStyle, border: '2px solid #fcd34d', background: 'rgba(252,211,77,0.1)', fontWeight: 700 }}
               >
                 <option value="Otros Clientes">Otros Clientes</option>
-                <option value="Especiales">Especiales</option>
+                <option value="Clientes Especiales">Clientes Especiales</option>
               </select>
               <p style={{ color: 'rgba(252,211,77,0.8)', fontSize: 10, margin: '3px 0 0 0' }}>⚡ Se guarda automáticamente al cambiar</p>
             </div>
