@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useProductosStore, Producto } from '@/features/productos/store/productos-store'
 import { useClientesStore } from '@/features/clientes/store/clientes-store'
 import { useReferenceStore } from '@/features/referencias/store/reference-store'
-import { nextConsecutivo } from '@/shared/lib/consecutivo'
 import * as XLSX from 'xlsx'
 
 const PRODUCTO_FIELDS: (keyof Producto)[] = [
@@ -125,7 +124,7 @@ export default function ProductosPage() {
   )
 
   const descargarPlantilla = () => {
-    const headers = PRODUCTO_FIELDS.filter(f => f !== 'codigo' && f !== 'situacion')
+    const headers = PRODUCTO_FIELDS.filter(f => f !== 'situacion')
     const ws = XLSX.utils.aoa_to_sheet([headers as unknown as string[]])
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Productos')
@@ -143,7 +142,7 @@ export default function ProductosPage() {
       const headerMap: Record<string, keyof Producto> = {}
       const ignoradas: string[] = []
       const noReconocidos: string[] = []
-      const ignored = new Set<keyof Producto>(['codigo', 'situacion', 'fecha_registro'])
+      const ignored = new Set<keyof Producto>(['situacion', 'fecha_registro'])
       Object.keys(rows[0]).forEach(h => {
         const n = norm(h)
         const direct = PRODUCTO_FIELDS.find(f => norm(f) === n)
@@ -162,14 +161,13 @@ export default function ProductosPage() {
       const omitidosCols = noReconocidos.length ? `\n\n⚠️ Columnas NO reconocidas (se ignoran):\n  ${noReconocidos.join(', ')}` : ''
       if (!confirm(`Se detectaron ${Object.keys(headerMap).length} columnas y ${rows.length} filas.\n\n✓ Mapeo:\n${detectados}${ignoradasMsg}${omitidosCols}\n\n¿Continuar con la importación?`)) return
 
-      let creados = 0, errores = 0
-      let nro = nextConsecutivo('PRD-', productos.map(p => p.codigo)).nro
+      let creados = 0, sinCodigo = 0, sinDescripcion = 0, duplicados = 0, errores = 0
+      const codigosExistentes = new Set(productos.map(p => p.codigo))
+      const codigosEnArchivo = new Set<string>()
 
       for (const row of rows) {
         try {
-          const codigoAuto = `PRD-${String(nro).padStart(5, '0')}`
           const prod = emptyProducto()
-          prod.codigo = codigoAuto
 
           for (const [header, field] of Object.entries(headerMap)) {
             const raw = row[header]
@@ -182,17 +180,20 @@ export default function ProductosPage() {
             }
           }
 
-          if (!prod.descripcion) { errores++; continue }
+          if (!prod.codigo) { sinCodigo++; continue }
+          if (!prod.descripcion) { sinDescripcion++; continue }
+          if (codigosExistentes.has(prod.codigo) || codigosEnArchivo.has(prod.codigo)) { duplicados++; continue }
+
           prod.situacion = 'Activo'
           prod.fecha_registro = today
 
           addProducto({ ...prod, id: crypto.randomUUID() })
-          nro++
+          codigosEnArchivo.add(prod.codigo)
           creados++
         } catch { errores++ }
       }
 
-      alert(`Importación finalizada:\n\n✓ Creados: ${creados}\n✗ Errores (sin Descripción): ${errores}`)
+      alert(`Importación finalizada:\n\n✓ Creados: ${creados}\n✗ Sin Código: ${sinCodigo}\n✗ Sin Descripción: ${sinDescripcion}\n⊘ Código duplicado (ya existe): ${duplicados}\n✗ Otros errores: ${errores}`)
     } catch (err) {
       alert('Error al leer el Excel: ' + (err as Error).message)
     }
