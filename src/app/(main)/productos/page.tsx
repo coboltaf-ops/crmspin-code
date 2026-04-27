@@ -222,7 +222,11 @@ export default function ProductosPage() {
     if (!selected) return
     if (!selected.codigo.trim()) { alert('El código es obligatorio'); return }
     const duplicado = productos.find(p => p.codigo.toLowerCase() === selected.codigo.toLowerCase() && p.id !== selected.id)
-    if (duplicado) { alert(`Ya existe un producto con el código "${selected.codigo}"`); return }
+    if (duplicado) {
+      const modo = selected.id ? 'EDICIÓN' : 'CREACIÓN'
+      alert(`Ya existe un producto con el código "${selected.codigo}".\n\nModo: ${modo}\nID actual: ${selected.id || '(vacío)'}\nID duplicado: ${duplicado.id}`)
+      return
+    }
     if (selected.id) { const _anterior = productos.find(x => x.id === selected.id); updateProducto(selected.id, selected); logAudit({ ...auditParams(), accion: "MODIFICAR", registro_codigo: selected.codigo, registro_nombre: selected.descripcion, detalle: computarDiff(_anterior as unknown as Record<string, unknown>, selected as unknown as Record<string, unknown>) }) }
     else { addProducto({ ...selected, id: crypto.randomUUID() }) }
     setIsForm(false); setSelected(null)
@@ -474,7 +478,7 @@ export default function ProductosPage() {
           </div>
 
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>{selected.id ? 'Actualizar' : 'Guardar'}</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
