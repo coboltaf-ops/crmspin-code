@@ -152,7 +152,7 @@ export default function ClientesPage() {
     !search || c.razon_social.toLowerCase().includes(search.toLowerCase()) ||
     c.codigo.toLowerCase().includes(search.toLowerCase()) ||
     c.nro_documento.includes(search)
-  )
+  ).sort((a, b) => a.razon_social.localeCompare(b.razon_social, 'es', { sensitivity: 'base' }))
 
   const auditParams = () => ({
     usuario: currentUser?.usuario || 'desconocido',
