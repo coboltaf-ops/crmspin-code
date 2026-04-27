@@ -111,6 +111,8 @@ export default function ProductosPage() {
   const [viewDetail, setViewDetail] = useState<Producto | null>(null)
   const [tab, setTab] = useState<'registros' | 'reportes'>('registros')
   const [search, setSearch] = useState('')
+  const [filtroRazon, setFiltroRazon] = useState('')
+  const [filtroFormula, setFiltroFormula] = useState('')
   const { pendingSearch, pendingAction, clearPending } = useAsistenteStore()
   useEffect(() => {
     if (pendingSearch) setSearch(pendingSearch)
@@ -118,10 +120,16 @@ export default function ProductosPage() {
     if (pendingSearch || pendingAction) clearPending()
   }, [])
 
-  const filtered = productos.filter(p =>
-    !search || p.descripcion.toLowerCase().includes(search.toLowerCase()) ||
-    p.codigo.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = productos.filter(p => {
+    if (filtroRazon && p.razon_social !== filtroRazon) return false
+    if (filtroFormula && p.tipo_formula !== filtroFormula) return false
+    if (!search) return true
+    const s = search.toLowerCase()
+    return p.descripcion.toLowerCase().includes(s) || p.codigo.toLowerCase().includes(s)
+  })
+
+  const razonesSociales = [...new Set(productos.map(p => p.razon_social).filter(Boolean))].sort()
+  const formulas = [...new Set(productos.map(p => p.tipo_formula).filter(Boolean))].sort()
 
   const descargarPlantilla = () => {
     const headers = PRODUCTO_FIELDS.filter(f => f !== 'situacion')
@@ -539,8 +547,22 @@ export default function ProductosPage() {
 
       {tab === 'registros' && (
         <>
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por descripción o código..."
-            style={{ ...inputStyle, maxWidth: 400, marginBottom: 16 }} />
+          <div style={{ display: 'flex', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Buscar por descripción o código..."
+              style={{ ...inputStyle, maxWidth: 360 }} />
+            <select value={filtroRazon} onChange={e => setFiltroRazon(e.target.value)} style={{ ...inputStyle, maxWidth: 240 }}>
+              <option value="">Razón Social: Todas</option>
+              {razonesSociales.map(r => <option key={r} value={r}>{r}</option>)}
+            </select>
+            <select value={filtroFormula} onChange={e => setFiltroFormula(e.target.value)} style={{ ...inputStyle, maxWidth: 200 }}>
+              <option value="">Tipo Fórmula: Todas</option>
+              {formulas.map(f => <option key={f} value={f}>{f}</option>)}
+            </select>
+            {(filtroRazon || filtroFormula || search) && (
+              <button onClick={() => { setSearch(''); setFiltroRazon(''); setFiltroFormula('') }} style={{ ...btnStyle, background: '#64748b', color: '#fff', fontSize: 12 }} title="Limpiar todos los filtros">✕ Limpiar</button>
+            )}
+            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, alignSelf: 'center' }}>{filtered.length} de {productos.length}</span>
+          </div>
           <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
