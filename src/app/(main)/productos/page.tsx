@@ -129,7 +129,10 @@ export default function ProductosPage() {
   })
 
   const razonesSociales = [...new Set(productos.map(p => p.razon_social).filter(Boolean))].sort()
-  const formulas = [...new Set(productos.map(p => p.tipo_formula).filter(Boolean))].sort()
+  const formulas = [...new Set([
+    ...(refData.tipo_formula || []).filter(r => r.situacion).map(r => r.descripcion),
+    ...productos.map(p => p.tipo_formula).filter(Boolean),
+  ])].sort()
 
   const descargarPlantilla = () => {
     const headers = PRODUCTO_FIELDS.filter(f => f !== 'situacion')
