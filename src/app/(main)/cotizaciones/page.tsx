@@ -14,7 +14,6 @@ import { fmtMoney } from '@/shared/lib/format-number'
 import { fDate, todayColombia } from '@/shared/lib/format-date'
 import { nextConsecutivo } from '@/shared/lib/consecutivo'
 import ReportPanel from '@/shared/components/report-panel'
-import PieChart from '@/shared/components/pie-chart'
 import SeguimientoPanel from '@/shared/components/seguimiento-panel'
 import DocumentosPanel from '@/shared/components/documentos-panel'
 import { useAsistenteStore } from '@/shared/stores/asistente-store'
@@ -747,27 +746,8 @@ export default function CotizacionesPage() {
       )}
 
       {tab === 'reportes' && (
-        <>
-          {(() => {
-            const aprobadas = ['Aprobada', 'Aceptada', 'Entregada', 'Realizada']
-            const counts: Record<string, number> = {}
-            cotizaciones.forEach(c => {
-              if (!aprobadas.includes(c.situacion)) return
-              const v = (c.vendedor || '').trim() || '(sin vendedor)'
-              counts[v] = (counts[v] || 0) + 1
-            })
-            const data = Object.entries(counts)
-              .map(([label, value]) => ({ label, value }))
-              .sort((a, b) => b.value - a.value)
-            return (
-              <div style={{ marginBottom: 24 }}>
-                <PieChart title="Cotizaciones Aprobadas por Vendedor" data={data} />
-              </div>
-            )
-          })()}
-          <ReportPanel title="Reporte de Cotizaciones" columns={reportColumns} rows={reportRows}
-            filters={[{ label: 'Situación', key: 'situacion', options: [...new Set(cotizaciones.map(c => c.situacion).filter(Boolean))] }]} />
-        </>
+        <ReportPanel title="Reporte de Cotizaciones" columns={reportColumns} rows={reportRows}
+          filters={[{ label: 'Situación', key: 'situacion', options: [...new Set(cotizaciones.map(c => c.situacion).filter(Boolean))] }]} />
       )}
     </div>
   )

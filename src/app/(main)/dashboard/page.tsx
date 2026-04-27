@@ -8,6 +8,7 @@ import { useCotizacionesStore } from '@/features/cotizaciones/store/cotizaciones
 import { usePQRSStore } from '@/features/pqrs/store/pqrs-store'
 import { useProspectosStore } from '@/features/prospectos/store/prospectos-store'
 import { fmtMoney } from '@/shared/lib/format-number'
+import PieChart from '@/shared/components/pie-chart'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -338,6 +339,25 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Cotizaciones Aprobadas por Vendedor */}
+      {(() => {
+        const aprobadas = ['Aprobada', 'Aceptada', 'Entregada', 'Realizada']
+        const counts: Record<string, number> = {}
+        cotizaciones.forEach(c => {
+          if (!aprobadas.includes(c.situacion)) return
+          const v = (c.vendedor || '').trim() || '(sin vendedor)'
+          counts[v] = (counts[v] || 0) + 1
+        })
+        const data = Object.entries(counts)
+          .map(([label, value]) => ({ label, value }))
+          .sort((a, b) => b.value - a.value)
+        return (
+          <div style={{ marginBottom: 24 }}>
+            <PieChart title="Cotizaciones Aprobadas por Vendedor" data={data} />
+          </div>
+        )
+      })()}
     </div>
   )
 }
