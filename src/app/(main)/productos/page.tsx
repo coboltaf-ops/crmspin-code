@@ -404,7 +404,7 @@ export default function ProductosPage() {
               <label style={labelStyle}>Razón Social</label>
               <select value={selected.razon_social} onChange={e => setSelected({ ...selected, razon_social: e.target.value })} style={inputStyle}>
                 <option value="">— Sin asignar —</option>
-                {clientes.filter(c => c.situacion === 'Activo').map(c => (
+                {clientes.filter(c => c.situacion === 'Activo').sort((a, b) => a.razon_social.localeCompare(b.razon_social, 'es', { sensitivity: 'base' })).map(c => (
                   <option key={c.id} value={c.razon_social}>{c.razon_social}</option>
                 ))}
               </select>
