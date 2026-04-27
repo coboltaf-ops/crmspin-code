@@ -87,6 +87,7 @@ export const useClientesStore = create<ClientesState>()(
           const next = { ...c }
           if (!next.codigo_acceso) next.codigo_acceso = generarCodigoAcceso()
           if (!next.clase_cliente) next.clase_cliente = 'Otros Clientes'
+          if (next.clase_cliente === 'Especiales') next.clase_cliente = 'Clientes Especiales'
           return next
         })
         return state

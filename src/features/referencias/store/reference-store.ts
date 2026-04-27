@@ -202,7 +202,7 @@ const initialData: RefData = {
     { id: '5', descripcion: 'Cliente Final', situacion: true },
   ],
   clase_cliente: [
-    { id: '1', descripcion: 'Especiales', situacion: true },
+    { id: '1', descripcion: 'Clientes Especiales', situacion: true },
     { id: '2', descripcion: 'Otros Clientes', situacion: true },
   ],
   clasificacion_tributaria: [],
