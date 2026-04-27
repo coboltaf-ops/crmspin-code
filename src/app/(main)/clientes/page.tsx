@@ -413,17 +413,7 @@ export default function ClientesPage() {
 
           {detailTab === 'tarifa' && (
             <>
-              {/* Botón Agregar Producto a Cliente */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 12 }}>
-                {!showAddTarifa ? (
-                  <button onClick={() => { setShowAddTarifa(true); setNewProductoId(''); setNewPrecio(0); setNewFechaVigencia(today); setNewSituacion('Activo') }} style={{ ...btnStyle, background: '#172554', color: '#ffffff', border: '1px solid #3b82f6' }}>+ Agregar Producto a Cliente</button>
-                ) : (
-                  <button onClick={() => { setShowAddTarifa(false); setNewProductoId(''); setNewPrecio(0); setNewFechaVigencia(today); setNewSituacion('Activo') }} style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>✕ Cerrar</button>
-                )}
-              </div>
-
-              {/* Form inline */}
-              {showAddTarifa && (() => {
+              {false && (() => {
                 // Productos ya asociados al cliente (no permitir repetir código ni descripción)
                 const codigosUsados = new Set(tarifas.filter(t => t.cliente_id === viewDetail.id).map(t => t.producto_codigo.toLowerCase()))
                 const descripcionesUsadas = new Set(tarifas.filter(t => t.cliente_id === viewDetail.id).map(t => t.producto_descripcion.toLowerCase()))
@@ -708,18 +698,22 @@ export default function ClientesPage() {
           </>
           )}
 
-          <SeguimientoPanel
-            seguimientos={viewDetail.seguimientos || []}
-            usuario={`${currentUser?.nombre} ${currentUser?.apellido}`}
-            situacionActual={viewDetail.situacion}
-            situacionOpciones={refData.situacion_cliente.filter(r => r.situacion).map(r => r.descripcion)}
-            onAdd={(seg: Seguimiento) => {
-              const updated = { ...viewDetail, situacion: seg.situacion, seguimientos: [...(viewDetail.seguimientos || []), seg] }
-              updateCliente(viewDetail.id, updated)
-              setViewDetail(updated)
-            }}
-          />
-          <DocumentosPanel modulo="clientes" registroId={viewDetail.id} />
+          {detailTab === 'info' && (
+            <>
+              <SeguimientoPanel
+                seguimientos={viewDetail.seguimientos || []}
+                usuario={`${currentUser?.nombre} ${currentUser?.apellido}`}
+                situacionActual={viewDetail.situacion}
+                situacionOpciones={refData.situacion_cliente.filter(r => r.situacion).map(r => r.descripcion)}
+                onAdd={(seg: Seguimiento) => {
+                  const updated = { ...viewDetail, situacion: seg.situacion, seguimientos: [...(viewDetail.seguimientos || []), seg] }
+                  updateCliente(viewDetail.id, updated)
+                  setViewDetail(updated)
+                }}
+              />
+              <DocumentosPanel modulo="clientes" registroId={viewDetail.id} />
+            </>
+          )}
         </div>
       </div>
     )
