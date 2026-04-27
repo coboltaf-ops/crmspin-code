@@ -239,7 +239,6 @@ export default function ProductosPage() {
       { label: 'Unidad Medida', value: viewDetail.unidad_medida },
       { label: 'Existencia Actual', value: String(viewDetail.existencia_actual) },
       { label: 'Valor Permanente de Stock', value: `$${fmtMoney(viewDetail.valor_permanente_stock)}` },
-      { label: 'Costo', value: `$${fmtMoney(viewDetail.costo_inventario)}` },
     ]
 
     const detailGrid = (items: Array<{ label: string; value: string }>) => (
@@ -433,10 +432,6 @@ export default function ProductosPage() {
               <div>
                 <label style={labelStyle}>Valor Permanente de Stock</label>
                 {numberInput(selected.valor_permanente_stock, v => setSelected({ ...selected, valor_permanente_stock: v }), { step: '0.01' })}
-              </div>
-              <div>
-                <label style={labelStyle}>Costo</label>
-                {numberInput(selected.costo_inventario, v => setSelected({ ...selected, costo_inventario: v }), { step: '0.01' })}
               </div>
             </div>
           </div>
