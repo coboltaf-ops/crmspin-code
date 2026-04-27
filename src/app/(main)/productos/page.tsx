@@ -4,6 +4,46 @@ import { useState, useEffect } from 'react'
 import { useProductosStore, Producto } from '@/features/productos/store/productos-store'
 import { useClientesStore } from '@/features/clientes/store/clientes-store'
 import { useReferenceStore } from '@/features/referencias/store/reference-store'
+import { nextConsecutivo } from '@/shared/lib/consecutivo'
+import * as XLSX from 'xlsx'
+
+const PRODUCTO_FIELDS: (keyof Producto)[] = [
+  'codigo', 'descripcion', 'razon_social', 'tipo_empaque', 'tipo_formula', 'porcentaje_iva',
+  'tipo_precio', 'precio_unitario', 'fecha_vigencia_precio', 'observaciones',
+  'costo_producto', 'margen_contribucion_pct', 'margen_calculo_pct',
+  'valor_trm', 'conversion_cop', 'valor_usd',
+  'unidad_medida', 'existencia_actual', 'valor_permanente_stock', 'costo_inventario',
+  'situacion',
+]
+const NUMERIC_PRODUCTO_FIELDS = new Set<keyof Producto>([
+  'precio_unitario', 'costo_producto', 'margen_contribucion_pct', 'margen_calculo_pct',
+  'valor_trm', 'conversion_cop', 'valor_usd',
+  'existencia_actual', 'valor_permanente_stock', 'costo_inventario',
+])
+const norm = (s: string) => s.toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]/g, '')
+
+const FIELD_SYNONYMS_PROD: Record<string, keyof Producto> = {
+  'cod': 'codigo', 'codigoproducto': 'codigo',
+  'nombre': 'descripcion', 'producto': 'descripcion', 'nombreproducto': 'descripcion',
+  'cliente': 'razon_social', 'razonsocial': 'razon_social', 'razonsocialcliente': 'razon_social',
+  'empaque': 'tipo_empaque', 'tipoempaque': 'tipo_empaque',
+  'formula': 'tipo_formula', 'tipoformula': 'tipo_formula',
+  'iva': 'porcentaje_iva', 'porcentajeiva': 'porcentaje_iva', 'porciva': 'porcentaje_iva',
+  'tipoprecio': 'tipo_precio',
+  'precio': 'precio_unitario', 'preciounitario': 'precio_unitario', 'preciovta': 'precio_unitario', 'preciovenan': 'precio_unitario',
+  'fechavigencia': 'fecha_vigencia_precio', 'vigencia': 'fecha_vigencia_precio',
+  'unidad': 'unidad_medida', 'unidadmedida': 'unidad_medida', 'unidmedida': 'unidad_medida', 'um': 'unidad_medida',
+  'costo': 'costo_producto', 'costoproducto': 'costo_producto',
+  'margen': 'margen_contribucion_pct', 'margencontribucion': 'margen_contribucion_pct', 'margencalc': 'margen_calculo_pct', 'margencalculo': 'margen_calculo_pct',
+  'trm': 'valor_trm', 'valortrm': 'valor_trm',
+  'conversioncop': 'conversion_cop', 'cop': 'conversion_cop',
+  'usd': 'valor_usd', 'valorusd': 'valor_usd',
+  'existencia': 'existencia_actual', 'stock': 'existencia_actual',
+  'valorstock': 'valor_permanente_stock',
+  'costoinventario': 'costo_inventario',
+  'observaciones': 'observaciones', 'obs': 'observaciones',
+  'situacion': 'situacion', 'estado': 'situacion',
+}
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
 import { usePermisos } from '@/shared/hooks/use-permisos'
 import { fmtMoney } from '@/shared/lib/format-number'
@@ -66,6 +106,77 @@ export default function ProductosPage() {
     !search || p.descripcion.toLowerCase().includes(search.toLowerCase()) ||
     p.codigo.toLowerCase().includes(search.toLowerCase())
   )
+
+  const descargarPlantilla = () => {
+    const headers = PRODUCTO_FIELDS.filter(f => f !== 'codigo' && f !== 'situacion')
+    const ws = XLSX.utils.aoa_to_sheet([headers as unknown as string[]])
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Productos')
+    XLSX.writeFile(wb, 'plantilla-productos.xlsx')
+  }
+
+  const importarExcel = async (file: File) => {
+    try {
+      const buf = await file.arrayBuffer()
+      const wb = XLSX.read(buf, { type: 'array' })
+      const sheet = wb.Sheets[wb.SheetNames[0]]
+      const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: '' })
+      if (rows.length === 0) { alert('El Excel está vacío.'); return }
+
+      const headerMap: Record<string, keyof Producto> = {}
+      const noReconocidos: string[] = []
+      const ignored = new Set<keyof Producto>(['codigo', 'situacion', 'fecha_registro'])
+      Object.keys(rows[0]).forEach(h => {
+        const n = norm(h)
+        const direct = PRODUCTO_FIELDS.find(f => norm(f) === n)
+        const synonym = FIELD_SYNONYMS_PROD[n]
+        const match = direct || synonym
+        if (match && !ignored.has(match)) headerMap[h] = match
+        else noReconocidos.push(h)
+      })
+      if (Object.keys(headerMap).length === 0) {
+        alert(`No se reconoció ninguna columna.\n\nEncabezados encontrados:\n${Object.keys(rows[0]).join(', ')}\n\nDescarga la Plantilla y usa esos nombres exactos.`)
+        return
+      }
+      const detectados = Object.entries(headerMap).map(([h, f]) => `  "${h}" → ${f}`).join('\n')
+      const omitidosCols = noReconocidos.length ? `\n\n⚠️ Columnas IGNORADAS:\n  ${noReconocidos.join(', ')}` : ''
+      if (!confirm(`Se detectaron ${Object.keys(headerMap).length} columnas y ${rows.length} filas.\n\n✓ Mapeo:\n${detectados}${omitidosCols}\n\n¿Continuar con la importación?`)) return
+
+      let creados = 0, errores = 0
+      let nro = nextConsecutivo('PRD-', productos.map(p => p.codigo)).nro
+
+      for (const row of rows) {
+        try {
+          const codigoAuto = `PRD-${String(nro).padStart(5, '0')}`
+          const prod = emptyProducto()
+          prod.codigo = codigoAuto
+
+          for (const [header, field] of Object.entries(headerMap)) {
+            const raw = row[header]
+            if (raw === '' || raw === null || raw === undefined) continue
+            if (NUMERIC_PRODUCTO_FIELDS.has(field)) {
+              const n = Number(String(raw).replace(/[^0-9.\-]/g, ''))
+              ;(prod as unknown as Record<string, unknown>)[field] = isNaN(n) ? 0 : n
+            } else {
+              ;(prod as unknown as Record<string, unknown>)[field] = String(raw).trim()
+            }
+          }
+
+          if (!prod.descripcion) { errores++; continue }
+          prod.situacion = 'Activo'
+          prod.fecha_registro = today
+
+          addProducto({ ...prod, id: crypto.randomUUID() })
+          nro++
+          creados++
+        } catch { errores++ }
+      }
+
+      alert(`Importación finalizada:\n\n✓ Creados: ${creados}\n✗ Errores (sin Descripción): ${errores}`)
+    } catch (err) {
+      alert('Error al leer el Excel: ' + (err as Error).message)
+    }
+  }
 
   const auditParams = () => ({
     usuario: currentUser?.usuario || 'desconocido',
@@ -372,9 +483,37 @@ export default function ProductosPage() {
           <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>Lista de Productos</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Catálogo de productos y servicios para cotizar</p>
         </div>
-        {permisos.editar && tab === 'registros' && (
-          <button onClick={() => { setSelected(emptyProducto()); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nuevo Producto</button>
-        )}
+        <div style={{ display: 'flex', gap: 10 }}>
+          {permisos.esAdmin && productos.length > 0 && tab === 'registros' && (
+            <button
+              onClick={() => {
+                if (!confirm(`⚠️ ATENCIÓN\n\nSe eliminarán TODOS los ${productos.length} productos de forma permanente.\n\nEsta acción NO se puede deshacer.\n\n¿Continuar?`)) return
+                const confirmTxt = prompt('Para confirmar, escribe: ELIMINAR TODOS')
+                if (confirmTxt !== 'ELIMINAR TODOS') { alert('Cancelado. No se eliminó nada.'); return }
+                useProductosStore.setState({ productos: [] })
+                alert('Base de Productos eliminada.')
+              }}
+              style={{ ...btnStyle, background: '#b91c1c', color: '#ffffff', border: '1px solid #dc2626' }}
+              title="Solo administradores"
+            >
+              🗑️ Eliminar Base ({productos.length})
+            </button>
+          )}
+          {permisos.editar && tab === 'registros' && (
+            <>
+              <button onClick={descargarPlantilla} style={{ ...btnStyle, background: 'rgba(255,255,255,0.15)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.25)' }} title="Descargar plantilla Excel con los encabezados">📋 Plantilla</button>
+              <label style={{ ...btnStyle, background: '#059669', color: '#ffffff', border: '1px solid #10b981', display: 'inline-flex', alignItems: 'center', gap: 4 }} title="Importar productos desde Excel">
+                📥 Importar Excel
+                <input type="file" accept=".xlsx,.xls" style={{ display: 'none' }} onChange={async e => {
+                  const f = e.target.files?.[0]; if (!f) return
+                  await importarExcel(f)
+                  e.target.value = ''
+                }} />
+              </label>
+              <button onClick={() => { setSelected(emptyProducto()); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nuevo Producto</button>
+            </>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
