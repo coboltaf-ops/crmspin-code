@@ -28,12 +28,13 @@ export default function ReferenciasPage() {
   const departamentos = (data.departamento || []).filter(d => d.situacion).map(d => d.descripcion)
 
   const handleAdd = () => {
-    if (!desc.trim()) return
+    if (!desc.trim()) { alert('⚠️ Escribí una descripción primero'); return }
     if (items.some(i => i.descripcion.toLowerCase() === desc.trim().toLowerCase() && (!hasDepto || (i.departamento || '') === deptoRef.trim()))) { alert('Ya existe'); return }
     const payload: Parameters<typeof addItem>[1] = { id: crypto.randomUUID(), descripcion: desc.trim(), situacion: true }
     if (hasCodigo) payload.codigo = codigoRef.trim()
     if (hasDepto) payload.departamento = deptoRef.trim()
     addItem(selectedTable, payload)
+    alert(`✓ Agregado a "${tableLabel}": ${desc.trim()}\nTotal items: ${items.length + 1}`)
     setDesc(''); setCodigoRef(''); setDeptoRef('')
   }
 
