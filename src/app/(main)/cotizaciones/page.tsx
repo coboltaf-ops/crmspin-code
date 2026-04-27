@@ -534,29 +534,56 @@ export default function CotizacionesPage() {
               {showProductos ? '✕ Cerrar' : '+ Agregar Productos'}
             </button>
           </div>
-          {showProductos && (
-            <div style={{ marginBottom: 12 }}>
-              <input value={searchProd} onChange={e => setSearchProd(e.target.value)} placeholder="Buscar producto por código o descripción..." style={{ ...inputStyle, maxWidth: 500, marginBottom: 8 }} autoFocus />
-              <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, maxHeight: 220, overflow: 'auto' }}>
-                {productos.filter(p => p.situacion === 'Activo').filter(p => !searchProd || p.descripcion.toLowerCase().includes(searchProd.toLowerCase()) || p.codigo.toLowerCase().includes(searchProd.toLowerCase())).slice(0, 20).map(p => (
-                  <div key={p.id} onClick={() => {
-                    if (!selected) return
-                    const nuevo = recalcDetalle({ id: crypto.randomUUID(), producto_id: p.id, codigo_producto: p.codigo, descripcion: p.descripcion, cantidad: 1, precio_unitario: p.precio_unitario, unidad_medida: p.unidad_medida, descuento_pct: 0, subtotal: 0 })
-                    const detalles = selected.detalles.filter(d => d.producto_id)
-                    setSelected({ ...selected, detalles: [...detalles, nuevo] })
-                  }} style={{ padding: '10px 14px', cursor: 'pointer', fontSize: 12, color: '#ffffff', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'background 0.15s' }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(59,130,246,0.15)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                    <span><span style={{ color: '#60a5fa', fontFamily: 'monospace', marginRight: 8 }}>{p.codigo}</span>{p.descripcion}</span>
-                    <span style={{ color: '#93c5fd', fontWeight: 600, whiteSpace: 'nowrap', marginLeft: 12 }}>${fmtMoney(p.precio_unitario)}</span>
+          {showProductos && (() => {
+            const normRS = (s: string) => (s || '').toLowerCase().trim()
+            const razonClienteCot = normRS(selected.cliente_nombre)
+            const codigosYaEnCot = new Set(selected.detalles.filter(d => d.producto_id).map(d => d.codigo_producto.toLowerCase()))
+            const productosFiltrados = productos
+              .filter(p => p.situacion === 'Activo')
+              .filter(p => razonClienteCot && normRS(p.razon_social) === razonClienteCot)
+              .filter(p => !codigosYaEnCot.has(p.codigo.toLowerCase()))
+              .filter(p => !searchProd || p.descripcion.toLowerCase().includes(searchProd.toLowerCase()) || p.codigo.toLowerCase().includes(searchProd.toLowerCase()))
+            return (
+              <div style={{ marginBottom: 12 }}>
+                {!razonClienteCot ? (
+                  <div style={{ padding: 14, background: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.4)', borderRadius: 8, color: '#fcd34d', fontSize: 12 }}>
+                    ⚠️ Selecciona primero un Cliente arriba. Los productos disponibles dependen de la Razón Social del cliente.
                   </div>
-                ))}
-                {productos.filter(p => p.situacion === 'Activo').filter(p => !searchProd || p.descripcion.toLowerCase().includes(searchProd.toLowerCase()) || p.codigo.toLowerCase().includes(searchProd.toLowerCase())).length === 0 && (
-                  <div style={{ padding: '16px 14px', color: 'rgba(255,255,255,0.5)', fontSize: 12, textAlign: 'center' }}>No se encontraron productos</div>
+                ) : (
+                  <>
+                    <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11, marginBottom: 6 }}>
+                      Mostrando productos del catálogo asignados a <strong style={{ color: '#93c5fd' }}>{selected.cliente_nombre}</strong> ({productosFiltrados.length} disponibles)
+                    </p>
+                    <input value={searchProd} onChange={e => setSearchProd(e.target.value)} placeholder="Buscar producto por código o descripción..." style={{ ...inputStyle, maxWidth: 500, marginBottom: 8 }} autoFocus />
+                    <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, maxHeight: 220, overflow: 'auto' }}>
+                      {productosFiltrados.slice(0, 20).map(p => (
+                        <div key={p.id} onClick={() => {
+                          if (!selected) return
+                          if (codigosYaEnCot.has(p.codigo.toLowerCase())) {
+                            alert(`El producto "${p.codigo}" ya está en esta cotización. No se puede duplicar.`)
+                            return
+                          }
+                          const nuevo = recalcDetalle({ id: crypto.randomUUID(), producto_id: p.id, codigo_producto: p.codigo, descripcion: p.descripcion, cantidad: 1, precio_unitario: p.precio_unitario, unidad_medida: p.unidad_medida, descuento_pct: 0, subtotal: 0 })
+                          const detalles = selected.detalles.filter(d => d.producto_id)
+                          setSelected({ ...selected, detalles: [...detalles, nuevo] })
+                        }} style={{ padding: '10px 14px', cursor: 'pointer', fontSize: 12, color: '#ffffff', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', transition: 'background 0.15s' }}
+                          onMouseEnter={e => (e.currentTarget.style.background = 'rgba(59,130,246,0.15)')}
+                          onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
+                          <span><span style={{ color: '#60a5fa', fontFamily: 'monospace', marginRight: 8 }}>{p.codigo}</span>{p.descripcion}</span>
+                          <span style={{ color: '#93c5fd', fontWeight: 600, whiteSpace: 'nowrap', marginLeft: 12 }}>${fmtMoney(p.precio_unitario)}</span>
+                        </div>
+                      ))}
+                      {productosFiltrados.length === 0 && (
+                        <div style={{ padding: '16px 14px', color: 'rgba(255,255,255,0.5)', fontSize: 12, textAlign: 'center' }}>
+                          No hay productos en el catálogo asignados a esta Razón Social (o ya los agregaste todos).
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
               </div>
-            </div>
-          )}
+            )
+          })()}
 
           {/* Tabla de items — los titulos siempre visibles */}
           <div style={{ borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden', marginBottom: 12 }}>
