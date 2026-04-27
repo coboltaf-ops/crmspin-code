@@ -173,8 +173,9 @@ export default function ProductosPage() {
       if (!confirm(`Se detectaron ${Object.keys(headerMap).length} columnas y ${rows.length} filas.\n\n✓ Mapeo:\n${detectados}${ignoradasMsg}${omitidosCols}\n\n¿Continuar con la importación?`)) return
 
       let creados = 0, sinCodigo = 0, sinDescripcion = 0, duplicados = 0, errores = 0
-      const codigosExistentes = new Set(productos.map(p => p.codigo))
-      const codigosEnArchivo = new Set<string>()
+      const claveProd = (rs: string, cod: string) => `${(rs || '').toLowerCase().trim()}|${cod.toLowerCase().trim()}`
+      const clavesExistentes = new Set(productos.map(p => claveProd(p.razon_social, p.codigo)))
+      const clavesEnArchivo = new Set<string>()
 
       for (const row of rows) {
         try {
@@ -193,13 +194,14 @@ export default function ProductosPage() {
 
           if (!prod.codigo) { sinCodigo++; continue }
           if (!prod.descripcion) { sinDescripcion++; continue }
-          if (codigosExistentes.has(prod.codigo) || codigosEnArchivo.has(prod.codigo)) { duplicados++; continue }
+          const clave = claveProd(prod.razon_social, prod.codigo)
+          if (clavesExistentes.has(clave) || clavesEnArchivo.has(clave)) { duplicados++; continue }
 
           prod.situacion = 'Activo'
           prod.fecha_registro = today
 
           addProducto({ ...prod, id: crypto.randomUUID() })
-          codigosEnArchivo.add(prod.codigo)
+          clavesEnArchivo.add(clave)
           creados++
         } catch { errores++ }
       }
@@ -221,10 +223,14 @@ export default function ProductosPage() {
     e.preventDefault()
     if (!selected) return
     if (!selected.codigo.trim()) { alert('El código es obligatorio'); return }
-    const duplicado = productos.find(p => p.codigo.toLowerCase() === selected.codigo.toLowerCase() && p.id !== selected.id)
+    const duplicado = productos.find(p =>
+      p.codigo.toLowerCase() === selected.codigo.toLowerCase() &&
+      (p.razon_social || '').toLowerCase() === (selected.razon_social || '').toLowerCase() &&
+      p.id !== selected.id
+    )
     if (duplicado) {
       const modo = selected.id ? 'EDICIÓN' : 'CREACIÓN'
-      alert(`Ya existe un producto con el código "${selected.codigo}".\n\nModo: ${modo}\nID actual: ${selected.id || '(vacío)'}\nID duplicado: ${duplicado.id}`)
+      alert(`Ya existe el producto "${selected.codigo}" para la razón social "${selected.razon_social || '(vacía)'}".\n\nModo: ${modo}\nID actual: ${selected.id || '(vacío)'}\nID duplicado: ${duplicado.id}`)
       return
     }
     if (selected.id) { const _anterior = productos.find(x => x.id === selected.id); updateProducto(selected.id, selected); logAudit({ ...auditParams(), accion: "MODIFICAR", registro_codigo: selected.codigo, registro_nombre: selected.descripcion, detalle: computarDiff(_anterior as unknown as Record<string, unknown>, selected as unknown as Record<string, unknown>) }) }
