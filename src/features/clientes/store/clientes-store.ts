@@ -54,6 +54,11 @@ export interface Cliente {
   fecha_ingreso_cliente: string
   seguimientos: Seguimiento[]
   codigo_acceso: string
+  // Régimen Colombia DIAN — campos adicionales DIAN/RUT
+  tipo_persona: string
+  responsabilidades_rut: string
+  actividad_dian_ciiu: string
+  tipo_regimen: string
 }
 
 /** Genera código de acceso aleatorio tipo ACC-XXXXXX */
@@ -88,6 +93,10 @@ export const useClientesStore = create<ClientesState>()(
           if (!next.codigo_acceso) next.codigo_acceso = generarCodigoAcceso()
           if (!next.clase_cliente) next.clase_cliente = 'Otros Clientes'
           if (next.clase_cliente === 'Especiales') next.clase_cliente = 'Clientes Especiales'
+          if (next.tipo_persona === undefined) next.tipo_persona = ''
+          if (next.responsabilidades_rut === undefined) next.responsabilidades_rut = ''
+          if (next.actividad_dian_ciiu === undefined) next.actividad_dian_ciiu = ''
+          if (next.tipo_regimen === undefined) next.tipo_regimen = ''
           return next
         })
         return state

@@ -102,6 +102,7 @@ const emptyCliente = (codigo: string): Cliente => ({
   cupo_credito: 0, banco_pagos: '', cuenta_banco: '', tipo_cuenta_banco: 'Ahorro', naturaleza_cuenta: '',
   observaciones: '',
   situacion: 'Activo', fecha_registro: today, fecha_ingreso_cliente: '', seguimientos: [], codigo_acceso: generarCodigoAcceso(),
+  tipo_persona: '', responsabilidades_rut: '', actividad_dian_ciiu: '', tipo_regimen: '',
 })
 
 export default function ClientesPage() {
@@ -559,7 +560,7 @@ export default function ClientesPage() {
 
           {/* Datos DIAN */}
           <div style={{ marginTop: 16, padding: 16, background: 'rgba(59,130,246,0.06)', borderRadius: 12, border: '1px solid rgba(59,130,246,0.25)' }}>
-            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Datos Importantes Solicitados por DIAN</h3>
+            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Régimen Colombia DIAN</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
               {[
                 { label: 'Autoretenedor', value: viewDetail.autoretenedor },
@@ -578,6 +579,10 @@ export default function ClientesPage() {
                 { label: 'Banco para Pagos', value: viewDetail.banco_pagos },
                 { label: 'Cuenta', value: viewDetail.cuenta_banco },
                 { label: 'Tipo de Cuenta en Banco', value: viewDetail.tipo_cuenta_banco },
+                { label: 'Tipo de Persona', value: viewDetail.tipo_persona || '—' },
+                { label: 'Tipo de Régimen', value: viewDetail.tipo_regimen || '—' },
+                { label: 'Actividad Económica DIAN (CIIU)', value: viewDetail.actividad_dian_ciiu || '—' },
+                { label: 'Responsabilidades RUT', value: viewDetail.responsabilidades_rut || '—' },
               ].map(f => (
                 <div key={f.label}>
                   <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
@@ -833,7 +838,7 @@ export default function ClientesPage() {
 
           {/* Datos DIAN */}
           <div style={{ marginTop: 20, padding: 16, background: 'rgba(59,130,246,0.06)', borderRadius: 12, border: '1px solid rgba(59,130,246,0.25)' }}>
-            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Datos Importantes Solicitados por DIAN</h3>
+            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Régimen Colombia DIAN</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
               <div>
                 <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Autoretenedor</label>
@@ -929,6 +934,31 @@ export default function ClientesPage() {
                     <option key={r.id} value={r.descripcion}>{r.descripcion}</option>
                   ))}
                 </select>
+              </div>
+              <div>
+                <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Tipo de Persona</label>
+                <select value={selected.tipo_persona} onChange={e => setSelected({ ...selected, tipo_persona: e.target.value })} style={inputStyle}>
+                  <option value="">Seleccione...</option>
+                  <option value="Natural">Natural</option>
+                  <option value="Jurídica">Jurídica</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Tipo de Régimen</label>
+                <select value={selected.tipo_regimen} onChange={e => setSelected({ ...selected, tipo_regimen: e.target.value })} style={inputStyle}>
+                  <option value="">Seleccione...</option>
+                  <option value="Común">Común</option>
+                  <option value="Simplificado">Simplificado</option>
+                  <option value="Simple">Simple</option>
+                </select>
+              </div>
+              <div>
+                <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Actividad Económica DIAN (CIIU)</label>
+                <input value={selected.actividad_dian_ciiu} onChange={e => setSelected({ ...selected, actividad_dian_ciiu: e.target.value })} placeholder="Ej. 4690" style={inputStyle} />
+              </div>
+              <div style={{ gridColumn: 'span 3' }}>
+                <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Responsabilidades RUT</label>
+                <input value={selected.responsabilidades_rut} onChange={e => setSelected({ ...selected, responsabilidades_rut: e.target.value })} placeholder="Ej. O-13, R-99-PN, O-15" style={inputStyle} />
               </div>
             </div>
           </div>
