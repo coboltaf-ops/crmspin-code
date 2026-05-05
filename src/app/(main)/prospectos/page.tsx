@@ -165,6 +165,7 @@ export default function ProspectosPage() {
       cupo_credito: 0, banco_pagos: '', cuenta_banco: '', tipo_cuenta_banco: 'Ahorro', naturaleza_cuenta: '',
       observaciones: `Convertido desde Prospecto ${p.codigo}`,
       situacion: 'Activo', fecha_registro: today, fecha_ingreso_cliente: today, seguimientos: [], codigo_acceso: generarCodigoAcceso(),
+      tipo_persona: '', responsabilidades_rut: '', actividad_dian_ciiu: '', tipo_regimen: '',
     })
 
     const conCodigo = nextConsecutivo('CON-', contactos.map(c => c.codigo)).codigo
