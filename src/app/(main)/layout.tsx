@@ -383,7 +383,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       )}
 
       {/* Main content */}
-      <main style={{ flex: 1, padding: 24, overflow: 'auto' }}>
+      <main style={{ flex: 1, padding: 24, overflow: 'auto', background: '#172554' }}>
         {/* Top bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: '10px 16px', background: 'rgba(255,255,255,0.08)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', position: 'relative' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
