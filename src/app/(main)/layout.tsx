@@ -209,7 +209,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const sideW = collapsed ? 64 : 240
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#252533' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#172554' }}>
 
       {/* Asistente de bienvenida */}
       {showAsistente && (
