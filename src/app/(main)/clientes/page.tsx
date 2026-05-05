@@ -560,7 +560,7 @@ export default function ClientesPage() {
 
           {/* Datos DIAN */}
           <div style={{ marginTop: 16, padding: 16, background: 'rgba(59,130,246,0.06)', borderRadius: 12, border: '1px solid rgba(59,130,246,0.25)' }}>
-            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Régimen Colombia DIAN</h3>
+            <h3 style={{ color: '#fbbf24', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>🇨🇴 Régimen Colombia DIAN</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
               {[
                 { label: 'Autoretenedor', value: viewDetail.autoretenedor },
@@ -838,7 +838,7 @@ export default function ClientesPage() {
 
           {/* Datos DIAN */}
           <div style={{ marginTop: 20, padding: 16, background: 'rgba(59,130,246,0.06)', borderRadius: 12, border: '1px solid rgba(59,130,246,0.25)' }}>
-            <h3 style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>Régimen Colombia DIAN</h3>
+            <h3 style={{ color: '#fbbf24', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>🇨🇴 Régimen Colombia DIAN</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
               <div>
                 <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Autoretenedor</label>
