@@ -256,7 +256,7 @@ export default function CotizacionesPage() {
     return (
       <div>
         <button onClick={() => setEmailModal(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)', maxWidth: 500 }}>
+        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)', maxWidth: 500 }}>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Enviar {emailModal.codigo} por Email</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
@@ -287,7 +287,7 @@ export default function CotizacionesPage() {
     return (
       <div>
         <button onClick={() => setViewDetail(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           {empresa && (
             <div style={{ marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
               <p style={{ color: '#60a5fa', fontSize: 16, fontWeight: 800 }}>{empresa.nombre}</p>
@@ -401,7 +401,7 @@ export default function CotizacionesPage() {
     return (
       <div>
         <button onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <form onSubmit={handleSave} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <form onSubmit={handleSave} style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 20, textAlign: 'center' }}>{selected.id ? 'Editar' : 'Nueva'} Cotización Nro {selected.codigo}</h2>
 
           {/* Encabezado: Nro / Fechas */}

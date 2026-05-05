@@ -182,7 +182,7 @@ export default function PQRSPublicoPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             {empresa.logo_url ? (
-              <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 48, maxWidth: 80, objectFit: 'contain', background: '#ffffff', borderRadius: 8, padding: 4 }} />
+              <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 80, maxWidth: 220, objectFit: 'contain', background: '#ffffff', borderRadius: 10, padding: 6 }} />
             ) : (
               <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(59,130,246,0.2)', border: '1px solid rgba(59,130,246,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18 }}>📩</div>
             )}

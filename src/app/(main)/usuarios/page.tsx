@@ -174,7 +174,7 @@ export default function UsuariosPage() {
 
       {/* ═══ TAB: FORM USUARIO ═══ */}
       {tab === 'usuarios' && isForm && selected && (
-        <form onSubmit={handleSave} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <form onSubmit={handleSave} style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           <h3 style={{ color: '#ffffff', fontSize: 16, fontWeight: 600, marginBottom: 16 }}>{selected.id ? 'Editar' : 'Nuevo'} Usuario</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
             {[
@@ -240,7 +240,7 @@ export default function UsuariosPage() {
 
           {/* Permisos del rol seleccionado */}
           {selectedRolObj && (
-            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+            <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                 <div>
                   <h3 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700 }}>Permisos: {selectedRolObj.nombre}</h3>
