@@ -55,6 +55,37 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [configOpen, setConfigOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const recognitionRef = useRef<unknown>(null)
+  const [returnUrl, setReturnUrl] = useState<string | null>(null)
+  const [fromInventario, setFromInventario] = useState(false)
+
+  // Detectar si viene de Gestión Inventario
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const params = new URLSearchParams(window.location.search)
+    const from = params.get('from')
+    const ret = params.get('returnUrl')
+    if (from === 'inventario' && ret) {
+      sessionStorage.setItem('crm-return-url', ret)
+      sessionStorage.setItem('crm-from-inventario', '1')
+      setReturnUrl(ret)
+      setFromInventario(true)
+    } else {
+      const savedRet = sessionStorage.getItem('crm-return-url')
+      const savedFrom = sessionStorage.getItem('crm-from-inventario')
+      if (savedRet && savedFrom === '1') {
+        setReturnUrl(savedRet)
+        setFromInventario(true)
+      }
+    }
+  }, [])
+
+  const volverAInventario = () => {
+    if (returnUrl) {
+      sessionStorage.removeItem('crm-return-url')
+      sessionStorage.removeItem('crm-from-inventario')
+      window.location.href = returnUrl
+    }
+  }
 
   useEffect(() => { if (!user) router.push('/login') }, [user, router])
 
@@ -178,7 +209,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const sideW = collapsed ? 64 : 240
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: pathname === '/dashboard' ? '#252533' : '#1e3a8a' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#252533' }}>
 
       {/* Asistente de bienvenida */}
       {showAsistente && (
@@ -315,21 +346,36 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           )}
         </nav>
 
-        {/* Cerrar Sesión */}
-        <div style={{ padding: collapsed ? '12px 8px' : '12px 16px', borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+        {/* Botones inferiores: Volver + Cerrar Sesión */}
+        <div style={{ padding: collapsed ? '8px' : '8px 12px', borderTop: '1px solid rgba(255,255,255,0.15)', display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {fromInventario && (
+            <button onClick={volverAInventario}
+              title={collapsed ? 'Volver a Inventario' : undefined}
+              style={{
+                width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+                padding: collapsed ? '7px 0' : '7px 10px',
+                justifyContent: collapsed ? 'center' : 'flex-start',
+                borderRadius: 8, border: '2px solid #1e3a8a', cursor: 'pointer',
+                background: '#1e40af', color: '#ffffff',
+                fontSize: 11, fontWeight: 700,
+              }}>
+              <span style={{ fontSize: 13, flexShrink: 0 }}>←</span>
+              {!collapsed && <span>Volver a Inventario</span>}
+            </button>
+          )}
           <button onClick={() => {
             if (confirm('¿Cerrar sesión?')) { logout(); router.push('/login') }
           }}
             title={collapsed ? 'Cerrar Sesión' : undefined}
             style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: 12,
-              padding: collapsed ? '10px 0' : '10px 12px',
+              width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+              padding: collapsed ? '6px 0' : '6px 10px',
               justifyContent: collapsed ? 'center' : 'flex-start',
-              borderRadius: 10, border: '1px solid #dc2626', cursor: 'pointer',
+              borderRadius: 8, border: '1px solid #dc2626', cursor: 'pointer',
               background: '#b91c1c', color: '#ffffff',
-              fontSize: 13, fontWeight: 700,
+              fontSize: 11, fontWeight: 600,
             }}>
-            <span style={{ fontSize: 16, flexShrink: 0 }}>🚪</span>
+            <span style={{ fontSize: 13, flexShrink: 0 }}>🚪</span>
             {!collapsed && <span>Cerrar Sesión</span>}
           </button>
         </div>
