@@ -110,7 +110,7 @@ export default function DashboardPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* Embudo de Oportunidades */}
         <div onClick={() => router.push('/oportunidades')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Embudo de Ventas</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Embudo de Ventas</h2>
           <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Oportunidades</p>
@@ -148,7 +148,7 @@ export default function DashboardPage() {
 
         {/* Cotizaciones resumen */}
         <div onClick={() => router.push('/cotizaciones')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Cotizaciones</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Cotizaciones</h2>
           <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Total</p>
@@ -180,7 +180,7 @@ export default function DashboardPage() {
 
         {/* PQRS por tipo */}
         <div onClick={() => router.push('/pqrs')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>PQRS por Tipo</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>PQRS por Tipo</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {pqrsPorTipo.map(t => (
               <div key={t.tipo} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 12, textAlign: 'center' }}>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
 
         {/* Prospectos por Situación (PIE) */}
         <div onClick={() => router.push('/prospectos')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Prospectos por Situación</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Prospectos por Situación</h2>
           {prospectosPorSituacion.length === 0 ? (
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin prospectos registrados</p>
           ) : (() => {
@@ -240,7 +240,7 @@ export default function DashboardPage() {
 
         {/* Prospectos por Procedencia */}
         <div onClick={() => router.push('/prospectos')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Prospectos por Procedencia</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Prospectos por Procedencia</h2>
           {prospectosPorOrigen.length === 0 ? (
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin prospectos registrados</p>
           ) : (() => {
@@ -266,7 +266,7 @@ export default function DashboardPage() {
 
         {/* Clientes por Macro Sector — Pie */}
         <div onClick={() => router.push('/clientes')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Clientes por Macro Sector</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Clientes por Macro Sector</h2>
           {clientesPorMacroSector.length === 0 ? (
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin clientes registrados</p>
           ) : (() => {
@@ -320,7 +320,7 @@ export default function DashboardPage() {
 
         {/* Actividad reciente */}
         <div style={cardStyle}>
-          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Resumen General</h2>
+          <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Resumen General</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
               { l: 'Clientes Activos', v: clientes.filter(c => c.situacion === 'Activo').length, c: '#60a5fa', href: '/clientes' },
