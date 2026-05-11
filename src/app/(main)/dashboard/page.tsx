@@ -7,6 +7,7 @@ import { useOportunidadesStore } from '@/features/oportunidades/store/oportunida
 import { useCotizacionesStore } from '@/features/cotizaciones/store/cotizaciones-store'
 import { usePQRSStore } from '@/features/pqrs/store/pqrs-store'
 import { useProspectosStore } from '@/features/prospectos/store/prospectos-store'
+import { useTareasStore } from '@/features/tareas/store/tareas-store'
 import { fmtMoney } from '@/shared/lib/format-number'
 import PieChart from '@/shared/components/pie-chart'
 import BarChart from '@/shared/components/bar-chart'
@@ -20,6 +21,7 @@ export default function DashboardPage() {
   const cotizaciones = useCotizacionesStore(s => s.cotizaciones)
   const pqrs = usePQRSStore(s => s.pqrs)
   const prospectos = useProspectosStore(s => s.prospectos)
+  const tareas = useTareasStore(s => s.tareas)
 
   const opoAbiertas = oportunidades.filter(o => o.situacion === 'Abierta' || o.situacion === 'En Negociación')
   const totalPipeline = opoAbiertas.reduce((s, o) => s + o.valor_estimado, 0)
@@ -35,9 +37,11 @@ export default function DashboardPage() {
     { label: 'Clientes', value: clientes.length, icon: '🏢', color: '#60a5fa', href: '/clientes' },
     { label: 'Contactos', value: contactos.length, icon: '👤', color: '#a78bfa', href: '/contactos' },
     { label: 'Oportunidades', value: opoAbiertas.length, icon: '🎯', color: '#93c5fd', href: '/oportunidades' },
-    { label: 'Cotizaciones', value: cotizaciones.length, icon: '📋', color: '#fbbf24', href: '/cotizaciones' },
-    { label: 'PQRS Abiertas', value: pqrsAbiertas.length, icon: '📩', color: '#f87171', href: '/pqrs' },
+    { label: 'Prospectos', value: prospectos.length, icon: '🔭', color: '#86efac', href: '/prospectos' },
     { label: 'Productos', value: productos.length, icon: '📦', color: '#60a5fa', href: '/productos' },
+    { label: 'Cotizaciones', value: cotizaciones.length, icon: '📋', color: '#fbbf24', href: '/cotizaciones' },
+    { label: 'Tareas', value: tareas.length, icon: '✅', color: '#c4b5fd', href: '/tareas' },
+    { label: 'PQRS', value: pqrsAbiertas.length, icon: '📩', color: '#f87171', href: '/pqrs' },
   ]
 
   const clickable: React.CSSProperties = { cursor: 'pointer', transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease' }
@@ -102,7 +106,7 @@ export default function DashboardPage() {
               <span style={{ fontSize: 28 }}>{c.icon}</span>
               <span style={{ fontSize: 32, fontWeight: 800, color: c.color }}>{c.value}</span>
             </div>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{c.label}</p>
+            <p style={{ color: '#fbbf24', fontSize: 18, fontWeight: 800 }}>{c.label}</p>
           </div>
         ))}
       </div>
