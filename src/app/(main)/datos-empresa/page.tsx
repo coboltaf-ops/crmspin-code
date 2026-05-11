@@ -29,6 +29,7 @@ export default function DatosEmpresaPage() {
     return {
       id: '', codigo: nc.codigo, nombre: '', tipo_identificacion: 'NIT', nro_documento: '',
       correo: '', telefono: '', nro_movil: '', pagina_web: '', logo_url: '', representante_legal: '',
+      smtp_host: '', smtp_port: '587', smtp_usuario: '', smtp_clave: '', smtp_seguridad: 'TLS', smtp_remitente_email: '', smtp_remitente_nombre: '',
       direccion: '', ciudad: '', pais: 'Colombia', codigo_postal: '',
       situacion: 'Activo', seguimientos: [],
     }
@@ -59,14 +60,14 @@ export default function DatosEmpresaPage() {
 
   const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
-  const labelStyle: React.CSSProperties = { color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }
+  const labelStyle: React.CSSProperties = { color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }
 
   // ── VIEW DETAIL ──
   if (viewDetail) {
     return (
       <div>
         <button onClick={() => setViewDetail(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <div style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           <div style={{ display: 'flex', gap: 20, alignItems: 'center', marginBottom: 20 }}>
             {viewDetail.logo_url ? (
               <img src={viewDetail.logo_url} alt="Logo" style={{ width: 80, height: 80, borderRadius: 12, objectFit: 'contain', background: 'rgba(255,255,255,0.1)', padding: 8 }} />
@@ -115,7 +116,7 @@ export default function DatosEmpresaPage() {
             </div>
           </div>
 
-          <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', marginTop: 16 }}>Editar</button>
+          <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6', marginTop: 16 }}>Editar</button>
           <SeguimientoPanel
             seguimientos={viewDetail.seguimientos || []}
             usuario={`${currentUser?.nombre} ${currentUser?.apellido}`}
@@ -137,8 +138,8 @@ export default function DatosEmpresaPage() {
     return (
       <div>
         <button onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <form onSubmit={handleSave} style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
-          <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nueva'} Empresa</h2>
+        <form onSubmit={handleSave} style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+          <h2 style={{ color: '#ffffff', fontSize: 20, fontWeight: 800, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nueva'} Empresa</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             <div>
               <label style={labelStyle}>Código</label>
@@ -179,6 +180,45 @@ export default function DatosEmpresaPage() {
               <input value={selected.representante_legal} onChange={e => setSelected({ ...selected, representante_legal: e.target.value })} style={inputStyle} />
             </div>
 
+            {/* Configuración SMTP de correos */}
+            <div style={{ gridColumn: 'span 3', marginTop: 12, padding: 16, background: 'rgba(251,191,36,0.06)', borderRadius: 12, border: '1px solid rgba(251,191,36,0.25)' }}>
+              <h3 style={{ color: '#fbbf24', fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }}>📧 Configuración SMTP de Correos</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+                <div>
+                  <label style={labelStyle}>Servidor SMTP (Host)</label>
+                  <input value={selected.smtp_host} onChange={e => setSelected({ ...selected, smtp_host: e.target.value })} placeholder="smtp.gmail.com" style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Puerto</label>
+                  <input value={selected.smtp_port} onChange={e => setSelected({ ...selected, smtp_port: e.target.value })} placeholder="587" style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Seguridad</label>
+                  <select value={selected.smtp_seguridad} onChange={e => setSelected({ ...selected, smtp_seguridad: e.target.value })} style={inputStyle}>
+                    <option value="TLS">TLS</option>
+                    <option value="SSL">SSL</option>
+                    <option value="NONE">Sin cifrado</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={labelStyle}>Usuario SMTP</label>
+                  <input value={selected.smtp_usuario} onChange={e => setSelected({ ...selected, smtp_usuario: e.target.value })} placeholder="usuario@empresa.com" style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Contraseña SMTP</label>
+                  <input type="password" value={selected.smtp_clave} onChange={e => setSelected({ ...selected, smtp_clave: e.target.value })} placeholder="••••••••" style={inputStyle} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Email Remitente</label>
+                  <input value={selected.smtp_remitente_email} onChange={e => setSelected({ ...selected, smtp_remitente_email: e.target.value })} placeholder="no-reply@empresa.com" style={inputStyle} />
+                </div>
+                <div style={{ gridColumn: 'span 3' }}>
+                  <label style={labelStyle}>Nombre Remitente</label>
+                  <input value={selected.smtp_remitente_nombre} onChange={e => setSelected({ ...selected, smtp_remitente_nombre: e.target.value })} placeholder="Nombre que verá el destinatario (ej: SPIN S.A.S)" style={inputStyle} />
+                </div>
+              </div>
+            </div>
+
             {/* Logo */}
             <div style={{ gridColumn: 'span 3' }}>
               <label style={labelStyle}>Logo de la Empresa</label>
@@ -190,7 +230,7 @@ export default function DatosEmpresaPage() {
                 )}
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input ref={fileRef} type="file" accept="image/*" onChange={handleLogoUpload} style={{ display: 'none' }} />
-                  <button type="button" onClick={() => fileRef.current?.click()} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Subir Logo</button>
+                  <button type="button" onClick={() => fileRef.current?.click()} style={{ ...btnStyle, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' }}>Subir Logo</button>
                   {selected.logo_url && <button type="button" onClick={() => setSelected({ ...selected, logo_url: '' })} style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Quitar</button>}
                 </div>
               </div>
@@ -227,7 +267,7 @@ export default function DatosEmpresaPage() {
           </div>
 
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -240,10 +280,10 @@ export default function DatosEmpresaPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>Datos Empresa</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', marginBottom: 4 }}>Datos Empresa</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Información de las empresas del sistema</p>
         </div>
-        <button onClick={() => { setSelected(emptyEmpresa()); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nueva Empresa</button>
+        <button onClick={() => { setSelected(emptyEmpresa()); setIsForm(true) }} style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>+ Nueva Empresa</button>
       </div>
 
       <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
@@ -251,7 +291,7 @@ export default function DatosEmpresaPage() {
           <thead>
             <tr>
               {['Logo', 'Código', 'Nombre', 'Documento', 'Correo', 'Teléfono', 'Rep. Legal', 'Acciones'].map(h => (
-                <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                <th key={h} style={{ padding: '12px 14px', background: '#0F8888', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
               ))}
             </tr>
           </thead>
@@ -274,7 +314,7 @@ export default function DatosEmpresaPage() {
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                   <div style={{ display: 'flex', gap: 6 }}>
                     <button onClick={() => setViewDetail(emp)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316' }}>Ver</button>
-                    <button onClick={() => { setSelected(emp); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
+                    <button onClick={() => { setSelected(emp); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
                     <button onClick={() => { if (confirm(`¿Eliminar "${emp.nombre}"?`)) deleteEmpresa(emp.id) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>
                   </div>
                 </td>
