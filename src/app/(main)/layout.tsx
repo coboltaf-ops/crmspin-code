@@ -411,7 +411,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         </div>
         {/* Logo de la empresa encima del modulo (no en dashboard, ya lo tiene) */}
         {pathname !== '/dashboard' && empresa?.logo_url && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: 12 }}>
             <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 80, maxWidth: 260, objectFit: 'contain' }} />
           </div>
         )}
