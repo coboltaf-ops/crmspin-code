@@ -209,12 +209,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const sideW = collapsed ? 64 : 240
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#172554' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#0A5A5A' }}>
 
       {/* Asistente de bienvenida */}
       {showAsistente && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ background: '#172554', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 16, padding: 36, width: 480, boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}>
+          <div style={{ background: '#0A5A5A', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 16, padding: 36, width: 480, boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12, marginBottom: 8 }}>Hola, {user.nombre} 👋</p>
             <h2 style={{ color: '#ffffff', fontSize: 22, fontWeight: 800, marginBottom: 24 }}>¿Qué deseas hacer?</h2>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -252,7 +252,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       {pathname === '/dashboard' && (
       <aside style={{
         width: sideW, transition: 'width 0.3s ease', flexShrink: 0,
-        background: '#172554',
+        background: '#0A5A5A',
         borderRight: '1px solid rgba(255,255,255,0.1)',
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
@@ -383,16 +383,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       )}
 
       {/* Main content */}
-      <main style={{ flex: 1, padding: 24, overflow: 'auto', background: '#172554' }}>
+      <main style={{ flex: 1, padding: 24, overflow: 'auto', background: '#0A5A5A' }}>
         {/* Top bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: '10px 16px', background: 'rgba(255,255,255,0.08)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {empresa?.logo_url ? (
-              <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 40, maxWidth: 120, objectFit: 'contain', background: '#ffffff', borderRadius: 6, padding: 3 }} />
-            ) : (
-              <span style={{ color: '#ffffff', fontWeight: 800, fontSize: 14 }}>{empresa?.nombre || 'CRM SPIN'}</span>
-            )}
-          </div>
+          <div />{/* espacio del lado izquierdo (logo está en el sidebar) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
             <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontWeight: 900, fontSize: 14 }}>
               {user.nombre[0]}{user.apellido[0]}
@@ -415,6 +409,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             )}
           </div>
         </div>
+        {/* Logo de la empresa encima del modulo (no en dashboard, ya lo tiene) */}
+        {pathname !== '/dashboard' && empresa?.logo_url && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+            <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 80, maxWidth: 260, objectFit: 'contain' }} />
+          </div>
+        )}
         {children}
       </main>
     </div>
