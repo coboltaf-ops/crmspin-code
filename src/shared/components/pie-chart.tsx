@@ -14,7 +14,7 @@ interface PieChartProps {
 }
 
 const PALETTE = [
-  '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+  '#2DD4D4', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
   '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16',
   '#06b6d4', '#a855f7', '#eab308', '#22c55e', '#dc2626',
 ]
@@ -25,7 +25,7 @@ export default function PieChart({ title, data, size = 280 }: PieChartProps) {
   if (total === 0) {
     return (
       <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
-        <h3 style={{ color: '#ffffff', fontSize: 16, fontWeight: 700, marginBottom: 16 }}>{title}</h3>
+        <h3 style={{ color: '#ffffff', fontSize: 20, fontWeight: 700, marginBottom: 16 }}>{title}</h3>
         <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin datos para mostrar</p>
       </div>
     )
@@ -58,7 +58,7 @@ export default function PieChart({ title, data, size = 280 }: PieChartProps) {
 
   return (
     <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
-      <h3 style={{ color: '#ffffff', fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{title}</h3>
+      <h3 style={{ color: '#ffffff', fontSize: 20, fontWeight: 700, marginBottom: 4 }}>{title}</h3>
       <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, marginBottom: 20 }}>Total: {total}</p>
       <div style={{ display: 'flex', gap: 32, alignItems: 'center', flexWrap: 'wrap' }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>

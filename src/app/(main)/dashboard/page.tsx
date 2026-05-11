@@ -70,7 +70,7 @@ export default function DashboardPage() {
   }
   const prospectosPorSituacion = groupCount('situacion')
   const prospectosPorOrigen = groupCount('origen_prospecto')
-  const barColors = ['#3b82f6', '#a855f7', '#f59e0b', '#3b82f6', '#ec4899', '#06b6d4', '#ef4444', '#84cc16', '#eab308', '#14b8a6']
+  const barColors = ['#2DD4D4', '#a855f7', '#f59e0b', '#2DD4D4', '#ec4899', '#06b6d4', '#ef4444', '#84cc16', '#eab308', '#14b8a6']
 
   // Clientes por Macro Sector
   const clientesPorMacroSector = (() => {
@@ -92,7 +92,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 24 }}>Dashboard</h1>
+      <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', marginBottom: 24 }}>Dashboard</h1>
 
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16, marginBottom: 24 }}>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* Embudo de Oportunidades */}
         <div onClick={() => router.push('/oportunidades')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Embudo de Ventas</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Embudo de Ventas</h2>
           <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Oportunidades</p>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
             </div>
           </div>
           {(() => {
-            const funnelColors = ['#3b82f6', '#a855f7', '#f59e0b', '#3b82f6', '#ec4899']
+            const funnelColors = ['#2DD4D4', '#a855f7', '#f59e0b', '#2DD4D4', '#ec4899']
             const funnelData = opoPorEtapa.filter(e => e.count > 0)
             const maxCount = Math.max(...opoPorEtapa.map(e => e.count), 1)
             return (
@@ -148,7 +148,7 @@ export default function DashboardPage() {
 
         {/* Cotizaciones resumen */}
         <div onClick={() => router.push('/cotizaciones')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Cotizaciones</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Cotizaciones</h2>
           <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
             <div>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>Total</p>
@@ -180,7 +180,7 @@ export default function DashboardPage() {
 
         {/* PQRS por tipo */}
         <div onClick={() => router.push('/pqrs')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>PQRS por Tipo</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>PQRS por Tipo</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
             {pqrsPorTipo.map(t => (
               <div key={t.tipo} style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 12, textAlign: 'center' }}>
@@ -195,7 +195,7 @@ export default function DashboardPage() {
 
         {/* Prospectos por Situación (PIE) */}
         <div onClick={() => router.push('/prospectos')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Prospectos por Situación</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Prospectos por Situación</h2>
           {prospectosPorSituacion.length === 0 ? (
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin prospectos registrados</p>
           ) : (() => {
@@ -240,7 +240,7 @@ export default function DashboardPage() {
 
         {/* Prospectos por Procedencia */}
         <div onClick={() => router.push('/prospectos')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Prospectos por Procedencia</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Prospectos por Procedencia</h2>
           {prospectosPorOrigen.length === 0 ? (
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin prospectos registrados</p>
           ) : (() => {
@@ -266,7 +266,7 @@ export default function DashboardPage() {
 
         {/* Clientes por Macro Sector — Pie */}
         <div onClick={() => router.push('/clientes')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Clientes por Macro Sector</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Clientes por Macro Sector</h2>
           {clientesPorMacroSector.length === 0 ? (
             <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin clientes registrados</p>
           ) : (() => {
@@ -296,7 +296,7 @@ export default function DashboardPage() {
                 <svg width={220} height={220} viewBox="0 0 220 220" style={{ flexShrink: 0 }}>
                   {slices.map((s, i) => (
                     <g key={i}>
-                      <path d={s.path} fill={s.color} stroke="#172554" strokeWidth={2} />
+                      <path d={s.path} fill={s.color} stroke="#0A5A5A" strokeWidth={2} />
                       {parseInt(s.pct) >= 6 && (
                         <text x={s.labelX} y={s.labelY} fill="#ffffff" fontSize={11} fontWeight={800} textAnchor="middle" dominantBaseline="middle">{s.pct}%</text>
                       )}
@@ -320,7 +320,7 @@ export default function DashboardPage() {
 
         {/* Actividad reciente */}
         <div style={cardStyle}>
-          <h2 style={{ color: '#ef4444', fontSize: 16, fontWeight: 800, marginBottom: 16 }}>Resumen General</h2>
+          <h2 style={{ color: '#ef4444', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Resumen General</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
             {[
               { l: 'Clientes Activos', v: clientes.filter(c => c.situacion === 'Activo').length, c: '#60a5fa', href: '/clientes' },
