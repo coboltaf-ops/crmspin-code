@@ -69,6 +69,7 @@ import SeguimientoPanel from '@/shared/components/seguimiento-panel'
 import DocumentosPanel from '@/shared/components/documentos-panel'
 import { useAsistenteStore } from '@/shared/stores/asistente-store'
 import { Seguimiento } from '@/shared/types/seguimiento'
+import BackupRestoreButtons from '@/shared/components/backup-restore-buttons'
 
 const today = todayColombia()
 
@@ -133,6 +134,38 @@ export default function ProductosPage() {
     ...(refData.tipo_formula || []).filter(r => r.situacion).map(r => r.descripcion),
     ...productos.map(p => p.tipo_formula).filter(Boolean),
   ])].sort()
+
+  const exportarParaInventario = () => {
+    const COLS = [
+      { header: 'Codigo', key: 'codigo' },
+      { header: 'Descripcion', key: 'descripcion' },
+      { header: 'Razon Social', key: 'razon_social' },
+      { header: 'Tipo Empaque', key: 'tipo_empaque' },
+      { header: 'Precio', key: 'precio_unitario' },
+      { header: 'Costo Producto', key: 'costo_producto' },
+      { header: 'Tipo Formula', key: 'tipo_formula' },
+      { header: 'Margen Contribucion %', key: 'margen_contribucion_pct' },
+      { header: 'Margen Calculo %', key: 'margen_calculo_pct' },
+      { header: 'Valor TRM', key: 'valor_trm' },
+      { header: 'Conversion COP', key: 'conversion_cop' },
+      { header: 'Valor US$', key: 'valor_usd' },
+      { header: 'Unidad Medida', key: 'unidad_medida' },
+      { header: 'Situacion', key: 'situacion' },
+    ]
+    const rows = productos.map(p => {
+      const row: Record<string, string | number> = {}
+      COLS.forEach(c => {
+        const v = (p as unknown as Record<string, string | number>)[c.key]
+        row[c.header] = v !== undefined && v !== null ? v : ''
+      })
+      return row
+    })
+    const ws = XLSX.utils.json_to_sheet(rows, { header: COLS.map(c => c.header) })
+    ws['!cols'] = COLS.map(c => ({ wch: c.header === 'Descripcion' || c.header === 'Razon Social' ? 32 : Math.max(c.header.length + 4, 14) }))
+    const wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, 'Productos')
+    XLSX.writeFile(wb, 'Productos_Para_Inventario.xlsx')
+  }
 
   const descargarPlantilla = () => {
     const headers = PRODUCTO_FIELDS.filter(f => f !== 'situacion')
@@ -250,7 +283,7 @@ export default function ProductosPage() {
   const inputStyle: React.CSSProperties = { width: '100%', padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)', color: '#ffffff', fontSize: 13, outline: 'none', boxSizing: 'border-box', height: 38 }
   const btnStyle: React.CSSProperties = { padding: '8px 16px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600 }
   const tabBtnStyle = (active: boolean): React.CSSProperties => ({ ...btnStyle, background: active ? '#4169E1' : 'rgba(255,255,255,0.15)', color: active ? '#ffffff' : 'rgba(255,255,255,0.7)', border: active ? '1px solid #3b82f6' : '1px solid rgba(255,255,255,0.2)' })
-  const labelStyle: React.CSSProperties = { color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }
+  const labelStyle: React.CSSProperties = { color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }
   const sectionStyle: React.CSSProperties = { marginTop: 20, padding: 16, borderRadius: 12, background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.25)' }
   const sectionTitleStyle: React.CSSProperties = { color: '#60a5fa', fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 }
   const refOptions = (table: string) => (refData[table as keyof typeof refData] || []).filter(r => r.situacion).map(r => r.descripcion)
@@ -297,8 +330,8 @@ export default function ProductosPage() {
     return (
       <div>
         <button onClick={() => setViewDetail(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
-          <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 16 }}>{viewDetail.descripcion}</h2>
+        <div style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+          <h2 style={{ color: '#ffffff', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>{viewDetail.descripcion}</h2>
           {detailGrid(fields)}
 
           <div style={sectionStyle}>
@@ -322,7 +355,7 @@ export default function ProductosPage() {
           )}
 
           {permisos.editar && (
-            <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6', marginTop: 16 }}>Editar</button>
+            <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6', marginTop: 16 }}>Editar</button>
           )}
           <SeguimientoPanel
             seguimientos={viewDetail.seguimientos || []}
@@ -356,8 +389,8 @@ export default function ProductosPage() {
     return (
       <div>
         <button onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <form onSubmit={handleSave} style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
-          <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nuevo'} Producto</h2>
+        <form onSubmit={handleSave} style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+          <h2 style={{ color: '#ffffff', fontSize: 20, fontWeight: 800, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nuevo'} Producto</h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16 }}>
             <div>
@@ -484,7 +517,7 @@ export default function ProductosPage() {
           </div>
 
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>{selected.id ? 'Actualizar' : 'Guardar'}</button>
+            <button type="submit" style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>{selected.id ? 'Actualizar' : 'Guardar'}</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -515,9 +548,21 @@ export default function ProductosPage() {
 
   return (
     <div>
+
+      {/* Backup / Restore */}
+      <div style={{ marginBottom: 16, padding: '12px 16px', background: 'rgba(245,158,11,0.25)', borderRadius: 12, border: '1px solid rgba(245,158,11,0.6)', boxShadow: '0 2px 12px rgba(245,158,11,0.2)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <span style={{ color: '#fef08a', fontSize: 14, fontWeight: 900, textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>🗄️ Mantenimiento de datos:</span>
+        <BackupRestoreButtons
+          modulo="productos"
+          label="Productos"
+          registros={productos}
+          onClear={() => useProductosStore.setState({ productos: [] })}
+          onRestore={(rs) => useProductosStore.setState({ productos: rs })}
+        />
+      </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>Lista de Productos</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', marginBottom: 4 }}>Lista de Productos</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Catálogo de productos y servicios para cotizar</p>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
@@ -538,6 +583,7 @@ export default function ProductosPage() {
           )}
           {permisos.editar && tab === 'registros' && (
             <>
+              <button onClick={exportarParaInventario} style={{ ...btnStyle, background: '#fbbf24', color: '#0A5A5A', border: '1px solid #f59e0b', fontWeight: 800 }} title="Descargar Excel para Inventario (14 campos)">📦 Excel para Inventario</button>
               <button onClick={descargarPlantilla} style={{ ...btnStyle, background: 'rgba(255,255,255,0.15)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.25)' }} title="Descargar plantilla Excel con los encabezados">📋 Plantilla</button>
               <label style={{ ...btnStyle, background: '#059669', color: '#ffffff', border: '1px solid #10b981', display: 'inline-flex', alignItems: 'center', gap: 4 }} title="Importar productos desde Excel">
                 📥 Importar Excel
@@ -547,7 +593,7 @@ export default function ProductosPage() {
                   e.target.value = ''
                 }} />
               </label>
-              <button onClick={() => { setSelected(emptyProducto()); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nuevo Producto</button>
+              <button onClick={() => { setSelected(emptyProducto()); setIsForm(true) }} style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>+ Nuevo Producto</button>
             </>
           )}
         </div>
@@ -581,7 +627,7 @@ export default function ProductosPage() {
               <thead>
                 <tr>
                   {['Código', 'Descripción', 'Razón Social', 'Tipo Empaque', 'Tipo Precio', 'Precio', 'Vigencia', 'Existencia', 'Situación', 'Acciones'].map(h => (
-                    <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                    <th key={h} style={{ padding: '12px 14px', background: '#0F8888', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -602,7 +648,7 @@ export default function ProductosPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button onClick={() => setViewDetail(p)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316' }}>Ver</button>
-                        {permisos.editar && <button onClick={() => { setSelected(p); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>}
+                        {permisos.editar && <button onClick={() => { setSelected(p); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>}
                         {permisos.eliminar && <button onClick={() => { if (confirm(`¿Eliminar "${p.descripcion}"?`)) deleteProducto(p.id); logAudit({ ...auditParams(), accion: "ELIMINAR", registro_codigo: p.codigo, registro_nombre: p.descripcion }) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: '1px solid #ef4444' }}>Eliminar</button>}
                       </div>
                     </td>
