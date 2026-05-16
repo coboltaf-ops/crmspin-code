@@ -19,6 +19,7 @@ import DocumentosPanel from '@/shared/components/documentos-panel'
 import { useAsistenteStore } from '@/shared/stores/asistente-store'
 import { Seguimiento } from '@/shared/types/seguimiento'
 import { generarCotizacionPdf } from '@/shared/lib/pdf-cotizacion'
+import BackupRestoreButtons from '@/shared/components/backup-restore-buttons'
 
 const today = todayColombia()
 
@@ -36,9 +37,11 @@ const emptyCotizacion = (codigo: string, nro: number, responsable: string): Coti
   situacion: 'En Construcción', responsable, vendedor: '', fecha_registro: today, seguimientos: [],
 })
 
-const calcTotals = (detalles: DetalleCotizacion[], pctIva: number, pctRet: number = 0) => {
+// IVA fijo 19% para todas las cotizaciones del CRM
+const IVA_PCT = 19
+const calcTotals = (detalles: DetalleCotizacion[], _pctIva: number, pctRet: number = 0) => {
   const subtotal = detalles.reduce((s, d) => s + d.subtotal, 0)
-  const impuesto = subtotal * (pctIva / 100)
+  const impuesto = subtotal * (IVA_PCT / 100)
   const retencion = subtotal * (pctRet / 100)
   const total = subtotal + impuesto - retencion
   return { subtotal, impuesto, retencion, total }
@@ -210,8 +213,8 @@ export default function CotizacionesPage() {
       'Borrador': { background: 'rgba(156,163,175,0.2)', color: '#d1d5db', border: '1px solid rgba(156,163,175,0.3)' },
       'En Construcción': { background: 'rgba(59,130,246,0.2)', color: '#93c5fd', border: '1px solid rgba(59,130,246,0.3)' },
       'Anulada': { background: 'rgba(120,53,15,0.3)', color: '#fcd34d', border: '1px solid rgba(180,83,9,0.5)', textDecoration: 'line-through' },
-      'Enviada': { background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' },
-      'Aprobada': { background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' },
+      'Enviada': { background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' },
+      'Aprobada': { background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' },
       'Rechazada': { background: '#b91c1c', color: '#ffffff', border: '1px solid #dc2626' },
       'Vencida': { background: 'rgba(245,158,11,0.2)', color: '#fcd34d', border: '1px solid rgba(245,158,11,0.3)' },
     }
@@ -238,7 +241,7 @@ export default function CotizacionesPage() {
       `*Moneda:* ${cot.tipo_moneda}\n\n` +
       `*Detalle:*\n${items}\n\n` +
       `*Subtotal antes de impuestos:* ${fmtMoney(subtotal)}\n` +
-      `*Monto IVA (${cot.pct_impuesto}%):* ${fmtMoney(impuesto)}\n` +
+      `*Monto IVA (19%):* ${fmtMoney(impuesto)}\n` +
       `*Retención (${cot.pct_retencion || 0}%):* −${fmtMoney(retencion)}\n` +
       `*VALOR NETO A PAGAR: ${fmtMoney(total)}*\n\n` +
       (cot.observaciones ? `_${cot.observaciones}_\n\n` : '') +
@@ -256,23 +259,23 @@ export default function CotizacionesPage() {
     return (
       <div>
         <button onClick={() => setEmailModal(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)', maxWidth: 500 }}>
-          <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Enviar {emailModal.codigo} por Email</h2>
+        <div style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)', maxWidth: 500 }}>
+          <h2 style={{ color: '#ffffff', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Enviar {emailModal.codigo} por Email</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Para *</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Para *</label>
               <input type="email" value={emailTo} onChange={e => setEmailTo(e.target.value)} placeholder={con?.email || cli?.email || 'correo@ejemplo.com'} required style={inputStyle} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Asunto</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Asunto</label>
               <input value={emailAsunto} onChange={e => setEmailAsunto(e.target.value)} placeholder={`Cotización ${emailModal.codigo}`} style={inputStyle} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Mensaje</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Mensaje</label>
               <textarea value={emailMsg} onChange={e => setEmailMsg(e.target.value)} rows={4} placeholder="Mensaje adicional..." style={{ ...inputStyle, resize: "vertical", height: "auto" }} />
             </div>
             <button onClick={handleSendEmail} disabled={sending || !emailTo}
-              style={{ ...btnStyle, background: sending ? '#3b82f6' : '#3b82f6', color: '#ffffff', marginTop: 8 }}>
+              style={{ ...btnStyle, background: sending ? '#2DD4D4' : '#2DD4D4', color: '#ffffff', marginTop: 8 }}>
               {sending ? 'Enviando...' : 'Enviar Cotización'}
             </button>
           </div>
@@ -287,12 +290,16 @@ export default function CotizacionesPage() {
     return (
       <div>
         <button onClick={() => setViewDetail(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <div style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           {empresa && (
-            <div style={{ marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
-              <p style={{ color: '#60a5fa', fontSize: 16, fontWeight: 800 }}>{empresa.nombre}</p>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>{empresa.direccion}{empresa.ciudad ? ', ' + empresa.ciudad : ''}</p>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>NIT: {empresa.nro_documento}</p>
+            <div style={{ marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+              {empresa.logo_url ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={empresa.logo_url} alt={empresa.nombre || 'Logo'} style={{ maxHeight: 64, maxWidth: 220, objectFit: 'contain', background: '#ffffff', borderRadius: 8, padding: 6 }} />
+              ) : (
+                <p style={{ color: '#60a5fa', fontSize: 16, fontWeight: 800 }}>{empresa.nombre}</p>
+              )}
+              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 11, fontFamily: 'monospace' }}>NIT: {empresa.nro_documento}</p>
             </div>
           )}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
@@ -343,7 +350,7 @@ export default function CotizacionesPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead><tr>
                 {['Código', 'Descripción', 'Unidad Medida', 'Cantidad', 'Precio', 'Subtotal'].map(h => (
-                  <th key={h} style={{ padding: '10px 12px', background: '#1e3a8a', color: '#fff', fontSize: 11, textAlign: 'left' }}>{h}</th>
+                  <th key={h} style={{ padding: '10px 12px', background: '#0F8888', color: '#fff', fontSize: 11, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
@@ -363,7 +370,7 @@ export default function CotizacionesPage() {
 
           <div style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 12, padding: 16, marginBottom: 16, textAlign: 'right' }}>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Subtotal antes de impuestos: <span style={{ color: '#ffffff', fontWeight: 700 }}>${fmtMoney(subtotal)}</span></p>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Monto IVA ({viewDetail.pct_impuesto}%): <span style={{ color: '#ffffff', fontWeight: 700 }}>${fmtMoney(impuesto)}</span></p>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Monto IVA (19%): <span style={{ color: '#ffffff', fontWeight: 700 }}>${fmtMoney(impuesto)}</span></p>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Retención ({viewDetail.pct_retencion || 0}%): <span style={{ color: '#fca5a5', fontWeight: 700 }}>−${fmtMoney(retencion)}</span></p>
             <p style={{ color: '#60a5fa', fontSize: 20, fontWeight: 800, marginTop: 8, borderTop: '2px solid rgba(255,255,255,0.2)', paddingTop: 8 }}>VALOR NETO A PAGAR: ${fmtMoney(total)}</p>
           </div>
@@ -375,7 +382,7 @@ export default function CotizacionesPage() {
             <button onClick={() => { setEmailTo(''); setEmailAsunto(''); setEmailMsg(''); setEmailModal(viewDetail) }} style={{ ...btnStyle, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6' }}>Enviar por Email</button>
             <button onClick={() => sendWhatsApp(viewDetail)} style={{ ...btnStyle, background: '#25d366', color: '#ffffff', border: '1px solid #3b82f6' }}>WhatsApp</button>
             {permisos.editar && !['Aprobada', 'Rechazada'].includes(viewDetail.situacion) && (
-              <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
+              <button onClick={() => { setSelected(viewDetail); setIsForm(true); setViewDetail(null) }} style={{ ...btnStyle, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
             )}
           </div>
           <SeguimientoPanel
@@ -401,29 +408,29 @@ export default function CotizacionesPage() {
     return (
       <div>
         <button onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <form onSubmit={handleSave} style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
-          <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 20, textAlign: 'center' }}>{selected.id ? 'Editar' : 'Nueva'} Cotización Nro {selected.codigo}</h2>
+        <form onSubmit={handleSave} style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+          <h2 style={{ color: '#ffffff', fontSize: 20, fontWeight: 800, marginBottom: 20, textAlign: 'center' }}>{selected.id ? 'Editar' : 'Nueva'} Cotización Nro {selected.codigo}</h2>
 
           {/* Encabezado: Nro / Fechas */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', gap: 12, marginBottom: 16 }}>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Nro Cotización</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Nro Cotización</label>
               <input value={selected.codigo} readOnly style={{ ...inputStyle, opacity: 0.5, fontFamily: 'monospace', fontWeight: 700 }} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Registro</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Fecha Registro</label>
               <input value={fDate(selected.fecha_registro)} readOnly style={{ ...inputStyle, opacity: 0.5 }} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Cotización *</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Fecha Cotización *</label>
               <input type="date" value={selected.fecha_emision} onChange={e => setSelected({ ...selected, fecha_emision: e.target.value })} required style={inputStyle} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Vencimiento</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Fecha Vencimiento</label>
               <input type="date" value={selected.fecha_vencimiento} onChange={e => setSelected({ ...selected, fecha_vencimiento: e.target.value })} style={inputStyle} />
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Fecha Aprobación</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Fecha Aprobación</label>
               <input type="date" value={selected.fecha_aprobacion} onChange={e => setSelected({ ...selected, fecha_aprobacion: e.target.value })} style={inputStyle} />
             </div>
           </div>
@@ -431,7 +438,7 @@ export default function CotizacionesPage() {
           {/* Cliente + Contacto en la misma línea */}
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16, marginBottom: 16 }}>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Cliente *</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Cliente *</label>
               <select value={selected.cliente_id} onChange={e => {
                 const cli = clientes.find(c => c.id === e.target.value)
                 setSelected({ ...selected, cliente_id: e.target.value, cliente_nombre: cli?.razon_social || '', contacto_id: '', contacto_nombre: '', oportunidad_id: '', oportunidad_nombre: '' })
@@ -441,7 +448,7 @@ export default function CotizacionesPage() {
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Contacto</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Contacto</label>
               <select value={selected.contacto_id} onChange={e => {
                 const con = contactosDelCliente.find(c => c.id === e.target.value)
                 setSelected({ ...selected, contacto_id: e.target.value, contacto_nombre: con ? `${con.nombre} ${con.apellido}` : '' })
@@ -455,7 +462,7 @@ export default function CotizacionesPage() {
           {/* Oportunidad + Vendedor en la misma línea */}
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 16, marginBottom: 16 }}>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Oportunidad</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Oportunidad</label>
               <select value={selected.oportunidad_id} onChange={e => {
                 const opo = oportunidades.find(o => o.id === e.target.value)
                 setSelected({ ...selected, oportunidad_id: e.target.value, oportunidad_nombre: opo?.nombre || '' })
@@ -465,7 +472,7 @@ export default function CotizacionesPage() {
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Vendedor</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Vendedor</label>
               <select value={selected.vendedor} onChange={e => setSelected({ ...selected, vendedor: e.target.value })} style={inputStyle}>
                 <option value="">Seleccionar...</option>
                 {vendedores.map(v => <option key={v.id} value={`${v.nombre} ${v.apellido}`}>{v.codigo} - {v.nombre} {v.apellido}</option>)}
@@ -502,26 +509,26 @@ export default function CotizacionesPage() {
           {/* Moneda / Condiciones / Situación */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 20 }}>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Tipo Moneda</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Tipo Moneda</label>
               <select value={selected.tipo_moneda} onChange={e => setSelected({ ...selected, tipo_moneda: e.target.value })} style={inputStyle}>
                 {refOptions('tipo_moneda').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Condiciones de Pago</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Condiciones de Pago</label>
               <select value={selected.condicion_pago} onChange={e => setSelected({ ...selected, condicion_pago: e.target.value })} style={inputStyle}>
                 {refOptions('condiciones_pago').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>¿Tiene Flete?</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>¿Tiene Flete?</label>
               <select value={selected.tiene_flete || 'No'} onChange={e => setSelected({ ...selected, tiene_flete: e.target.value })} style={inputStyle}>
                 <option value="No">No</option>
                 <option value="Si">Sí</option>
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Situación</label>
+              <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Situación</label>
               <select value={selected.situacion} onChange={e => setSelected({ ...selected, situacion: e.target.value })} style={inputStyle}>
                 {refOptions('situacion_cotizacion').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
@@ -592,7 +599,7 @@ export default function CotizacionesPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead><tr>
                 {['Código', 'Descripción', 'Unidad Medida', 'Cantidad', 'Precio', 'Subtotal', ''].map(h => (
-                  <th key={h} style={{ padding: '10px 12px', background: '#1e3a8a', color: '#fff', fontSize: 12, fontWeight: 700, textAlign: 'left', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
+                  <th key={h} style={{ padding: '10px 12px', background: '#0F8888', color: '#fff', fontSize: 12, fontWeight: 700, textAlign: 'left', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
@@ -630,18 +637,18 @@ export default function CotizacionesPage() {
           {/* Totales (los % se calcularán según fórmula que se definirá) */}
           <div style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 12, padding: 16, marginBottom: 16, textAlign: 'right' }}>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Subtotal antes de impuestos: <span style={{ color: '#ffffff', fontWeight: 700 }}>${fmtMoney(subtotal)}</span></p>
-            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Monto IVA: <span style={{ color: '#ffffff', fontWeight: 700 }}>${fmtMoney(impuesto)}</span></p>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Monto IVA (19%): <span style={{ color: '#ffffff', fontWeight: 700 }}>${fmtMoney(impuesto)}</span></p>
             <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, margin: '4px 0' }}>Retención: <span style={{ color: '#fca5a5', fontWeight: 700 }}>−${fmtMoney(retencion)}</span></p>
             <p style={{ color: '#60a5fa', fontSize: 20, fontWeight: 800, marginTop: 8, borderTop: '2px solid rgba(255,255,255,0.2)', paddingTop: 8 }}>VALOR NETO A PAGAR: ${fmtMoney(total)}</p>
           </div>
 
           <div style={{ marginBottom: 16 }}>
-            <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Observaciones</label>
+            <label style={{ color: '#ffffff', fontSize: 14, fontWeight: 800, display: 'block', marginBottom: 6 }}>Observaciones</label>
             <textarea value={selected.observaciones} onChange={e => setSelected({ ...selected, observaciones: e.target.value })} rows={3} style={{ ...inputStyle, resize: "vertical", height: "auto" }} placeholder="Notas adicionales, condiciones especiales, garantías, etc." />
           </div>
 
           <div style={{ display: 'flex', gap: 10 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -671,13 +678,25 @@ export default function CotizacionesPage() {
   // ── MAIN VIEW ──
   return (
     <div>
+
+      {/* Backup / Restore */}
+      <div style={{ marginBottom: 16, padding: '12px 16px', background: 'rgba(245,158,11,0.25)', borderRadius: 12, border: '1px solid rgba(245,158,11,0.6)', boxShadow: '0 2px 12px rgba(245,158,11,0.2)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <span style={{ color: '#fef08a', fontSize: 14, fontWeight: 900, textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>🗄️ Mantenimiento de datos:</span>
+        <BackupRestoreButtons
+          modulo="cotizaciones"
+          label="Cotizaciones"
+          registros={cotizaciones}
+          onClear={() => useCotizacionesStore.setState({ cotizaciones: [] })}
+          onRestore={(rs) => useCotizacionesStore.setState({ cotizaciones: rs })}
+        />
+      </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>Cotizaciones</h1>
+          <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', marginBottom: 4 }}>Cotizaciones</h1>
           <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }}>Gestión de cotizaciones comerciales</p>
         </div>
         {permisos.editar && tab === 'registros' && (
-          <button onClick={() => { { const nc = nextConsecutivo('COT-', cotizaciones.map(c => c.codigo)); setSelected(emptyCotizacion(nc.codigo, nc.nro, `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`)) }; setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nueva Cotización</button>
+          <button onClick={() => { { const nc = nextConsecutivo('COT-', cotizaciones.map(c => c.codigo)); setSelected(emptyCotizacion(nc.codigo, nc.nro, `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`)) }; setIsForm(true) }} style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>+ Nueva Cotización</button>
         )}
       </div>
 
@@ -694,7 +713,7 @@ export default function CotizacionesPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead><tr>
                 {['Código', 'Cliente', 'Tipo Documento', 'Nro Documento', 'Dirección', 'Ciudad', 'País', 'Emisión', 'Vence', 'Items', 'Total', 'Situación', 'Acciones'].map(h => (
-                  <th key={h} style={{ padding: '12px 14px', background: '#1e3a8a', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
+                  <th key={h} style={{ padding: '12px 14px', background: '#0F8888', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr></thead>
               <tbody>
@@ -723,7 +742,7 @@ export default function CotizacionesPage() {
                           <button onClick={() => generatePDF(c)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#b91c1c', color: '#ffffff', border: '1px solid #dc2626' }}>PDF</button>
                           <button onClick={() => { setEmailTo(''); setEmailAsunto(''); setEmailMsg(''); setEmailModal(c) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6' }}>Email</button>
                           {permisos.editar && !['Aprobada', 'Rechazada'].includes(c.situacion) && (
-                            <button onClick={() => { setSelected(c); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
+                            <button onClick={() => { setSelected(c); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
                           )}
                           {permisos.eliminar && c.situacion !== 'Anulada' && (
                             <button onClick={() => {

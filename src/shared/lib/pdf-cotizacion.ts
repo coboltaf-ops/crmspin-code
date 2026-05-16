@@ -81,7 +81,7 @@ export function generarCotizacionPdf(input: GenerarCotizacionPdfInput): jsPDF {
 
   const subtotal = cotizacion.detalles.reduce((s, d) => s + d.subtotal, 0)
   const descuento = cotizacion.descuento || 0
-  const pctImpuesto = cotizacion.pct_impuesto ?? 19
+  const pctImpuesto = 19  // IVA fijo 19% para todas las cotizaciones SPIN
   const pctRetFuente = cotizacion.pct_retencion || 0
   const pctRetIva = cotizacion.pct_retencion_iva || 0
   const baseImponible = subtotal - descuento
