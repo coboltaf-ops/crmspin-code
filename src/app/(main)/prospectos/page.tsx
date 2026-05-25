@@ -27,8 +27,9 @@ interface ProspectoExterno {
 
 const emptyProspecto = (codigo: string): Prospecto => ({
   id: '', codigo, nombre: '', apellido: '', empresa: '', correo: '', nro_movil: '',
-  origen_prospecto: '', como_nos_conocio: '', productos_interes: [], detalle_requerimiento: '', actividad: '', ciudad: '', pais: 'Colombia',
-  situacion: 'Nuevo', fecha_registro: today, seguimientos: [],
+  macro_sector: '', origen_prospecto: '', como_nos_conocio: '', productos_interes: [], objetivo_producto: '',
+  tiene_proveedor: 'no', nombre_proveedor_actual: '', detalle_requerimiento: '', ciudad: '', pais: 'Colombia',
+  situacion: 'Sin Contactar', fecha_registro: today, seguimientos: [],
 })
 
 export default function ProspectosPage() {
@@ -78,8 +79,9 @@ export default function ProspectosPage() {
     addProspecto({
       id: crypto.randomUUID(), codigo, nombre: ext.nombre, apellido: ext.apellido,
       empresa: ext.empresa, correo: ext.correo, nro_movil: ext.nro_movil,
-      origen_prospecto: 'Formulario Web', como_nos_conocio: 'En Internet', productos_interes: [], detalle_requerimiento: ext.descripcion_requerimiento,
-      actividad: '', ciudad: '', pais: 'Colombia', situacion: 'Sin Contactar',
+      macro_sector: '', origen_prospecto: 'Formulario Web', como_nos_conocio: 'En Internet', productos_interes: [],
+      objetivo_producto: '', tiene_proveedor: 'no', nombre_proveedor_actual: '', detalle_requerimiento: ext.descripcion_requerimiento,
+      ciudad: '', pais: 'Colombia', situacion: 'Sin Contactar',
       fecha_registro: todayColombia(), seguimientos: [{
         id: crypto.randomUUID(), fecha: today, detalle: `Prospecto importado desde formulario web. Registrado el ${ext.fecha_registro} a las ${ext.hora_registro}.`,
         persona_actividad: `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`.trim(), situacion: 'Sin Contactar', usuario: currentUser?.nombre || 'Sistema',
@@ -95,8 +97,9 @@ export default function ProspectosPage() {
       addProspecto({
         id: crypto.randomUUID(), codigo, nombre: ext.nombre, apellido: ext.apellido,
         empresa: ext.empresa, correo: ext.correo, nro_movil: ext.nro_movil,
-        origen_prospecto: 'Formulario Web', como_nos_conocio: 'En Internet', productos_interes: [], detalle_requerimiento: ext.descripcion_requerimiento,
-        actividad: '', ciudad: '', pais: 'Colombia', situacion: 'Sin Contactar',
+        macro_sector: '', origen_prospecto: 'Formulario Web', como_nos_conocio: 'En Internet', productos_interes: [],
+        objetivo_producto: '', tiene_proveedor: 'no', nombre_proveedor_actual: '', detalle_requerimiento: ext.descripcion_requerimiento,
+        ciudad: '', pais: 'Colombia', situacion: 'Sin Contactar',
         fecha_registro: todayColombia(), seguimientos: [{
           id: crypto.randomUUID(), fecha: today, detalle: `Prospecto importado desde formulario web. Registrado el ${ext.fecha_registro} a las ${ext.hora_registro}.`,
           persona_actividad: `${currentUser?.nombre || ''} ${currentUser?.apellido || ''}`.trim(), situacion: 'Sin Contactar', usuario: currentUser?.nombre || 'Sistema',
@@ -156,7 +159,7 @@ export default function ProspectosPage() {
     addCliente({
       id: cliId, codigo: cliCodigo, tipo_identificacion: 'NIT',
       nro_documento: '', digito_verificacion: '', razon_social: p.empresa,
-      macro_sector: '', actividad: p.actividad, actividad_codigo: '',
+      macro_sector: p.macro_sector, actividad: '', actividad_codigo: '',
       direccion: '', departamento: '', ciudad: p.ciudad, codigo_ciudad: '', pais: p.pais || 'Colombia', codigo_pais: 'CO', codigo_postal: '',
       telefono: '', nro_movil: p.nro_movil, email: p.correo, sitio_web: '',
       condicion_pago: 'Contado', tipo_moneda: 'Pesos Colombianos', calificacion_pagador: '', representante_legal: '', tipo_cuenta_cliente: '', clase_cliente: 'Otros Clientes',
@@ -241,11 +244,14 @@ export default function ProspectosPage() {
       { label: 'Origen Prospecto', value: viewDetail.origen_prospecto },
       { label: 'Cómo Nos Conoció', value: viewDetail.como_nos_conocio },
       { label: 'Productos de Interés', value: (viewDetail.productos_interes || []).join(', ') },
-      { label: 'Actividad', value: viewDetail.actividad },
+      { label: 'Macro Sector', value: viewDetail.macro_sector },
+      { label: 'Objetivo Producto', value: viewDetail.objetivo_producto },
+      { label: 'Tiene Proveedor', value: viewDetail.tiene_proveedor === 'si' ? 'Sí' : 'No' },
+      { label: 'Nombre Proveedor Actual', value: viewDetail.nombre_proveedor_actual },
+      { label: 'Detalle Requerimiento', value: viewDetail.detalle_requerimiento },
+      { label: 'Situación', value: viewDetail.situacion },
       { label: 'Ciudad', value: viewDetail.ciudad },
       { label: 'País', value: viewDetail.pais },
-      { label: 'Situación', value: viewDetail.situacion },
-      { label: 'Detalle Requerimiento', value: viewDetail.detalle_requerimiento },
     ]
     return (
       <div>
@@ -342,6 +348,13 @@ export default function ProspectosPage() {
                 {refOptions('como_nos_conocio').map(o => <option key={o} value={o}>{o}</option>)}
               </select>
             </div>
+            <div>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Macro Sector</label>
+              <select value={selected.macro_sector} onChange={e => setSelected({ ...selected, macro_sector: e.target.value })} style={inputStyle}>
+                <option value="">Seleccionar...</option>
+                {refOptions('macro_sector').map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
+            </div>
             <div style={{ gridColumn: 'span 3' }}>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>
                 Productos de Interés <span style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}>(selección múltiple — {(selected.productos_interes || []).length} seleccionado{(selected.productos_interes || []).length === 1 ? '' : 's'})</span>
@@ -385,17 +398,19 @@ export default function ProspectosPage() {
               </div>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Actividad</label>
-              <select value={selected.actividad} onChange={e => setSelected({ ...selected, actividad: e.target.value })} style={inputStyle}>
-                <option value="">Seleccionar...</option>
-                {refOptions('actividad_cliente').map(o => <option key={o} value={o}>{o}</option>)}
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Objetivo Producto</label>
+              <input value={selected.objetivo_producto} onChange={e => setSelected({ ...selected, objetivo_producto: e.target.value })} style={inputStyle} />
+            </div>
+            <div>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Tiene Proveedor Actual</label>
+              <select value={selected.tiene_proveedor} onChange={e => setSelected({ ...selected, tiene_proveedor: e.target.value as 'si' | 'no' })} style={inputStyle}>
+                <option value="no">No</option>
+                <option value="si">Sí</option>
               </select>
             </div>
             <div>
-              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Situación</label>
-              <select value={selected.situacion} onChange={e => setSelected({ ...selected, situacion: e.target.value })} style={inputStyle}>
-                {refOptions('situacion_prospecto').map(o => <option key={o} value={o}>{o}</option>)}
-              </select>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Nombre Proveedor Actual</label>
+              <input value={selected.nombre_proveedor_actual || ''} onChange={e => setSelected({ ...selected, nombre_proveedor_actual: e.target.value })} style={inputStyle} />
             </div>
             <div>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Ciudad</label>
@@ -414,6 +429,12 @@ export default function ProspectosPage() {
             <div style={{ gridColumn: 'span 3' }}>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Detalle Requerimiento</label>
               <textarea value={selected.detalle_requerimiento} onChange={e => setSelected({ ...selected, detalle_requerimiento: e.target.value })} rows={3} style={{ ...inputStyle, resize: "vertical", height: "auto" }} />
+            </div>
+            <div>
+              <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>Situación</label>
+              <select value={selected.situacion} onChange={e => setSelected({ ...selected, situacion: e.target.value })} style={inputStyle}>
+                {refOptions('situacion_prospecto').map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>

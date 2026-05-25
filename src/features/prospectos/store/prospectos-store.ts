@@ -13,11 +13,14 @@ export interface Prospecto {
   empresa: string
   correo: string
   nro_movil: string
+  macro_sector: string
   origen_prospecto: string
   como_nos_conocio: string
   productos_interes: string[]
+  objetivo_producto: string
+  tiene_proveedor: 'si' | 'no'
+  nombre_proveedor_actual?: string
   detalle_requerimiento: string
-  actividad: string
   ciudad: string
   pais: string
   situacion: string
