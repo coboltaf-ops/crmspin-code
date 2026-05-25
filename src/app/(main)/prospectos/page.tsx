@@ -256,7 +256,7 @@ export default function ProspectosPage() {
     return (
       <div>
         <button onClick={() => setViewDetail(null)} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <div style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <div style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 16 }}>{viewDetail.nombre} {viewDetail.apellido}</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {fields.map(f => (
@@ -303,7 +303,7 @@ export default function ProspectosPage() {
     return (
       <div>
         <button onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#000000', color: '#ffffff', border: '1px solid #333333', marginBottom: 16 }}>← Volver</button>
-        <form onSubmit={handleSave} style={{ background: '#172554', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
+        <form onSubmit={handleSave} style={{ background: '#0A5A5A', borderRadius: 16, padding: 24, border: '1px solid rgba(255,255,255,0.15)' }}>
           <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, marginBottom: 20 }}>{selected.id ? 'Editar' : 'Nuevo'} Prospecto</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             <div>
@@ -438,7 +438,7 @@ export default function ProspectosPage() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
+            <button type="submit" style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
         </form>
@@ -499,7 +499,7 @@ export default function ProspectosPage() {
             </button>
           )}
           {permisos.editar && tab === 'registros' && (
-            <button onClick={() => { setSelected(emptyProspecto(nextConsecutivo('PRS-', prospectos.map(p => p.codigo)).codigo)); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nuevo Prospecto</button>
+            <button onClick={() => { setSelected(emptyProspecto(nextConsecutivo('PRS-', prospectos.map(p => p.codigo)).codigo)); setIsForm(true) }} style={{ ...btnStyle, background: '#0A5A5A', color: '#ffffff' }}>+ Nuevo Prospecto</button>
           )}
         </div>
       </div>
