@@ -1,12 +1,12 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUsuariosStore } from '@/features/usuarios-gestion/store/usuarios-store'
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
 import { logAudit } from '@/shared/lib/audit'
 import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const usuarios = useUsuariosStore(s => s.usuarios)
@@ -79,5 +79,17 @@ export default function LoginPage() {
         </form>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#002366' }}>
+        <div style={{ color: '#ffffff' }}>Cargando...</div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   )
 }
