@@ -58,13 +58,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const [returnUrl, setReturnUrl] = useState<string | null>(null)
   const [fromInventario, setFromInventario] = useState(false)
 
-  // Detectar si viene de Gestión Inventario
+  // Detectar si viene de Gestión Inventario o Gestión Operaciones
   useEffect(() => {
     if (typeof window === 'undefined') return
     const params = new URLSearchParams(window.location.search)
-    const from = params.get('from')
     const ret = params.get('returnUrl')
-    if (from === 'inventario' && ret) {
+    if (ret) {
       sessionStorage.setItem('crm-return-url', ret)
       sessionStorage.setItem('crm-from-inventario', '1')
       setReturnUrl(ret)
@@ -248,8 +247,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       )}
-      {/* Sidebar vTiger style — solo visible en Dashboard */}
-      {pathname === '/dashboard' && (
+      {/* Sidebar vTiger style — visible siempre si viene de inventario, o solo en dashboard */}
+      {(pathname === '/dashboard' || fromInventario) && (
       <aside style={{
         width: sideW, transition: 'width 0.3s ease', flexShrink: 0,
         background: '#0A5A5A',
@@ -350,7 +349,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <div style={{ padding: collapsed ? '8px' : '8px 12px', borderTop: '1px solid rgba(255,255,255,0.15)', display: 'flex', flexDirection: 'column', gap: 6 }}>
           {fromInventario && (
             <button onClick={volverAInventario}
-              title={collapsed ? 'Volver a Inventario' : undefined}
+              title={collapsed ? 'Regresar a Gestión Operaciones' : undefined}
               style={{
                 width: '100%', display: 'flex', alignItems: 'center', gap: 8,
                 padding: collapsed ? '7px 0' : '7px 10px',
@@ -360,7 +359,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                 fontSize: 11, fontWeight: 700,
               }}>
               <span style={{ fontSize: 13, flexShrink: 0 }}>←</span>
-              {!collapsed && <span>Volver a Inventario</span>}
+              {!collapsed && <span>Regresar a Gestión Operaciones</span>}
             </button>
           )}
           <button onClick={() => {
