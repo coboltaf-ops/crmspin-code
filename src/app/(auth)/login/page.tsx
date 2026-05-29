@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useUsuariosStore } from '@/features/usuarios-gestion/store/usuarios-store'
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
 import { logAudit } from '@/shared/lib/audit'
@@ -8,12 +8,23 @@ import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const usuarios = useUsuariosStore(s => s.usuarios)
   const setUser = useCurrentUserStore(s => s.setUser)
   const empresa = useEmpresaStore(s => s.empresas[0])
   const [usuario, setUsuario] = useState('')
   const [clave, setClave] = useState('')
   const [error, setError] = useState('')
+  const [returnUrl, setReturnUrl] = useState<string | null>(null)
+
+  // Capturar returnUrl de query params
+  useEffect(() => {
+    const ret = searchParams.get('returnUrl')
+    if (ret) {
+      sessionStorage.setItem('crm-return-url', ret)
+      setReturnUrl(ret)
+    }
+  }, [searchParams])
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,6 +43,11 @@ export default function LoginPage() {
       accion: 'LOGIN',
       detalle: `Inicio de sesión correcto`,
     })
+    // Preservar returnUrl en sessionStorage si existe
+    if (returnUrl) {
+      sessionStorage.setItem('crm-return-url', returnUrl)
+      sessionStorage.setItem('crm-from-inventario', '1')
+    }
     router.push('/dashboard')
   }
 
