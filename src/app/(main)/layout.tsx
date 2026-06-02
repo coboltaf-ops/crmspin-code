@@ -56,37 +56,69 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   const inputRef = useRef<HTMLInputElement>(null)
   const recognitionRef = useRef<unknown>(null)
   const [returnUrl, setReturnUrl] = useState<string | null>(null)
-  const [fromInventario, setFromInventario] = useState(false)
+  // Leer isExternal directamente (sin delay)
+  const isExternal = typeof window !== 'undefined' ? sessionStorage.getItem('crm-external-user') === '1' : false
 
-  // Detectar si viene de Gestión Inventario o Gestión Operaciones
+  // Bloquear navegación si es usuario externo
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (isExternal && !pathname.includes('/clientes')) {
+      router.push('/clientes')
+    }
+  }, [pathname, router, isExternal])
+
+  // Detectar si viene de Gestión Operaciones
   useEffect(() => {
     if (typeof window === 'undefined') return
     const params = new URLSearchParams(window.location.search)
     const ret = params.get('returnUrl')
+    const isExt = params.get('isExternal')
+    
+    if (isExt === '1') {
+      sessionStorage.setItem('crm-external-user', '1')
+    }
     if (ret) {
       sessionStorage.setItem('crm-return-url', ret)
-      sessionStorage.setItem('crm-from-inventario', '1')
       setReturnUrl(ret)
-      setFromInventario(true)
     } else {
       const savedRet = sessionStorage.getItem('crm-return-url')
-      const savedFrom = sessionStorage.getItem('crm-from-inventario')
-      if (savedRet && savedFrom === '1') {
+      if (savedRet) {
         setReturnUrl(savedRet)
-        setFromInventario(true)
       }
     }
   }, [])
 
   const volverAInventario = () => {
-    if (returnUrl) {
+    const isExternal = sessionStorage.getItem('crm-external-user') === '1'
+    
+    // Si NO es external user, solo ir a dashboard
+    if (!isExternal) {
+      router.push('/dashboard')
+      return
+    }
+    
+    // Si ES external user y hay returnUrl, regresar
+    if (returnUrl && isExternal) {
       sessionStorage.removeItem('crm-return-url')
-      sessionStorage.removeItem('crm-from-inventario')
+      sessionStorage.removeItem('crm-external-user')
       window.location.href = returnUrl
+    } else {
+      router.push('/dashboard')
     }
   }
 
-  useEffect(() => { if (!user) router.push('/login') }, [user, router])
+  useEffect(() => { 
+    if (!user) {
+      const isExternal = sessionStorage.getItem('crm-external-user') === '1'
+      // Si es external, redirigir a /clientes; si no, a /login
+      if (isExternal && pathname === '/clientes') {
+        // Ya está en el path correcto, solo esperar que se logee
+        return
+      }
+      const next = isExternal ? '/clientes' : (pathname || '/dashboard')
+      router.push(`/login?next=${encodeURIComponent(next)}&returnUrl=${sessionStorage.getItem('crm-return-url') ? encodeURIComponent(sessionStorage.getItem('crm-return-url')!) : ''}`)
+    }
+  }, [user, router, pathname])
 
   // Sincronizar códigos de acceso de clientes al servidor para validación en formulario público
   useEffect(() => {
@@ -117,7 +149,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     if (user && !sessionStorage.getItem('asistente-shown')) {
-      setShowAsistente(true)
+      const isExternal = sessionStorage.getItem('crm-external-user') === '1'
+      // Si es usuario externo, no mostrar asistente
+      if (!isExternal) {
+        setShowAsistente(true)
+      }
       sessionStorage.setItem('asistente-shown', '1')
     }
   }, [user])
@@ -247,8 +283,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </div>
         </div>
       )}
-      {/* Sidebar vTiger style — visible siempre si viene de inventario, o solo en dashboard */}
-      {(pathname === '/dashboard' || fromInventario) && (
+      {/* Sidebar vTiger style — siempre visible */}
       <aside style={{
         width: sideW, transition: 'width 0.3s ease', flexShrink: 0,
         background: '#0A5A5A',
@@ -275,19 +310,22 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         <nav style={{ flex: 1, padding: '12px 8px', display: 'flex', flexDirection: 'column', gap: 2, overflow: 'auto' }}>
           {mainItems.map(item => {
             const active = pathname === item.href
+            const isClientsBtn = item.label === 'Clientes'
+            const isDisabled = isExternal && !isClientsBtn
             return (
-              <button key={item.href} onClick={() => router.push(item.href)}
+              <button key={item.href} onClick={() => !isDisabled && router.push(item.href)} disabled={isDisabled}
                 title={collapsed ? item.label : undefined}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 12,
                   padding: collapsed ? '10px 0' : '10px 12px',
                   justifyContent: collapsed ? 'center' : 'flex-start',
-                  borderRadius: 10, border: 'none', cursor: 'pointer',
-                  background: active ? 'rgba(255,255,255,0.2)' : 'transparent',
-                  color: active ? '#ffffff' : 'rgba(255,255,255,0.85)',
+                  borderRadius: 10, border: 'none', cursor: isDisabled ? 'not-allowed' : 'pointer',
+                  background: active ? 'rgba(255,255,255,0.2)' : (isDisabled ? 'rgba(255,255,255,0.05)' : 'transparent'),
+                  color: isDisabled ? 'rgba(255,255,255,0.3)' : (active ? '#ffffff' : 'rgba(255,255,255,0.85)'),
                   fontSize: 14, fontWeight: active ? 700 : 500,
                   transition: 'all 0.2s',
                   borderLeft: active ? '3px solid #ffffff' : '3px solid transparent',
+                  opacity: isDisabled ? 0.5 : 1,
                 }}>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>{item.icon}</span>
                 {!collapsed && <span>{item.label}</span>}
@@ -347,7 +385,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         {/* Botones inferiores: Volver + Cerrar Sesión */}
         <div style={{ padding: collapsed ? '8px' : '8px 12px', borderTop: '1px solid rgba(255,255,255,0.15)', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          {fromInventario && (
+          {returnUrl && (
             <button onClick={volverAInventario}
               title={collapsed ? 'Regresar a Gestión Operaciones' : undefined}
               style={{
@@ -379,7 +417,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
           </button>
         </div>
       </aside>
-      )}
 
       {/* Main content */}
       <main style={{ flex: 1, padding: 24, overflow: 'auto', background: '#0A5A5A' }}>

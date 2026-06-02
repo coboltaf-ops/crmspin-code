@@ -17,12 +17,17 @@ function LoginContent() {
   const [error, setError] = useState('')
   const [returnUrl, setReturnUrl] = useState<string | null>(null)
 
-  // Capturar returnUrl de query params
+  // Capturar returnUrl y next de query params
+  const [next, setNext] = useState<string | null>(null)
   useEffect(() => {
     const ret = searchParams.get('returnUrl')
+    const nxt = searchParams.get('next')
     if (ret) {
       sessionStorage.setItem('crm-return-url', ret)
       setReturnUrl(ret)
+    }
+    if (nxt) {
+      setNext(nxt)
     }
   }, [searchParams])
 
@@ -48,7 +53,7 @@ function LoginContent() {
       sessionStorage.setItem('crm-return-url', returnUrl)
       sessionStorage.setItem('crm-from-inventario', '1')
     }
-    router.push('/dashboard')
+    router.push(next || '/dashboard')
   }
 
   return (

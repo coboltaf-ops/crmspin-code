@@ -135,6 +135,10 @@ export default function ClientesPage() {
     if (latest && latest !== viewDetail) setViewDetail(latest)
   }, [clientes, viewDetail])
   const [tab, setTab] = useState<'registros' | 'reportes'>('registros')
+  const isExternal = typeof window !== 'undefined' ? sessionStorage.getItem('crm-external-user') === '1' : false
+  const [returnUrl, setReturnUrl] = useState<string | null>(null)
+  useEffect(() => { const ret = sessionStorage.getItem('crm-return-url'); if (ret) setReturnUrl(ret) }, [])
+  const volverAInventario = () => { if (isExternal && returnUrl) { sessionStorage.removeItem('crm-return-url'); sessionStorage.removeItem('crm-external-user'); window.location.href = returnUrl } }
   const [detailTab, setDetailTab] = useState<'info' | 'contactos' | 'cotizaciones' | 'oportunidades' | 'tickets' | 'tarifa'>('info')
   const [showAddTarifa, setShowAddTarifa] = useState(false)
   const [newProductoId, setNewProductoId] = useState('')
@@ -1093,8 +1097,8 @@ export default function ClientesPage() {
           )}
           {permisos.editar && tab === 'registros' && (
             <>
-              <button onClick={descargarPlantilla} style={{ ...btnStyle, background: 'rgba(255,255,255,0.15)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.25)' }} title="Descargar plantilla Excel con los encabezados">📋 Plantilla</button>
-              <label style={{ ...btnStyle, background: '#059669', color: '#ffffff', border: '1px solid #10b981', display: 'inline-flex', alignItems: 'center', gap: 4 }} title="Importar clientes desde Excel">
+              <button onClick={descargarPlantilla} disabled={isExternal} style={{ ...btnStyle, background: 'rgba(255,255,255,0.15)', color: '#ffffff', border: '1px solid rgba(255,255,255,0.25)' }} title="Descargar plantilla Excel con los encabezados">📋 Plantilla</button>
+              <label style={{ ...btnStyle, background: isExternal ? 'rgba(5,150,105,0.3)' : '#059669', color: isExternal ? 'rgba(255,255,255,0.3)' : '#ffffff', border: '1px solid #10b981', display: 'inline-flex', alignItems: 'center', gap: 4, cursor: isExternal ? 'not-allowed' : 'pointer', pointerEvents: isExternal ? 'none' : 'auto' }} title="Importar clientes desde Excel">
                 📥 Importar Excel
                 <input type="file" accept=".xlsx,.xls" style={{ display: 'none' }} onChange={async e => {
                   const f = e.target.files?.[0]; if (!f) return
@@ -1102,7 +1106,10 @@ export default function ClientesPage() {
                   e.target.value = ''
                 }} />
               </label>
-              <button onClick={() => { setSelected(emptyCliente(nextConsecutivo('CLI-', clientes.map(c => c.codigo)).codigo)); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>+ Nuevo Cliente</button>
+              <button onClick={() => { setSelected(emptyCliente(nextConsecutivo('CLI-', clientes.map(c => c.codigo)).codigo)); setIsForm(true) }} style={{ ...btnStyle, background: '#172554', color: '#ffffff' }} disabled={isExternal}>+ Nuevo Cliente</button>
+              {returnUrl && (
+                <button onClick={volverAInventario} style={{ ...btnStyle, background: '#1e40af', color: '#ffffff' }}>← Regresar a Gestión Operaciones</button>
+              )}
             </>
           )}
         </div>
