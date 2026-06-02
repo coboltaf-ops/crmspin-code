@@ -321,7 +321,6 @@ export default function CotizacionesPage() {
                     { l: 'Nro Documento', v: cli?.nro_documento },
                     { l: 'Dirección', v: cli?.direccion },
                     { l: 'Ciudad', v: cli?.ciudad },
-                    { l: 'País', v: cli?.pais },
                     { l: 'Contacto', v: viewDetail.contacto_nombre },
                   ].map(f => (
                     <div key={f.l}><p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
@@ -488,13 +487,12 @@ export default function CotizacionesPage() {
             return (
               <div style={{ background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.25)', borderRadius: 10, padding: 12, marginBottom: 16 }}>
                 <p style={{ color: '#93c5fd', fontSize: 11, fontWeight: 700, marginBottom: 8, letterSpacing: 0.5 }}>DATOS DEL CLIENTE</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr', gap: 12 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 12 }}>
                   {[
                     { l: 'Tipo Documento', v: cli?.tipo_identificacion },
                     { l: 'Nro Documento', v: cli?.nro_documento },
                     { l: 'Dirección', v: cli?.direccion },
                     { l: 'Ciudad', v: cli?.ciudad },
-                    { l: 'País', v: cli?.pais },
                   ].map(f => (
                     <div key={f.l}>
                       <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>{f.l}</p>
@@ -712,7 +710,7 @@ export default function CotizacionesPage() {
           <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead><tr>
-                {['Código', 'Cliente', 'Tipo Documento', 'Nro Documento', 'Dirección', 'Ciudad', 'País', 'Emisión', 'Vence', 'Items', 'Total', 'Situación', 'Acciones'].map(h => (
+                {['Código', 'Cliente', 'Emisión', 'Vence', 'Items', 'Total', 'Situación', 'Acciones'].map(h => (
                   <th key={h} style={{ padding: '12px 14px', background: '#0F8888', color: '#fff', fontSize: 12, textAlign: 'left' }}>{h}</th>
                 ))}
               </tr></thead>
@@ -724,11 +722,6 @@ export default function CotizacionesPage() {
                     <tr key={c.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13, fontFamily: 'monospace' }}>{c.codigo}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13 }}>{c.cliente_nombre}</td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{cli?.tipo_identificacion || ''}</td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{cli?.nro_documento || ''}</td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{cli?.direccion || ''}</td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{cli?.ciudad || ''}</td>
-                      <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{cli?.pais || ''}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{fDate(c.fecha_emision)}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{fDate(c.fecha_vencimiento)}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13, textAlign: 'center' }}>{c.detalles.length}</td>
@@ -737,12 +730,12 @@ export default function CotizacionesPage() {
                         <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(c.situacion) }}>{c.situacion}</span>
                       </td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                        <div style={{ display: 'flex', gap: 6 }}>
-                          <button onClick={() => setViewDetail(c)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316' }}>Ver</button>
-                          <button onClick={() => generatePDF(c)} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#b91c1c', color: '#ffffff', border: '1px solid #dc2626' }}>PDF</button>
-                          <button onClick={() => { setEmailTo(''); setEmailAsunto(''); setEmailMsg(''); setEmailModal(c) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6' }}>Email</button>
+                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'center' }}>
+                          <button onClick={() => setViewDetail(c)} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#ea580c', color: '#ffffff', border: '1px solid #f97316', whiteSpace: 'nowrap' }}>Ver</button>
+                          <button onClick={() => generatePDF(c)} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#b91c1c', color: '#ffffff', border: '1px solid #dc2626', whiteSpace: 'nowrap' }}>PDF</button>
+                          <button onClick={() => { setEmailTo(''); setEmailAsunto(''); setEmailMsg(''); setEmailModal(c) }} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6', whiteSpace: 'nowrap' }}>Email</button>
                           {permisos.editar && !['Aprobada', 'Rechazada'].includes(c.situacion) && (
-                            <button onClick={() => { setSelected(c); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6' }}>Editar</button>
+                            <button onClick={() => { setSelected(c); setIsForm(true) }} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#14B4B4', color: '#ffffff', border: '1px solid #3b82f6', whiteSpace: 'nowrap' }}>Editar</button>
                           )}
                           {permisos.eliminar && c.situacion !== 'Anulada' && (
                             <button onClick={() => {
@@ -750,14 +743,14 @@ export default function CotizacionesPage() {
                               if (motivo === null) return
                               const nota = motivo.trim() ? `\n\n[ANULADA] Motivo: ${motivo.trim()}` : '\n\n[ANULADA]'
                               updateCotizacion(c.id, { situacion: 'Anulada', observaciones: (c.observaciones || '') + nota })
-                            }} style={{ ...btnStyle, padding: '4px 12px', fontSize: 11, background: '#78350f', color: '#ffffff', border: '1px solid #b45309' }}>Anular</button>
+                            }} style={{ ...btnStyle, padding: '4px 10px', fontSize: 11, background: '#78350f', color: '#ffffff', border: '1px solid #b45309', whiteSpace: 'nowrap' }}>Anular</button>
                           )}
                         </div>
                       </td>
                     </tr>
                   )
                 })}
-                {filtered.length === 0 && <tr><td colSpan={13} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay cotizaciones registradas</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay cotizaciones registradas</td></tr>}
               </tbody>
             </table>
           </div>
