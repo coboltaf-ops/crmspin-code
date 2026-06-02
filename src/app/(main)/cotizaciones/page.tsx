@@ -50,7 +50,10 @@ const calcTotals = (detalles: DetalleCotizacion[], _pctIva: number, pctRet: numb
 export default function CotizacionesPage() {
   const permisos = usePermisos('cotizaciones')
   const currentUser = useCurrentUserStore(s => s.user)
-  const { cotizaciones, addCotizacion, updateCotizacion, deleteCotizacion } = useCotizacionesStore()
+  const { cotizaciones, addCotizacion, updateCotizacion, deleteCotizacion, migrateUnidadesMedida } = useCotizacionesStore()
+  useEffect(() => {
+    migrateUnidadesMedida()
+  }, [])
   const allClientes = useClientesStore(s => s.clientes)
   const clientes = allClientes.filter(c => c.situacion === 'Activo')
   const allContactos = useContactosStore(s => s.contactos).filter(c => c.situacion === 'Activo')

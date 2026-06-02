@@ -48,6 +48,7 @@ interface CotizacionesState {
   addCotizacion: (c: Cotizacion) => void
   updateCotizacion: (id: string, c: Partial<Cotizacion>) => void
   deleteCotizacion: (id: string) => void
+  migrateUnidadesMedida: () => void
 }
 
 export const useCotizacionesStore = create<CotizacionesState>()(
@@ -57,6 +58,15 @@ export const useCotizacionesStore = create<CotizacionesState>()(
       addCotizacion: (c) => set((s) => ({ cotizaciones: [...s.cotizaciones, c] })),
       updateCotizacion: (id, c) => set((s) => ({ cotizaciones: s.cotizaciones.map((r) => r.id === id ? { ...r, ...c } : r) })),
       deleteCotizacion: (id) => set((s) => ({ cotizaciones: s.cotizaciones.filter((r) => r.id !== id) })),
+      migrateUnidadesMedida: () => set((s) => ({
+        cotizaciones: s.cotizaciones.map(c => ({
+          ...c,
+          detalles: c.detalles.map(d => ({
+            ...d,
+            unidad_medida: d.unidad_medida && d.unidad_medida.trim() ? d.unidad_medida : 'Kg'
+          }))
+        }))
+      })),
     }),
     { name: 'crm-cotizaciones-storage' }
   )
