@@ -22,11 +22,11 @@ export default function ModulosPage() {
 
       {/* Resumen */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        <div style={{ background: '#166534', borderRadius: 12, padding: '12px 24px', border: '1px solid #15803d', textAlign: 'center' }}>
+        <div className="crm-white" style={{ background: '#166534', borderRadius: 12, padding: '12px 24px', border: '1px solid #15803d', textAlign: 'center' }}>
           <p style={{ color: '#ffffff', fontSize: 28, fontWeight: 800 }}>{activos}</p>
           <p style={{ color: '#ffffff', fontSize: 12 }}>Activos</p>
         </div>
-        <div style={{ background: '#b91c1c', borderRadius: 12, padding: '12px 24px', border: '1px solid #dc2626', textAlign: 'center' }}>
+        <div className="crm-white" style={{ background: '#b91c1c', borderRadius: 12, padding: '12px 24px', border: '1px solid #dc2626', textAlign: 'center' }}>
           <p style={{ color: '#ffffff', fontSize: 28, fontWeight: 800 }}>{inactivos}</p>
           <p style={{ color: '#ffffff', fontSize: 12 }}>Inactivos</p>
         </div>
@@ -48,7 +48,7 @@ export default function ModulosPage() {
                 <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12.5 }}>{m.href}</p>
               </div>
               {isProtected ? (
-                <div style={{ ...btnStyle, background: '#166534', color: '#ffffff', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div className="crm-white" style={{ ...btnStyle, background: '#166534', color: '#ffffff', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ color: '#ffffff', fontSize: 12.5, fontWeight: 700 }}>Siempre activo</span>
                   <div style={{ width: 48, height: 26, borderRadius: 13, background: 'rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px' }}>
                     <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff' }} />

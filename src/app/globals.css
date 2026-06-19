@@ -81,6 +81,14 @@ main button span, main button div {
   background: transparent !important;
 }
 
+/* Elementos marcados que SIEMPRE deben llevar texto blanco intenso
+   (recuadros/botones de estado: Activos/Inactivos, "Siempre activo", etc.).
+   La clase gana en especificidad a la regla general "main p/span/div". */
+main .crm-white, main .crm-white * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
 /* Avatar del usuario (botón verde con iniciales): iniciales SIEMPRE en blanco */
 main .user-avatar,
 main div.user-avatar,
