@@ -34,34 +34,35 @@ export default function ModulosPage() {
 
       {/* Lista de módulos */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {modulos.map((m, i) => {
+        {modulos.map((m) => {
           const isProtected = m.id === 'dashboard' || m.id === 'usuarios' || m.id === 'modulos'
+          const isActivo = isProtected ? true : m.activo
           return (
             <div key={m.id} style={{
               display: 'flex', alignItems: 'center', padding: '16px 20px',
-              background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.03)',
-              borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)',
+              background: isActivo ? '#166534' : '#b91c1c',
+              borderRadius: 12, border: `1px solid ${isActivo ? '#15803d' : '#dc2626'}`,
             }}>
               <span style={{ fontSize: 24, marginRight: 16 }}>{m.icon}</span>
               <div style={{ flex: 1 }}>
-                <p style={{ color: '#ffffff', fontSize: 15, fontWeight: 600 }}>{m.label}</p>
-                <p style={{ color: '#14532d', fontSize: 12.5 }}>{m.href}</p>
+                <p style={{ color: '#ffffff', fontSize: 15, fontWeight: 700 }}>{m.label}</p>
+                <p style={{ color: '#ffffff', fontSize: 12.5 }}>{m.href}</p>
               </div>
               {isProtected ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: '#14532d', fontSize: 12.5 }}>Siempre activo</span>
-                  <div style={{ width: 48, height: 26, borderRadius: 13, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px', opacity: 0.5 }}>
+                  <span style={{ color: '#ffffff', fontSize: 12.5, fontWeight: 600 }}>Siempre activo</span>
+                  <div style={{ width: 48, height: 26, borderRadius: 13, background: 'rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px' }}>
                     <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff' }} />
                   </div>
                 </div>
               ) : (
                 <button onClick={() => toggleModulo(m.id)} style={{ ...btnStyle, background: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: m.activo ? '#ffffff' : '#fca5a5', fontSize: 13, fontWeight: 600 }}>
+                  <span style={{ color: '#ffffff', fontSize: 13, fontWeight: 700 }}>
                     {m.activo ? 'Activo' : 'Inactivo'}
                   </span>
                   <div style={{
                     width: 48, height: 26, borderRadius: 13,
-                    background: m.activo ? '#166534' : '#b91c1c',
+                    background: 'rgba(0,0,0,0.25)',
                     display: 'flex', alignItems: 'center',
                     justifyContent: m.activo ? 'flex-end' : 'flex-start',
                     padding: '0 3px', transition: 'all 0.3s',
