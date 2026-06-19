@@ -182,12 +182,12 @@ export default function PQRSPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
                   <span style={{ fontSize: 20 }}>{tipoIcon(viewDetail.tipo)}</span>
                   <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700 }}>{viewDetail.codigo}</h2>
-                  <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(viewDetail.situacion) }}>{viewDetail.situacion}</span>
-                  <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...prioridadStyle(viewDetail.prioridad) }}>{viewDetail.prioridad}</span>
+                  <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(viewDetail.situacion) }}>{viewDetail.situacion}</span>
+                  <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...prioridadStyle(viewDetail.prioridad) }}>{viewDetail.prioridad}</span>
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{diasAbierto} días abierto</p>
+                <p style={{ color: '#14532d', fontSize: 12 }}>{diasAbierto} días abierto</p>
               </div>
             </div>
 
@@ -201,13 +201,13 @@ export default function PQRSPage() {
                 { l: 'Prioridad', v: viewDetail.prioridad }, { l: 'Situación', v: viewDetail.situacion },
                 { l: 'Cierre', v: fDate(viewDetail.fecha_cierre) },
               ].map(f => (
-                <div key={f.l}><p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
+                <div key={f.l}><p style={{ color: '#14532d', fontSize: 12 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
               ))}
             </div>
 
             {viewDetail.detalle_incidencia && (
               <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 14, marginBottom: 16 }}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>Detalle de la Incidencia</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>Detalle de la Incidencia</p>
                 <p style={{ color: '#ffffff', fontSize: 13, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{viewDetail.detalle_incidencia}</p>
               </div>
             )}
@@ -447,12 +447,12 @@ export default function PQRSPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13, fontFamily: 'monospace' }}>{p.codigo}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#ffffff', fontSize: 13 }}>{tipoIcon(p.tipo)} {p.tipo}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...prioridadStyle(p.prioridad) }}>{p.prioridad}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...prioridadStyle(p.prioridad) }}>{p.prioridad}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.cliente_nombre}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.responsable}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
@@ -463,7 +463,7 @@ export default function PQRSPage() {
                     </td>
                   </tr>
                 ))}
-                {filtered.length === 0 && <tr><td colSpan={7} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay PQRS registradas</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={7} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay PQRS registradas</td></tr>}
               </tbody>
             </table>
           </div>

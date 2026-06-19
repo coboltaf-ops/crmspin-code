@@ -8,6 +8,9 @@ import { useClientesStore } from '@/features/clientes/store/clientes-store'
 import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 import { useFlujoListener } from '@/features/flujos/lib/useFlujoListener'
 import { useAutoSeed } from '@/shared/hooks/use-auto-seed'
+import { useCacheBust } from '@/shared/hooks/use-cache-bust'
+
+const BUILD_VERSION = process.env.NEXT_PUBLIC_BUILD_VERSION || 'dev'
 
 const ROUTE_KEYWORDS: { keywords: string[]; href: string; label: string }[] = [
   { keywords: ['empresa', 'empresas', 'cliente', 'clientes'], href: '/clientes', label: 'Clientes' },
@@ -38,6 +41,7 @@ function resolveRoute(text: string): { href: string; label: string } | null {
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   useAutoSeed()
+  useCacheBust(BUILD_VERSION)
   useFlujoListener()
   const router = useRouter()
   const pathname = usePathname()
@@ -277,7 +281,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             </div>
             {listening && <p style={{ color: '#86efac', fontSize: 12, marginTop: 8 }}>🔴 Escuchando... habla ahora</p>}
             {hint && <p style={{ color: '#fca5a5', fontSize: 12, marginTop: 8 }}>{hint}</p>}
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginTop: 12 }}>
+            <p style={{ color: '#14532d', fontSize: 11, marginTop: 12 }}>
               Ejemplos: "clientes", "cotizaciones", "pqrs" · Enter vacío → menú normal
             </p>
           </div>
@@ -400,36 +404,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               {!collapsed && <span>Regresar a Gestión Operaciones</span>}
             </button>
           )}
-          <button onClick={() => {
-            if (confirm('¿Cerrar sesión?')) { logout(); router.push('/login') }
-          }}
-            title={collapsed ? 'Cerrar Sesión' : undefined}
-            style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: 8,
-              padding: collapsed ? '6px 0' : '6px 10px',
-              justifyContent: collapsed ? 'center' : 'flex-start',
-              borderRadius: 8, border: '1px solid #dc2626', cursor: 'pointer',
-              background: '#b91c1c', color: '#ffffff',
-              fontSize: 11, fontWeight: 600,
-            }}>
-            <span style={{ fontSize: 13, flexShrink: 0 }}>🚪</span>
-            {!collapsed && <span>Cerrar Sesión</span>}
-          </button>
         </div>
       </aside>
 
       {/* Main content */}
       <main style={{ flex: 1, padding: 24, overflow: 'auto', background: '#0A5A5A' }}>
         {/* Top bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: '10px 16px', background: 'rgba(255,255,255,0.08)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', position: 'relative' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, padding: '10px 16px', background: 'rgba(255,255,255,0.08)', borderRadius: 12, border: '2px solid #14532d', position: 'relative' }}>
           <div />{/* espacio del lado izquierdo (logo está en el sidebar) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-            <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '2px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontWeight: 900, fontSize: 14 }}>
+            <div className="user-avatar" style={{ width: 46, height: 46, borderRadius: '50%', background: '#14532d', border: '2px solid #14532d', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontWeight: 900, fontSize: 18 }}>
               {user.nombre[0]}{user.apellido[0]}
             </div>
             <div>
-              <p style={{ color: '#ffffff', fontSize: 15, fontWeight: 900, margin: 0 }}>{user.nombre} {user.apellido}</p>
-              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 12, fontWeight: 700, margin: 0 }}>{user.rol}</p>
+              <p style={{ color: '#14532d', fontSize: 20, fontWeight: 900, margin: 0, lineHeight: 1.15 }}>{user.nombre} {user.apellido}</p>
+              <p style={{ color: '#166534', fontSize: 14, fontWeight: 700, margin: 0 }}>{user.rol}</p>
             </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -437,12 +426,21 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               <button onClick={() => router.push('/dashboard')}
                 style={{
                   padding: '8px 20px', borderRadius: 8,
-                  background: '#dc2626', border: '1px solid #ef4444',
+                  background: '#166534', border: '1px solid #16a34a',
                   color: '#ffffff', fontSize: 13, fontWeight: 800, cursor: 'pointer',
                 }}>
                 Menú Principal
               </button>
             )}
+            <button onClick={() => { if (confirm('¿Cerrar sesión?')) { logout(); router.push('/login') } }}
+              title="Cerrar Sesión"
+              style={{
+                padding: '8px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6,
+                background: '#b91c1c', border: '1px solid #dc2626',
+                color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              }}>
+              <span style={{ fontSize: 15 }}>🚪</span> Cerrar Sesión
+            </button>
           </div>
         </div>
         {/* Logo de la empresa encima del modulo (no en dashboard, ya lo tiene) */}

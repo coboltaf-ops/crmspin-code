@@ -261,7 +261,7 @@ export default function ProspectosPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {fields.map(f => (
               <div key={f.label} style={f.label === 'Detalle Requerimiento' ? { gridColumn: 'span 3' } : undefined}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
               </div>
             ))}
@@ -357,7 +357,7 @@ export default function ProspectosPage() {
             </div>
             <div style={{ gridColumn: 'span 3' }}>
               <label style={{ color: '#ffffff', fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>
-                Productos de Interés <span style={{ color: 'rgba(255,255,255,0.5)', fontWeight: 400 }}>(selección múltiple — {(selected.productos_interes || []).length} seleccionado{(selected.productos_interes || []).length === 1 ? '' : 's'})</span>
+                Productos de Interés <span style={{ color: '#14532d', fontWeight: 400 }}>(selección múltiple — {(selected.productos_interes || []).length} seleccionado{(selected.productos_interes || []).length === 1 ? '' : 's'})</span>
               </label>
               {(selected.productos_interes || []).length > 0 && (
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
@@ -524,7 +524,7 @@ export default function ProspectosPage() {
                     <div style={{ flex: 1 }}>
                       <p style={{ color: '#ffffff', fontSize: 14, fontWeight: 600, margin: 0 }}>{ext.nombre} {ext.apellido}</p>
                       <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, margin: '2px 0' }}>{ext.empresa || 'Sin empresa'} | {ext.correo} | {ext.nro_movil || 'Sin móvil'}</p>
-                      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, margin: 0 }}>{ext.descripcion_requerimiento?.substring(0, 120)}{(ext.descripcion_requerimiento?.length || 0) > 120 ? '...' : ''}</p>
+                      <p style={{ color: '#14532d', fontSize: 12, margin: 0 }}>{ext.descripcion_requerimiento?.substring(0, 120)}{(ext.descripcion_requerimiento?.length || 0) > 120 ? '...' : ''}</p>
                       <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, margin: '4px 0 0' }}>{fDate(ext.fecha_registro)} {ext.hora_registro}</p>
                     </div>
                     <button onClick={() => importarProspecto(ext)} style={{ ...btnStyle, background: '#4169E1', color: '#ffffff', border: '1px solid #3b82f6', fontSize: 11, marginLeft: 12 }}>Importar al CRM</button>
@@ -557,7 +557,7 @@ export default function ProspectosPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.nro_movil}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.origen_prospecto}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
@@ -568,7 +568,7 @@ export default function ProspectosPage() {
                     </td>
                   </tr>
                 ))}
-                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay prospectos registrados</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay prospectos registrados</td></tr>}
               </tbody>
             </table>
           </div>

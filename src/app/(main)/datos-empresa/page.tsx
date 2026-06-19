@@ -72,7 +72,7 @@ export default function DatosEmpresaPage() {
             {viewDetail.logo_url ? (
               <img src={viewDetail.logo_url} alt="Logo" style={{ width: 80, height: 80, borderRadius: 12, objectFit: 'contain', background: 'rgba(255,255,255,0.1)', padding: 8 }} />
             ) : (
-              <div style={{ width: 80, height: 80, borderRadius: 12, background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>Sin logo</div>
+              <div style={{ width: 80, height: 80, borderRadius: 12, background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#14532d', fontSize: 12.5 }}>Sin logo</div>
             )}
             <div>
               <h2 style={{ color: '#ffffff', fontSize: 20, fontWeight: 700 }}>{viewDetail.nombre}</h2>
@@ -92,7 +92,7 @@ export default function DatosEmpresaPage() {
               { label: 'Representante Legal', value: viewDetail.representante_legal },
             ].map(f => (
               <div key={f.label}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
               </div>
             ))}
@@ -109,7 +109,7 @@ export default function DatosEmpresaPage() {
                 { label: 'Código Postal', value: viewDetail.codigo_postal },
               ].map(f => (
                 <div key={f.label}>
-                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                  <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                   <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
                 </div>
               ))}
@@ -226,7 +226,7 @@ export default function DatosEmpresaPage() {
                 {selected.logo_url ? (
                   <img src={selected.logo_url} alt="Logo" style={{ width: 80, height: 80, borderRadius: 12, objectFit: 'contain', background: 'rgba(255,255,255,0.1)', padding: 8 }} />
                 ) : (
-                  <div style={{ width: 80, height: 80, borderRadius: 12, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Sin logo</div>
+                  <div style={{ width: 80, height: 80, borderRadius: 12, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#14532d', fontSize: 12 }}>Sin logo</div>
                 )}
                 <div style={{ display: 'flex', gap: 8 }}>
                   <input ref={fileRef} type="file" accept="image/*" onChange={handleLogoUpload} style={{ display: 'none' }} />
@@ -302,7 +302,7 @@ export default function DatosEmpresaPage() {
                   {emp.logo_url ? (
                     <img src={emp.logo_url} alt="Logo" style={{ width: 36, height: 36, borderRadius: 8, objectFit: 'contain', background: 'rgba(255,255,255,0.1)' }} />
                   ) : (
-                    <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>—</div>
+                    <div style={{ width: 36, height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#14532d', fontSize: 10 }}>—</div>
                   )}
                 </td>
                 <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#60a5fa', fontSize: 13, fontFamily: 'monospace' }}>{emp.codigo}</td>
@@ -320,7 +320,7 @@ export default function DatosEmpresaPage() {
                 </td>
               </tr>
             ))}
-            {empresas.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay empresas registradas</td></tr>}
+            {empresas.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay empresas registradas</td></tr>}
           </tbody>
         </table>
       </div>

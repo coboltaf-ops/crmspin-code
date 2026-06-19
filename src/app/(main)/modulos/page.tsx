@@ -45,11 +45,11 @@ export default function ModulosPage() {
               <span style={{ fontSize: 24, marginRight: 16 }}>{m.icon}</span>
               <div style={{ flex: 1 }}>
                 <p style={{ color: '#ffffff', fontSize: 15, fontWeight: 600 }}>{m.label}</p>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{m.href}</p>
+                <p style={{ color: '#14532d', fontSize: 12.5 }}>{m.href}</p>
               </div>
               {isProtected ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>Siempre activo</span>
+                  <span style={{ color: '#14532d', fontSize: 12.5 }}>Siempre activo</span>
                   <div style={{ width: 48, height: 26, borderRadius: 13, background: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px', opacity: 0.5 }}>
                     <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff' }} />
                   </div>

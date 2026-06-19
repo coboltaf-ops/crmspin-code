@@ -320,7 +320,7 @@ export default function ProductosPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
         {items.map(f => (
           <div key={f.label}>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+            <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
             <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
           </div>
         ))}
@@ -349,7 +349,7 @@ export default function ProductosPage() {
 
           {viewDetail.observaciones && (
             <div style={{ marginTop: 16 }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>Observaciones</p>
+              <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>Observaciones</p>
               <p style={{ color: '#ffffff', fontSize: 14, whiteSpace: 'pre-wrap' }}>{viewDetail.observaciones}</p>
             </div>
           )}
@@ -620,7 +620,7 @@ export default function ProductosPage() {
             {(filtroRazon || filtroFormula || search) && (
               <button onClick={() => { setSearch(''); setFiltroRazon(''); setFiltroFormula('') }} style={{ ...btnStyle, background: '#64748b', color: '#fff', fontSize: 12 }} title="Limpiar todos los filtros">✕ Limpiar</button>
             )}
-            <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, alignSelf: 'center' }}>{filtered.length} de {productos.length}</span>
+            <span style={{ color: '#14532d', fontSize: 12, alignSelf: 'center' }}>{filtered.length} de {productos.length}</span>
           </div>
           <div style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -643,7 +643,7 @@ export default function ProductosPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{fDate(p.fecha_vigencia_precio)}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13, textAlign: 'right' }}>{p.existencia_actual}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
@@ -654,7 +654,7 @@ export default function ProductosPage() {
                     </td>
                   </tr>
                 ))}
-                {filtered.length === 0 && <tr><td colSpan={10} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay productos registrados</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={10} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay productos registrados</td></tr>}
               </tbody>
             </table>
           </div>

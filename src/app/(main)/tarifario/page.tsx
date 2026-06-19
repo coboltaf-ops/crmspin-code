@@ -122,7 +122,7 @@ export default function TarifarioPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {fields.map(f => (
               <div key={f.label}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
               </div>
             ))}
@@ -202,7 +202,7 @@ export default function TarifarioPage() {
             <button type="submit" style={{ ...btnStyle, background: '#172554', color: '#ffffff' }}>Guardar</button>
             <button type="button" onClick={() => { setIsForm(false); setSelected(null) }} style={{ ...btnStyle, background: '#64748b', color: '#ffffff' }}>Cancelar</button>
           </div>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginTop: 10 }}>
+          <p style={{ color: '#14532d', fontSize: 11, marginTop: 10 }}>
             Regla: un mismo Cliente + Producto no puede tener 2 tarifas Activas simultáneamente. Si existe una Activa, se te preguntará si quieres desactivarla automáticamente al crear esta.
           </p>
         </form>
@@ -287,7 +287,7 @@ export default function TarifarioPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{fDate(p.fecha_inicio_vigencia)}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{p.fecha_fin_vigencia ? fDate(p.fecha_fin_vigencia) : '—'}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(p.situacion) }}>{p.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
@@ -299,7 +299,7 @@ export default function TarifarioPage() {
                   </tr>
                   )
                 })}
-                {filtered.length === 0 && <tr><td colSpan={9} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>Sin tarifas registradas</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={9} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>Sin tarifas registradas</td></tr>}
               </tbody>
             </table>
           </div>

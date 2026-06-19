@@ -1,19 +1,362 @@
+/* Fuentes elegantes (deben ir antes que cualquier otro @import) */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #0A5A5A;
-  --foreground: #ffffff;
+  --background: #eef3ef;   /* blanco con leve tinte verde */
+  --foreground: #0f172a;   /* slate-900 (texto principal) */
+  --accent: #16a34a;       /* verde de acento */
+  --accent-deep: #166534;  /* verde oscuro (encabezados) */
+  --card: #ffffff;
+  --border-soft: #e2e8f0;
+  --border-input: #cbd5e1;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Inter', system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* =========================================================
+   LAVADO DE CARA — estilo moderno (verde oscuro intenso + blanco)
+   - Fondo claro, tarjetas blancas con sombra suave
+   - Tipografía: Inter (cuerpo) + Playfair Display (títulos)
+   - Bordes finos, esquinas redondeadas, brillo verde en inputs
+   - Sidebar verde oscuro. Botones de acción conservan su color.
+   ========================================================= */
+
+body, html {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Menú lateral (aside): verde oscuro + texto blanco ===== */
+aside {
+  background: linear-gradient(180deg, #166534 0%, #052e16 100%) !important;
+}
+aside *,
+aside p, aside span, aside a, aside button, aside div, aside nav {
+  color: #e7f5ec !important;
+  background: transparent !important;
+}
+aside img {
+  background: #ffffff !important;
+  border-radius: 8px !important;
+}
+
+/* ===== Área de contenido: claro ===== */
+main {
+  background: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+/* Texto del contenido */
+main p, main span, main a, main li, main td, main div,
+main strong, main small, main b, main label.texto {
+  color: var(--foreground) !important;
+  font-weight: 400 !important;
+}
+main strong, main b { font-weight: 600 !important; }
+
+/* Títulos translúcidos de los campos (vista Ver en TODOS los módulos) → verde oscuro intenso, más grandes */
+main p[style*="rgba(255,255,255,0.4)"], main p[style*="rgba(255, 255, 255, 0.4)"],
+main p[style*="rgba(255,255,255,0.5)"], main p[style*="rgba(255, 255, 255, 0.5)"],
+main p[style*="rgba(255,255,255,0.6)"], main p[style*="rgba(255, 255, 255, 0.6)"],
+main p[style*="rgba(255,255,255,0.7)"], main p[style*="rgba(255, 255, 255, 0.7)"],
+main span[style*="rgba(255,255,255,0.4)"], main span[style*="rgba(255, 255, 255, 0.4)"],
+main span[style*="rgba(255,255,255,0.5)"], main span[style*="rgba(255, 255, 255, 0.5)"],
+main span[style*="rgba(255,255,255,0.6)"], main span[style*="rgba(255, 255, 255, 0.6)"],
+main span[style*="rgba(255,255,255,0.7)"], main span[style*="rgba(255, 255, 255, 0.7)"] {
+  color: #14532d !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+}
+
+/* Botones conservan su color en línea */
+main button span, main button div {
+  color: inherit !important;
+  background: transparent !important;
+}
+
+/* Avatar del usuario (botón verde con iniciales): iniciales SIEMPRE en blanco */
+main .user-avatar,
+main div.user-avatar,
+main .user-avatar * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: #14532d !important;
+  font-weight: 900 !important;
+  opacity: 1 !important;
+}
+
+/* Títulos: Playfair Display, verde oscuro */
+main h1, main h2, main h3, main h4, main h5, main h6,
+main h1 *, main h2 *, main h3 *, main h4 *, main h5 *, main h6 * {
+  color: var(--accent-deep) !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em;
+}
+
+/* Títulos de los campos (labels) en TODOS los módulos: más grandes y verde oscuro intenso */
+main form label,
+main label:not(.chip-off) {
+  color: #14532d !important;
+  background: transparent !important;
+  padding: 0 !important;
+  display: block !important;
+  font-weight: 800 !important;
+  font-size: 15.5px !important;
+  margin-bottom: 7px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+main form label *,
+main label:not(.chip-off) * {
+  color: #14532d !important;
+  background: transparent !important;
+}
+
+/* Formularios: tarjeta blanca, borde suave, sombra ligera */
+main form {
+  background: var(--card) !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  box-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04) !important;
+}
+
+/* Tablas: limpias, encabezado verde oscuro */
+main table { border-collapse: separate; border-spacing: 0; }
+main table, main tr, main td {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  border-color: var(--border-soft) !important;
+}
+main th, main thead th, main table thead tr {
+  color: #ffffff !important;
+  background: #14532d !important;
+  border-color: #14532d !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.02em;
+  padding: 10px 12px !important;
+}
+main th *, main thead th * {
+  color: #ffffff !important;
+}
+
+/* Inputs/textarea/select: marco verde oscuro intenso, texto negro, brillo verde al enfocar */
+main input, main textarea, main select {
+  color: #000000 !important;
+  background: #ffffff !important;
+  border: 2px solid #14532d !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  padding: 9px 12px !important;
+  transition: border-color .15s, box-shadow .15s !important;
+}
+main input:focus, main textarea:focus, main select:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.18) !important;
+}
+main input::placeholder, main textarea::placeholder {
+  color: #94a3b8 !important;
+  font-weight: 400 !important;
+}
+main input[type="checkbox"], main input[type="radio"] {
+  border-width: 1px !important;
+  border-radius: 4px !important;
+}
+
+main button { cursor: pointer; }
+
+/* Botones tipo "tab" translúcidos (diseñados para tema oscuro) → visibles */
+main button[style*="rgba(255,255,255,0.15)"],
+main button[style*="rgba(255, 255, 255, 0.15)"],
+main button[style*="rgba(255,255,255,0.1)"],
+main button[style*="rgba(255, 255, 255, 0.1)"],
+main button[style*="rgba(255,255,255,0.08)"],
+main button[style*="rgba(255, 255, 255, 0.08)"] {
+  background: #f0f4f1 !important;
+  color: var(--accent-deep) !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 8px !important;
+}
+main button[style*="rgba(255,255,255,0.15)"] span,
+main button[style*="rgba(255, 255, 255, 0.15)"] span,
+main button[style*="rgba(255,255,255,0.1)"] span,
+main button[style*="rgba(255, 255, 255, 0.1)"] span {
+  color: var(--accent-deep) !important;
+}
+
+/* Tarjetas/paneles con borde "solid": marco suave + redondeo + sombra */
+main div[style*="solid"] {
+  border-color: var(--border-soft) !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 3px rgba(15,23,42,0.05) !important;
+}
+
+/* Vistas "Ver/Editar": paneles con fondo azul/oscuro → BLANCO (legibles).
+   El navegador serializa los hex a rgb(...) con espacios, por eso targeteamos rgb. */
+main div[style*="rgb(23, 37, 84)"],   /* #172554 navy oscuro */
+main div[style*="rgb(30, 58, 138)"],  /* #1e3a8a */
+main div[style*="rgb(30, 64, 175)"],  /* #1e40af */
+main div[style*="rgb(10, 15, 28)"],   /* #0a0f1c */
+main div[style*="rgb(10, 90, 90)"],   /* #0A5A5A teal */
+main div[style*="rgba(59, 130, 246"], /* azul translúcido */
+main div[style*="rgba(30, 58, 138"] {
+  background: #ffffff !important;
+  border: 1px solid var(--border-soft) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(15,23,42,0.05) !important;
+}
+/* Texto dentro de esas vistas: oscuro legible (no botones) */
+main div[style*="rgb(23, 37, 84)"] p, main div[style*="rgb(23, 37, 84)"] span,
+main div[style*="rgb(23, 37, 84)"] h2, main div[style*="rgb(23, 37, 84)"] h3,
+main div[style*="rgb(30, 58, 138)"] p, main div[style*="rgb(30, 58, 138)"] span {
+  color: #0f172a !important;
+}
+
+/* Contenedor de cada campo: limpio y aireado */
+main form div:has(> input),
+main form div:has(> select),
+main form div:has(> textarea) {
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  margin-bottom: 14px !important;
+}
+
+/* =========================================================
+   DASHBOARD (.crm-dashboard): fondo blanco,
+   cuadros con marco VERDE OSCURO y textos NEGRO INTENSO
+   ========================================================= */
+.crm-dashboard { background: #ffffff !important; }
+
+.crm-dashboard div[style*="rgba(255,255,255,0.05)"],
+.crm-dashboard div[style*="rgba(255, 255, 255, 0.05)"],
+.crm-dashboard div[style*="rgba(255,255,255,0.03)"],
+.crm-dashboard div[style*="rgba(255, 255, 255, 0.03)"],
+.crm-dashboard div[style*="blur"],
+.crm-dashboard div[style*="solid"] {
+  background: #ffffff !important;
+  border: 2px solid #14532d !important;
+  border-radius: 14px !important;
+  box-shadow: 0 1px 4px rgba(20,83,45,0.10) !important;
+}
+
+.crm-dashboard, .crm-dashboard *:not(h1) {
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+.crm-dashboard h1 { color: #166534 !important; }
+
+/* Títulos de los paneles del dashboard: más grandes y verde oscuro intenso */
+.crm-dashboard h2, .crm-dashboard h3,
+.crm-dashboard h2 *, .crm-dashboard h3 * {
+  color: #14532d !important;
+  font-size: 19px !important;
+  font-weight: 800 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Etiquetas de los cuadros: más grandes y verde oscuro intenso */
+.crm-dashboard .card-label {
+  color: #14532d !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  letter-spacing: .01em !important;
+}
+
+/* Badges de "Situación" en todos los módulos: SIN fondo, solo texto negro intenso */
+.sit-badge, main .sit-badge {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Etiquetas descriptivas en TODOS los paneles del dashboard */
+.crm-dashboard p[style*="rgba(255,255,255,0.5)"],
+.crm-dashboard p[style*="rgba(255,255,255,0.6)"],
+.crm-dashboard p[style*="rgba(255,255,255,0.7)"],
+.crm-dashboard span[style*="rgba(255,255,255,0.5)"],
+.crm-dashboard span[style*="rgba(255,255,255,0.6)"],
+.crm-dashboard span[style*="rgba(255,255,255,0.7)"] {
+  color: #14532d !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+}
+
+/* =========================================================
+   VISTAS DE DETALLE ("Ver") en TODOS los módulos:
+   - Paneles navy #172554 y teal #0A5A5A
+   - Labels (<p> translúcidos) → verde oscuro intenso, un poco más grandes
+   - Valores (texto blanco) → NEGRO INTENSO
+   ========================================================= */
+/* VALORES (texto blanco) → NEGRO INTENSO.
+   Por defecto todo <p>/<span> de los paneles de detalle es negro legible. */
+main div[style*="rgb(23, 37, 84)"] p, main div[style*="rgb(10, 90, 90)"] p,
+main div[style*="rgb(23, 37, 84)"] span, main div[style*="rgb(10, 90, 90)"] span {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+}
+
+/* LABELS (títulos de campo) → VERDE OSCURO INTENSO.
+   ─────────────────────────────────────────────────────────────────────
+   SELECTOR ESTRUCTURAL (NO depende de rgba): cada campo es un <div> con
+   exactamente dos <p> hijos directos (label = primer <p>, valor = segundo).
+   Targeteamos el PRIMER <p> hijo directo de cualquier <div> dentro del panel.
+   Safari serializa rgb(...) de forma predecible (igual que Chrome), pero NO
+   serializa rgba(...) igual, por eso ya NO usamos [style*="rgba(...)"] aquí.
+   Los <td> de las tablas NO coinciden (sus <p> tienen padre <td>, no <div>),
+   y los badges/celdas usan <span>, así que no se ven afectados. */
+main div[style*="rgb(23, 37, 84)"] div > p:first-child,
+main div[style*="rgb(10, 90, 90)"] div > p:first-child {
+  color: #14532d !important;
+  font-weight: 800 !important;
+  font-size: 13.5px !important;
+}
+/* VALOR (segundo <p> del par) → reafirmamos NEGRO INTENSO sobre el label verde */
+main div[style*="rgb(23, 37, 84)"] div > p:first-child + p,
+main div[style*="rgb(10, 90, 90)"] div > p:first-child + p {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+}
+main div[style*="rgb(23, 37, 84)"] h2, main div[style*="rgb(10, 90, 90)"] h2 {
+  color: #14532d !important;
+}
+
+/* =========================================================
+   VISTA VER — títulos más grandes + cada VALOR en cuadro con marco verde
+   (selectores estructurales = a prueba de Safari; el panel usa rgb() que Safari sí matchea)
+   ========================================================= */
+main div[style*="rgb(23, 37, 84)"] div > p:first-child,
+main div[style*="rgb(10, 90, 90)"] div > p:first-child {
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  margin-bottom: 5px !important;
+}
+main div[style*="rgb(23, 37, 84)"] div > p:first-child + p,
+main div[style*="rgb(10, 90, 90)"] div > p:first-child + p {
+  border: 2px solid #14532d !important;
+  border-radius: 10px !important;
+  padding: 9px 12px !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  margin-top: 2px !important;
 }

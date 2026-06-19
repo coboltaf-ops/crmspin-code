@@ -187,7 +187,7 @@ export default function AuditoriaPage() {
               </tr>
             </thead>
             <tbody>
-              {loading && <tr><td colSpan={9} style={{ padding: 20, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Cargando...</td></tr>}
+              {loading && <tr><td colSpan={9} style={{ padding: 20, textAlign: 'center', color: '#14532d' }}>Cargando...</td></tr>}
               {!loading && eventos.map((e, i) => (
                 <tr key={e.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
                   <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.8)', fontSize: 12, fontFamily: 'monospace' }}>{e.fecha_dia}</td>

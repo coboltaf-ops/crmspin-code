@@ -22,9 +22,18 @@ const emptyTarea = (codigo: string): Tarea => ({
 const colorMap: Record<string, { bg: string; color: string; border: string }> = {
   yellow: { bg: 'rgba(234,179,8,0.15)', color: '#eab308', border: 'rgba(234,179,8,0.3)' },
   blue: { bg: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: 'rgba(59,130,246,0.3)' },
-  green: { bg: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: 'rgba(59,130,246,0.3)' },
+  green: { bg: 'rgba(34,197,94,0.15)', color: '#22c55e', border: 'rgba(34,197,94,0.3)' },
   gray: { bg: 'rgba(156,163,175,0.15)', color: '#9ca3af', border: 'rgba(156,163,175,0.3)' },
   red: { bg: 'rgba(239,68,68,0.15)', color: '#ef4444', border: 'rgba(239,68,68,0.3)' },
+}
+
+// Colores intensos para los títulos de las tarjetas Kanban (legibles sobre fondo blanco)
+const intenseColorMap: Record<string, string> = {
+  yellow: '#ca8a04',
+  blue: '#2563eb',
+  green: '#16a34a',
+  gray: '#4b5563',
+  red: '#dc2626',
 }
 
 type Vista = 'lista' | 'form' | 'detalle'
@@ -150,21 +159,21 @@ export default function TareasPage() {
             <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59,130,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>✅</div>
             <div style={{ flex: 1 }}>
               <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 700, margin: 0 }}>{viewDetail.codigo}</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>{viewDetail.descripcion.slice(0, 80)}{viewDetail.descripcion.length > 80 ? '...' : ''}</p>
+              <p style={{ color: '#14532d', fontSize: 12.5, margin: 0 }}>{viewDetail.descripcion.slice(0, 80)}{viewDetail.descripcion.length > 80 ? '...' : ''}</p>
             </div>
             <span style={situacionBadge(viewDetail.situacion)}>{viewDetail.situacion}</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 20 }}>
             {fields.map(f => (
               <div key={f.label}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#fff', fontSize: 14 }}>{f.value}</p>
               </div>
             ))}
           </div>
           {viewDetail.descripcion && (
             <div style={{ marginBottom: 20 }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>Descripción</p>
+              <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>Descripción</p>
               <p style={{ color: '#fff', fontSize: 14, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{viewDetail.descripcion}</p>
             </div>
           )}
@@ -267,6 +276,7 @@ export default function TareasPage() {
       {situaciones.map(sit => {
         const tareasCol = tareas.filter(t => t.situacion === sit.nombre).sort((a, b) => b.fecha_registro.localeCompare(a.fecha_registro))
         const c = colorMap[sit.color] || colorMap.gray
+        const intense = intenseColorMap[sit.color] || intenseColorMap.gray
         return (
           <div key={sit.id}
             onDragOver={e => e.preventDefault()}
@@ -283,27 +293,20 @@ export default function TareasPage() {
                 <div key={t.id} draggable
                   onDragStart={() => setDragId(t.id)}
                   onClick={() => { setViewDetail(t); setVista('detalle') }}
-                  style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 10, padding: 12, border: '1px solid rgba(255,255,255,0.1)', cursor: 'grab', transition: 'transform 0.15s', }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ color: '#60a5fa', fontSize: 11, fontWeight: 700 }}>{t.codigo}</span>
-                    <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>⋮⋮</span>
+                  style={{ background: '#ffffff', borderRadius: 10, padding: 12, border: `2px solid ${intense}`, cursor: 'grab', transition: 'transform 0.15s', boxShadow: '0 1px 4px rgba(0,0,0,0.15)' }}>
+                  {/* Título de la tarjeta: código con el color intenso de la situación */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                    <span style={{ color: intense, fontSize: 13, fontWeight: 800 }}>{t.codigo}</span>
+                    <span style={{ color: '#000000', fontSize: 11 }}>⋮⋮</span>
                   </div>
-                  <p style={{ color: '#fff', fontSize: 12, margin: '0 0 8px', lineHeight: 1.4, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{t.descripcion}</p>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <span style={{ fontSize: 10 }}>👤</span>
-                      <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>{t.persona_ejecuta}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <span style={{ fontSize: 10 }}>📅</span>
-                      <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>{fDate(t.fecha_requerida_fin)}</span>
-                    </div>
-                    {t.fecha_asignacion && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                        <span style={{ fontSize: 10 }}>🗓</span>
-                        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>Asig: {fDate(t.fecha_asignacion)}</span>
-                      </div>
-                    )}
+                  {/* Descripción */}
+                  <p style={{ color: '#000000', fontSize: 12.5, fontWeight: 700, margin: '0 0 8px', lineHeight: 1.4 }}>{t.descripcion}</p>
+                  {/* Datos de la tarea, todo en negro intenso */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11, color: '#000000' }}>
+                    <div><span style={{ fontWeight: 700 }}>📅 Asignación:</span> {fDate(t.fecha_asignacion)}</div>
+                    <div><span style={{ fontWeight: 700 }}>👤 Asigna:</span> {t.persona_asigna}</div>
+                    <div><span style={{ fontWeight: 700 }}>🧑‍💼 Ejecuta:</span> {t.persona_ejecuta}</div>
+                    <div><span style={{ fontWeight: 700 }}>🏁 Terminación:</span> {fDate(t.fecha_requerida_fin)}</div>
                   </div>
                 </div>
               ))}
@@ -359,11 +362,11 @@ export default function TareasPage() {
           {/* Toggle vista */}
           <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden' }}>
             <button onClick={() => setVistaLista('tabla')}
-              style={{ ...btnStyle, borderRadius: 0, background: vistaLista === 'tabla' ? 'rgba(59,130,246,0.3)' : 'transparent', color: vistaLista === 'tabla' ? '#60a5fa' : 'rgba(255,255,255,0.5)', border: 'none', padding: '8px 14px', fontSize: 12 }}>
+              style={{ ...btnStyle, borderRadius: 0, background: '#172554', color: '#ffffff', opacity: vistaLista === 'tabla' ? 1 : 0.45, border: 'none', padding: '8px 14px', fontSize: 12 }}>
               Tabla
             </button>
             <button onClick={() => setVistaLista('kanban')}
-              style={{ ...btnStyle, borderRadius: 0, background: vistaLista === 'kanban' ? 'rgba(59,130,246,0.3)' : 'transparent', color: vistaLista === 'kanban' ? '#60a5fa' : 'rgba(255,255,255,0.5)', border: 'none', padding: '8px 14px', fontSize: 12 }}>
+              style={{ ...btnStyle, borderRadius: 0, background: '#ea580c', color: '#ffffff', opacity: vistaLista === 'kanban' ? 1 : 0.45, border: 'none', padding: '8px 14px', fontSize: 12 }}>
               Kanban
             </button>
           </div>
@@ -378,7 +381,7 @@ export default function TareasPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
         {stats.map(s => (
           <div key={s.label} style={{ ...cardStyle, textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{s.label}</p>
+            <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>{s.label}</p>
             <p style={{ color: s.color, fontSize: 24, fontWeight: 800 }}>{s.value}</p>
           </div>
         ))}

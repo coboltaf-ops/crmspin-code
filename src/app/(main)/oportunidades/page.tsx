@@ -110,7 +110,7 @@ export default function OportunidadesPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {fields.map(f => (
               <div key={f.label}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
               </div>
             ))}
@@ -135,7 +135,7 @@ export default function OportunidadesPage() {
                 { label: 'Probabilidad de Cierre', value: `${viewDetail.probabilidad}%` },
               ].map(f => (
                 <div key={f.label}>
-                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                  <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                   <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
                 </div>
               ))}
@@ -414,7 +414,7 @@ export default function OportunidadesPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: probColor(o.probabilidad), fontSize: 13, fontWeight: 600 }}>{o.probabilidad}%</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{o.etapa}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(o.situacion) }}>{o.situacion}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(o.situacion) }}>{o.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
@@ -425,7 +425,7 @@ export default function OportunidadesPage() {
                     </td>
                   </tr>
                 ))}
-                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay oportunidades registradas</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay oportunidades registradas</td></tr>}
               </tbody>
             </table>
           </div>

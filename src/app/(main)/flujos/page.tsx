@@ -150,7 +150,7 @@ export default function FlujosPage() {
             <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(139,92,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>⚡</div>
             <div style={{ flex: 1 }}>
               <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 700, margin: 0 }}>{viewDetail.nombre}</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>{viewDetail.codigo} · {moduloLabel(viewDetail.modulo)} · {triggerLabel(viewDetail.trigger)}</p>
+              <p style={{ color: '#14532d', fontSize: 12.5, margin: 0 }}>{viewDetail.codigo} · {moduloLabel(viewDetail.modulo)} · {triggerLabel(viewDetail.trigger)}</p>
             </div>
             <span style={{ padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, background: viewDetail.activo ? 'rgba(59,130,246,0.15)' : 'rgba(156,163,175,0.15)', color: viewDetail.activo ? '#3b82f6' : '#9ca3af', border: `1px solid ${viewDetail.activo ? 'rgba(59,130,246,0.3)' : 'rgba(156,163,175,0.3)'}` }}>
               {viewDetail.activo ? 'Activo' : 'Inactivo'}
@@ -158,15 +158,15 @@ export default function FlujosPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
             <div style={{ ...cardStyle, textAlign: 'center' }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Ejecuciones</p>
+              <p style={{ color: '#14532d', fontSize: 12 }}>Ejecuciones</p>
               <p style={{ color: '#3b82f6', fontSize: 28, fontWeight: 800 }}>{viewDetail.ejecuciones.length}</p>
             </div>
             <div style={{ ...cardStyle, textAlign: 'center' }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Exitosas</p>
+              <p style={{ color: '#14532d', fontSize: 12 }}>Exitosas</p>
               <p style={{ color: '#3b82f6', fontSize: 28, fontWeight: 800 }}>{totalExitosas}</p>
             </div>
             <div style={{ ...cardStyle, textAlign: 'center' }}>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Errores</p>
+              <p style={{ color: '#14532d', fontSize: 12 }}>Errores</p>
               <p style={{ color: '#ef4444', fontSize: 28, fontWeight: 800 }}>{totalErrores}</p>
             </div>
           </div>
@@ -262,7 +262,7 @@ export default function FlujosPage() {
               <div style={nodeStyle('#3b82f6')}>
                 <p style={{ color: '#60a5fa', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Trigger</p>
                 <p style={{ color: '#fff', fontSize: 13, fontWeight: 600 }}>{triggerLabel(editing.trigger)}</p>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Módulo: {moduloLabel(editing.modulo)}</p>
+                <p style={{ color: '#14532d', fontSize: 12 }}>Módulo: {moduloLabel(editing.modulo)}</p>
                 {editing.trigger === 'field_changed' && editing.trigger_campo && (
                   <p style={{ color: '#60a5fa', fontSize: 11 }}>Campo: {editing.trigger_campo}</p>
                 )}
@@ -291,7 +291,7 @@ export default function FlujosPage() {
                   <div style={nodeStyle('#3b82f6')}>
                     <p style={{ color: '#3b82f6', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Acción {i + 1}</p>
                     <p style={{ color: '#fff', fontSize: 13 }}>{accionIcon(a.tipo)} {accionLabel(a.tipo)}</p>
-                    <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>→ {moduloLabel(a.modulo_destino)}</p>
+                    <p style={{ color: '#14532d', fontSize: 12 }}>→ {moduloLabel(a.modulo_destino)}</p>
                   </div>
                   {i < editing.acciones.length - 1 && <div style={connectorStyle} />}
                 </div>
@@ -483,7 +483,7 @@ export default function FlujosPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
         {stats.map(s => (
           <div key={s.label} style={{ ...cardStyle, textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{s.label}</p>
+            <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>{s.label}</p>
             <p style={{ color: s.color, fontSize: 24, fontWeight: 800 }}>{s.value}</p>
           </div>
         ))}
@@ -523,7 +523,7 @@ export default function FlujosPage() {
                   {f.activo ? 'Activo' : 'Inactivo'}
                 </button>
               </div>
-              {f.descripcion && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginBottom: 10 }}>{f.descripcion}</p>}
+              {f.descripcion && <p style={{ color: '#14532d', fontSize: 12, marginBottom: 10 }}>{f.descripcion}</p>}
               <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
                 <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(59,130,246,0.15)', color: '#60a5fa' }}>{moduloLabel(f.modulo)}</span>
                 <span style={{ padding: '3px 10px', borderRadius: 8, fontSize: 10, fontWeight: 600, background: 'rgba(234,179,8,0.15)', color: '#eab308' }}>{triggerLabel(f.trigger)}</span>

@@ -368,10 +368,10 @@ export default function ClientesPage() {
                       <td style={td}>{c.cargo}</td>
                       <td style={td}>{c.email}</td>
                       <td style={td}>{c.celular || '—'}</td>
-                      <td style={td}><span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: c.situacion === 'Activo' ? 'rgba(59,130,246,0.2)' : 'rgba(156,163,175,0.2)', color: c.situacion === 'Activo' ? '#93c5fd' : '#d1d5db' }}>{c.situacion}</span></td>
+                      <td style={td}><span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: c.situacion === 'Activo' ? 'rgba(59,130,246,0.2)' : 'rgba(156,163,175,0.2)', color: c.situacion === 'Activo' ? '#93c5fd' : '#d1d5db' }}>{c.situacion}</span></td>
                     </tr>
                   ))}
-                  {misContactos.length === 0 && <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Este cliente no tiene contactos registrados</td></tr>}
+                  {misContactos.length === 0 && <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: '#14532d' }}>Este cliente no tiene contactos registrados</td></tr>}
                 </tbody>
               </table>
             </div>
@@ -388,10 +388,10 @@ export default function ClientesPage() {
                       <td style={td}>{fDate(c.fecha_emision)}</td>
                       <td style={td}>{fDate(c.fecha_vencimiento)}</td>
                       <td style={{ ...td, color: '#93c5fd', fontWeight: 700 }}>${fmtMoney(calcTotalCot(c.detalles || [], c.pct_impuesto || 0))}</td>
-                      <td style={td}><span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: 'rgba(59,130,246,0.2)', color: '#93c5fd' }}>{c.situacion}</span></td>
+                      <td style={td}><span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: 'rgba(59,130,246,0.2)', color: '#93c5fd' }}>{c.situacion}</span></td>
                     </tr>
                   ))}
-                  {misCotizaciones.length === 0 && <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Este cliente no tiene cotizaciones</td></tr>}
+                  {misCotizaciones.length === 0 && <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: '#14532d' }}>Este cliente no tiene cotizaciones</td></tr>}
                 </tbody>
               </table>
             </div>
@@ -405,12 +405,12 @@ export default function ClientesPage() {
                   {misOportunidades.map((o, i) => (
                     <tr key={o.id} style={{ background: i % 2 === 0 ? 'rgba(255,255,255,0.03)' : 'transparent' }}>
                       <td style={{ ...td, color: '#fff', fontWeight: 600 }}>{o.nombre}</td>
-                      <td style={td}><span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: 'rgba(168,85,247,0.2)', color: '#d8b4fe' }}>{o.etapa}</span></td>
+                      <td style={td}><span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: 'rgba(168,85,247,0.2)', color: '#d8b4fe' }}>{o.etapa}</span></td>
                       <td style={{ ...td, color: '#93c5fd', fontWeight: 700 }}>${fmtMoney(o.valor_estimado || 0)}</td>
-                      <td style={td}><span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: 'rgba(59,130,246,0.2)', color: '#93c5fd' }}>{o.situacion}</span></td>
+                      <td style={td}><span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: 'rgba(59,130,246,0.2)', color: '#93c5fd' }}>{o.situacion}</span></td>
                     </tr>
                   ))}
-                  {misOportunidades.length === 0 && <tr><td colSpan={4} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Este cliente no tiene oportunidades</td></tr>}
+                  {misOportunidades.length === 0 && <tr><td colSpan={4} style={{ padding: 32, textAlign: 'center', color: '#14532d' }}>Este cliente no tiene oportunidades</td></tr>}
                 </tbody>
               </table>
             </div>
@@ -497,7 +497,7 @@ export default function ClientesPage() {
                             <tr>
                               <td colSpan={headers.length} style={{ padding: 40, textAlign: 'center' }}>
                                 <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14 }}>No hay productos del catálogo asociados a la Razón Social <strong style={{ color: '#fff' }}>{viewDetail.razon_social}</strong>.</p>
-                                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginTop: 8 }}>Para asignar productos, edítalos en el módulo Productos y selecciona esta Razón Social.</p>
+                                <p style={{ color: '#14532d', fontSize: 12.5, marginTop: 8 }}>Para asignar productos, edítalos en el módulo Productos y selecciona esta Razón Social.</p>
                               </td>
                             </tr>
                           )}
@@ -521,10 +521,10 @@ export default function ClientesPage() {
                       <td style={td}>{p.tipo}</td>
                       <td style={td}><span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 700, color: prioColor[p.prioridad] || '#fff' }}>{p.prioridad}</span></td>
                       <td style={td}>{p.asunto}</td>
-                      <td style={td}><span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: p.situacion === 'Cerrada' ? 'rgba(156,163,175,0.2)' : 'rgba(239,68,68,0.2)', color: p.situacion === 'Cerrada' ? '#d1d5db' : '#fca5a5' }}>{p.situacion}</span></td>
+                      <td style={td}><span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, background: p.situacion === 'Cerrada' ? 'rgba(156,163,175,0.2)' : 'rgba(239,68,68,0.2)', color: p.situacion === 'Cerrada' ? '#d1d5db' : '#fca5a5' }}>{p.situacion}</span></td>
                     </tr>
                   ))}
-                  {misTickets.length === 0 && <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)' }}>Este cliente no tiene tickets</td></tr>}
+                  {misTickets.length === 0 && <tr><td colSpan={5} style={{ padding: 32, textAlign: 'center', color: '#14532d' }}>Este cliente no tiene tickets</td></tr>}
                 </tbody>
               </table>
             </div>
@@ -535,7 +535,7 @@ export default function ClientesPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {fields.map(f => (
               <div key={f.label}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
               </div>
             ))}
@@ -555,7 +555,7 @@ export default function ClientesPage() {
                 { label: 'Código Postal', value: viewDetail.codigo_postal },
               ].map(f => (
                 <div key={f.label}>
-                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                  <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                   <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
                 </div>
               ))}
@@ -589,7 +589,7 @@ export default function ClientesPage() {
                 { label: 'Responsabilidades RUT', value: viewDetail.responsabilidades_rut || '—' },
               ].map(f => (
                 <div key={f.label}>
-                  <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                  <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                   <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
                 </div>
               ))}
@@ -1147,7 +1147,7 @@ export default function ClientesPage() {
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{c.pais}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13 }}>{c.telefono}</td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                      <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(c.situacion) }}>{c.situacion}</span>
+                      <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(c.situacion) }}>{c.situacion}</span>
                     </td>
                     <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                       <div style={{ display: 'flex', gap: 6 }}>
@@ -1158,7 +1158,7 @@ export default function ClientesPage() {
                     </td>
                   </tr>
                 ))}
-                {filtered.length === 0 && <tr><td colSpan={11} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay clientes registrados</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={11} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay clientes registrados</td></tr>}
               </tbody>
             </table>
           </div>

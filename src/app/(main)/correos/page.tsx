@@ -115,14 +115,14 @@ export default function CorreosPage() {
             <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59,130,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📧</div>
             <div>
               <h2 style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, margin: 0 }}>{viewDetail.asunto}</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>Enviado a {viewDetail.para}</p>
+              <p style={{ color: '#14532d', fontSize: 12.5, margin: 0 }}>Enviado a {viewDetail.para}</p>
             </div>
             <span style={estadoBadge(viewDetail.estado)}>{viewDetail.estado}</span>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
             {fields.map(f => (
               <div key={f.label} style={f.label === 'Detalle Error' ? { gridColumn: 'span 3' } : undefined}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#ffffff', fontSize: 14 }}>{f.value || '—'}</p>
               </div>
             ))}
@@ -178,7 +178,7 @@ export default function CorreosPage() {
           { label: 'Errores', value: correos.filter(c => c.estado === 'Error').length, color: '#ef4444' },
         ].map(s => (
           <div key={s.label} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '14px 16px', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{s.label}</p>
+            <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>{s.label}</p>
             <p style={{ color: s.color, fontSize: 24, fontWeight: 800 }}>{s.value}</p>
           </div>
         ))}

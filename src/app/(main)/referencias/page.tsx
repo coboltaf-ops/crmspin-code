@@ -193,7 +193,7 @@ export default function ReferenciasPage() {
                   </td>
                 </tr>
               ))}
-              {vendedores.length === 0 && <tr><td colSpan={7} style={{ padding: 24, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin registros</td></tr>}
+              {vendedores.length === 0 && <tr><td colSpan={7} style={{ padding: 24, textAlign: 'center', color: '#14532d', fontSize: 13 }}>Sin registros</td></tr>}
             </tbody>
           </table>
         ) : (
@@ -227,7 +227,7 @@ export default function ReferenciasPage() {
                   </td>
                 </tr>
               ))}
-              {items.length === 0 && <tr><td colSpan={(hasCodigo ? 1 : 0) + (hasDepto ? 1 : 0) + 3} style={{ padding: 24, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin registros</td></tr>}
+              {items.length === 0 && <tr><td colSpan={(hasCodigo ? 1 : 0) + (hasDepto ? 1 : 0) + 3} style={{ padding: 24, textAlign: 'center', color: '#14532d', fontSize: 13 }}>Sin registros</td></tr>}
             </tbody>
           </table>
         )}

@@ -389,7 +389,7 @@ export default function EmailMarketingPage() {
             {plantillas.map(tpl => (
               <div key={tpl.id} style={cardStyle}>
                 <h3 style={{ color: '#fff', fontSize: 15, fontWeight: 700, margin: '0 0 8px' }}>{tpl.nombre}</h3>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, marginBottom: 4 }}>Asunto: {tpl.asunto}</p>
+                <p style={{ color: '#14532d', fontSize: 12.5, marginBottom: 4 }}>Asunto: {tpl.asunto}</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, marginBottom: 4 }}>Creada: {fDate(tpl.fecha_creacion)}</p>
                 {(tpl.imagenes?.length || 0) > 0 && (
                   <p style={{ color: '#a78bfa', fontSize: 11, marginBottom: 8 }}>{tpl.imagenes.length} imagen(es)</p>
@@ -480,7 +480,7 @@ export default function EmailMarketingPage() {
             <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(59,130,246,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>📨</div>
             <div style={{ flex: 1 }}>
               <h2 style={{ color: '#fff', fontSize: 18, fontWeight: 700, margin: 0 }}>{selected.nombre}</h2>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12, margin: 0 }}>{selected.codigo}</p>
+              <p style={{ color: '#14532d', fontSize: 12.5, margin: 0 }}>{selected.codigo}</p>
             </div>
             <span style={estadoBadge(selected.estado)}>{selected.estado}</span>
           </div>
@@ -494,7 +494,7 @@ export default function EmailMarketingPage() {
               { label: 'Enviados / Errores', value: `${selected.total_enviados} / ${selected.total_errores}` },
             ].map(f => (
               <div key={f.label}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 2 }}>{f.label}</p>
+                <p style={{ color: '#14532d', fontSize: 12, marginBottom: 2 }}>{f.label}</p>
                 <p style={{ color: '#fff', fontSize: 14 }}>{f.value}</p>
               </div>
             ))}
@@ -504,15 +504,15 @@ export default function EmailMarketingPage() {
           {selected.estado !== 'Borrador' && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginBottom: 20 }}>
               <div style={{ ...cardStyle, textAlign: 'center' }}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Enviados</p>
+                <p style={{ color: '#14532d', fontSize: 12 }}>Enviados</p>
                 <p style={{ color: '#3b82f6', fontSize: 28, fontWeight: 800 }}>{selected.total_enviados}</p>
               </div>
               <div style={{ ...cardStyle, textAlign: 'center' }}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Errores</p>
+                <p style={{ color: '#14532d', fontSize: 12 }}>Errores</p>
                 <p style={{ color: '#ef4444', fontSize: 28, fontWeight: 800 }}>{selected.total_errores}</p>
               </div>
               <div style={{ ...cardStyle, textAlign: 'center' }}>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>Tasa Exito</p>
+                <p style={{ color: '#14532d', fontSize: 12 }}>Tasa Exito</p>
                 <p style={{ color: '#60a5fa', fontSize: 28, fontWeight: 800 }}>
                   {selected.destinatarios.length > 0 ? Math.round((selected.total_enviados / selected.destinatarios.length) * 100) : 0}%
                 </p>
@@ -539,7 +539,7 @@ export default function EmailMarketingPage() {
               {selected.destinatarios.map((d, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 8px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                   <span style={{ color: '#fff', fontSize: 13 }}>{d.nombre}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{d.email}</span>
+                  <span style={{ color: '#14532d', fontSize: 12.5 }}>{d.email}</span>
                   <span style={{ ...estadoBadge(d.origen === 'manual' ? 'Borrador' : 'Enviada'), fontSize: 10, padding: '2px 8px' }}>{d.origen}</span>
                 </div>
               ))}
@@ -653,7 +653,7 @@ export default function EmailMarketingPage() {
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <p style={{ color: '#fff', fontSize: 13, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{d.nombre}</p>
-                          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, margin: 0 }}>{d.email}</p>
+                          <p style={{ color: '#14532d', fontSize: 12, margin: 0 }}>{d.email}</p>
                         </div>
                       </div>
                     )
@@ -732,7 +732,7 @@ export default function EmailMarketingPage() {
           { label: 'Emails Enviados', value: stats.totalEnviados, color: '#a78bfa' },
         ].map(s => (
           <div key={s.label} style={{ ...cardStyle, textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{s.label}</p>
+            <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>{s.label}</p>
             <p style={{ color: s.color, fontSize: 24, fontWeight: 800 }}>{s.value}</p>
           </div>
         ))}

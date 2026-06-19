@@ -211,7 +211,7 @@ export default function DisenadorCorreosPage() {
           { label: 'Comercial', value: plantillas.filter(p => p.categoria === 'Comercial').length, color: '#3b82f6' },
         ].map(s => (
           <div key={s.label} style={{ ...cardStyle, textAlign: 'center' }}>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{s.label}</p>
+            <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>{s.label}</p>
             <p style={{ color: s.color, fontSize: 24, fontWeight: 800 }}>{s.value}</p>
           </div>
         ))}
@@ -249,7 +249,7 @@ export default function DisenadorCorreosPage() {
                   dangerouslySetInnerHTML={{ __html: p.contenido.replace(/\{\{nombre\}\}/g, 'Juan').replace(/\{\{empresa\}\}/g, empresaNombre) }} />
               </div>
               <h3 style={{ color: '#fff', fontSize: 14, fontWeight: 700, margin: '0 0 4px', paddingRight: 30 }}>{p.nombre}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11, marginBottom: 4 }}>{p.asunto}</p>
+              <p style={{ color: '#14532d', fontSize: 12, marginBottom: 4 }}>{p.asunto}</p>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <span style={{ padding: '3px 10px', borderRadius: 12, fontSize: 10, fontWeight: 600, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.25)' }}>{p.categoria}</span>
                 <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 10 }}>{fDate(p.fecha_modificacion)}</span>

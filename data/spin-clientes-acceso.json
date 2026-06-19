@@ -1,0 +1,20 @@
+[
+  {
+    "id": "c1",
+    "codigo": "CLI-001",
+    "razon_social": "INVERSIONES ANDINAS SAS",
+    "codigo_acceso": "ACC-CWL8MR"
+  },
+  {
+    "id": "c2",
+    "codigo": "CLI-002",
+    "razon_social": "DISTRIBUIDORA CONTINENTAL LTDA",
+    "codigo_acceso": "ACC-3VWC8P"
+  },
+  {
+    "id": "c3",
+    "codigo": "CLI-003",
+    "razon_social": "LOGÍSTICA DEL CARIBE SA",
+    "codigo_acceso": "ACC-MMLFW5"
+  }
+]

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISTEMAS PALOMARES - Directorio Ejecutivo 2026-06</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #0a2463 0%, #247ba0 100%); padding: 30px 20px; }
+        .container { max-width: 1600px; margin: 0 auto; }
+
+        .header {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 50px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(255,107,53,0.3);
+        }
+
+        .header h1 { font-size: 80px; margin-bottom: 15px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .header .subtitle { font-size: 28px; opacity: 0.95; margin: 10px 0; font-weight: 600; }
+        .header .meta { margin-top: 25px; font-size: 16px; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 20px; }
+        .header .date { color: #fff; font-weight: bold; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
+            gap: 28px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+            border-left: 8px solid #FF6B35;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        }
+
+        .card-title {
+            color: #0a2463;
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #FF6B35;
+        }
+
+        .card-desc {
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .url-section {
+            background: linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border-left: 5px solid #FF6B35;
+        }
+
+        .url-label {
+            color: #E65100;
+            font-weight: 900;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .url-link {
+            color: #0066CC;
+            text-decoration: none;
+            font-size: 16px;
+            word-break: break-all;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .url-link:hover {
+            text-decoration: underline;
+            color: #003399;
+        }
+
+        .creds-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 16px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .creds-table th {
+            background: #0a2463;
+            color: white;
+            padding: 14px;
+            text-align: left;
+            font-weight: 900;
+            font-size: 17px;
+        }
+
+        .creds-table td {
+            padding: 14px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .creds-table tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .creds-table tr:hover {
+            background: #e8f4f8;
+        }
+
+        .forms-section {
+            background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+            border-left: 5px solid #4CAF50;
+            padding: 14px;
+            margin-top: 16px;
+            border-radius: 6px;
+        }
+
+        .forms-title {
+            color: #1B5E20;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .form-link {
+            display: block;
+            margin: 8px 0;
+            padding: 10px;
+            background: white;
+            border-left: 3px solid #4CAF50;
+            padding-left: 12px;
+            border-radius: 4px;
+        }
+
+        .form-name {
+            color: #1B5E20;
+            font-weight: 900;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .form-url {
+            color: #0066CC;
+            text-decoration: none;
+            font-size: 15px;
+            word-break: break-all;
+            font-weight: 700;
+        }
+
+        .form-url:hover {
+            text-decoration: underline;
+        }
+
+        .no-public {
+            color: #999;
+            font-size: 15px;
+            font-style: italic;
+            padding: 10px;
+            background: #f0f0f0;
+            border-left: 3px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .creds-label {
+            color: #0a2463;
+            font-size: 17px;
+            font-weight: 900;
+            margin: 16px 0 8px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #0a2463 0%, #247ba0 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .footer p { margin: 8px 0; font-weight: 600; }
+        .footer .title { font-size: 28px; font-weight: 900; margin-bottom: 12px; }
+        .footer .warning { color: #FF6B35; margin-top: 15px; font-weight: 900; font-size: 18px; }
+
+        .system-number {
+            display: inline-block;
+            background: #FF6B35;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: 900;
+            font-size: 18px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <div class="header">
+            <h1>🚀 SISTEMAS PALOMARES</h1>
+            <p class="subtitle">IAA - PLATAFORMA INTEGRAL 2026</p>
+            <p style="font-size:20px;font-weight:bold">Directorio Ejecutivo Completo - 24 Sistemas Activos</p>
+            <div class="meta">
+                <p style="font-size:18px">Ingeniero José E. Palomares | SaaS Factory</p>
+                <p class="date">Medellín, Colombia | 11 de junio de 2026</p>
+                <p style="color:#FF6B35;margin-top:12px;font-size:20px;font-weight:900">⚠ DOCUMENTO CONFIDENCIAL - USO EXCLUSIVO AUTORIZADO ⚠</p>
+            </div>
+        </div>
+
+        <div class="grid">
+
+<!-- 1. APRENDER LIDERAZGO -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">1</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Aprender Liderazgo</div>
+</div>
+<p class="card-desc">Plataforma de aprendizaje en liderazgo - Alfredo Sterling</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://aprenderliderazgo.vercel.app" target="_blank" class="url-link">aprenderliderazgo.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Acceso:</div>
+<p style="font-size:16px;color:#666">Autenticación remota (Supabase)</p>
+</card>
+
+<!-- 2. CALZADO ROPA -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">2</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Calzado & Ropa</div>
+</div>
+<p class="card-desc">Gestión de inventario de calzado y ropa</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://calzadoropa.vercel.app" target="_blank" class="url-link">calzadoropa.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>jarango</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+<div class="no-public">📋 Sin formularios públicos</div>
+</div>
+
+<!-- 3. CONSULTOR PALOMARES -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">3</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Consultor Palomares</div>
+</div>
+<p class="card-desc">Consultoría digital - Portfolio y servicios</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://consultorpalomares.vercel.app" target="_blank" class="url-link">consultorpalomares.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Autenticación remota (Supabase)</p>
+</div>
+
+<!-- 4. CRM COMERCIAL -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">4</span>
+<div class="card-title" style="margin:0;border:none;padding:0">CRM Comercial</div>
+</div>
+<p class="card-desc">Sistema CRM para gestión comercial avanzada</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://crmcomercial.vercel.app" target="_blank" class="url-link">crmcomercial.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+<div class="forms-section">
+<span class="forms-title">📋 Formularios Públicos:</span>
+<div class="form-link">
+<span class="form-name">→ PQRS Público</span>
+<a href="https://crmcomercial.vercel.app/pqrs-publico" target="_blank" class="form-url">crmcomercial.vercel.app/pqrs-publico</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Prospectos Público</span>
+<a href="https://crmcomercial.vercel.app/prospectos-publico" target="_blank" class="form-url">crmcomercial.vercel.app/prospectos-publico</a>
+</div>
+</div>
+</div>
+
+<!-- 5. CRM FLORES -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">5</span>
+<div class="card-title" style="margin:0;border:none;padding:0">CRM Flores</div>
+</div>
+<p class="card-desc">Golden Flowers - CRM comercial para venta de flores</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://crmflores.vercel.app" target="_blank" class="url-link">crmflores.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>coboltaf</td><td>Flores2026*</td><td>Admin</td></tr>
+</table>
+<div class="forms-section">
+<span class="forms-title">📋 Formularios Públicos:</span>
+<div class="form-link">
+<span class="form-name">→ Pedidos Público</span>
+<a href="https://crmflores.vercel.app/pedidos-publico" target="_blank" class="form-url">crmflores.vercel.app/pedidos-publico</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ PQRS Público</span>
+<a href="https://crmflores.vercel.app/pqrs-publico" target="_blank" class="form-url">crmflores.vercel.app/pqrs-publico</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Prospectos Público</span>
+<a href="https://crmflores.vercel.app/prospectos-publico" target="_blank" class="form-url">crmflores.vercel.app/prospectos-publico</a>
+</div>
+</div>
+</div>
+
+<!-- 6. CRM GTM -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">6</span>
+<div class="card-title" style="margin:0;border:none;padding:0">CRM GTM</div>
+</div>
+<p class="card-desc">SaaS Factory App - CRM estrategia Go To Market</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://crmgtm.vercel.app" target="_blank" class="url-link">crmgtm.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Autenticación remota (Supabase)</p>
+</div>
+
+<!-- 7. CRM NOVA SEGURIDAD -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">7</span>
+<div class="card-title" style="margin:0;border:none;padding:0">CRM Nova Seguridad</div>
+</div>
+<p class="card-desc">NOVASEGURIDAD - CRM especializado para empresas de seguridad</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://crmnovaseguridad.vercel.app" target="_blank" class="url-link">crmnovaseguridad.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+<div class="forms-section">
+<span class="forms-title">📋 Formularios Públicos:</span>
+<div class="form-link">
+<span class="form-name">→ PQRS Público</span>
+<a href="https://crmnovaseguridad.vercel.app/pqrs-publico" target="_blank" class="form-url">crmnovaseguridad.vercel.app/pqrs-publico</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Prospectos Público</span>
+<a href="https://crmnovaseguridad.vercel.app/prospectos-publico" target="_blank" class="form-url">crmnovaseguridad.vercel.app/prospectos-publico</a>
+</div>
+</div>
+</div>
+
+<!-- 8. CRM PALOMARES CONSULTOR -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">8</span>
+<div class="card-title" style="margin:0;border:none;padding:0">CRM Palomares Consultor</div>
+</div>
+<p class="card-desc">NOVASEGURIDAD Consultor - CRM especializado en consultoría</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://crmpalomaresconsultor.vercel.app" target="_blank" class="url-link">crmpalomaresconsultor.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+<div class="forms-section">
+<span class="forms-title">📋 Formularios Públicos:</span>
+<div class="form-link">
+<span class="form-name">→ PQRS Público</span>
+<a href="https://crmpalomaresconsultor.vercel.app/pqrs-publico" target="_blank" class="form-url">crmpalomaresconsultor.vercel.app/pqrs-publico</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Prospectos Público</span>
+<a href="https://crmpalomaresconsultor.vercel.app/prospectos-publico" target="_blank" class="form-url">crmpalomaresconsultor.vercel.app/prospectos-publico</a>
+</div>
+</div>
+</div>
+
+<!-- 9. CRM SPIN -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">9</span>
+<div class="card-title" style="margin:0;border:none;padding:0">CRM SPIN</div>
+</div>
+<p class="card-desc">CRM Principal - Gestión integral de relaciones comerciales</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://crmspin.vercel.app" target="_blank" class="url-link">crmspin.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+<div class="forms-section">
+<span class="forms-title">📋 Formularios Públicos:</span>
+<div class="form-link">
+<span class="form-name">→ PQRS Público</span>
+<a href="https://crmspin.vercel.app/pqrs-publico" target="_blank" class="form-url">crmspin.vercel.app/pqrs-publico</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Prospectos Público</span>
+<a href="https://crmspin.vercel.app/prospectos-publico" target="_blank" class="form-url">crmspin.vercel.app/prospectos-publico</a>
+</div>
+</div>
+</div>
+
+<!-- 10. DECORACIONES -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">10</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Decoraciones</div>
+</div>
+<p class="card-desc">Décorations - Interior Design Studio</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://decoraciones-livid.vercel.app" target="_blank" class="url-link">decoraciones-livid.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>Mario-Decor-2026!</td><td>ADMIN</td></tr>
+</table>
+</div>
+
+<!-- 11. GESTIÓN CONTABLE -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">11</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Gestión Contable</div>
+</div>
+<p class="card-desc">SisTech - Sistema de contabilidad y finanzas</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://gestioncontable.vercel.app" target="_blank" class="url-link">gestioncontable.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+<div class="no-public">📋 Sin formularios públicos</div>
+</div>
+
+<!-- 12. GESTIÓN DE INVENTARIO -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">12</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Gestión de Inventario</div>
+</div>
+<p class="card-desc">Sistema multi-tipo de inventario con control de productos</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://gestioninventario.vercel.app" target="_blank" class="url-link">gestioninventario.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Sin autenticación requerida</p>
+<div class="no-public">📋 Sin formularios públicos</div>
+</div>
+
+<!-- 13. GESTIÓN OPERACIONES BORINQUEN -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">13</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Gest. Oper. Borinquen</div>
+</div>
+<p class="card-desc">Sistema de gestión operacional para Borinquen</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://gestionoperaciones-borinquen.vercel.app" target="_blank" class="url-link">gestionoperaciones-borinquen.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>jarango</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+</div>
+
+<!-- 14. GESTIÓN OPERACIONES SPIN -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">14</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Gest. Oper. SPIN</div>
+</div>
+<p class="card-desc">Sistema de gestión operacional para Spin S.A.</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://gestionoperaciones-spin.vercel.app" target="_blank" class="url-link">gestionoperaciones-spin.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>jarango</td><td>admin123</td><td>ADMIN</td></tr>
+</table>
+</div>
+
+<!-- 15. HAPPY EXPRESS -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">15</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Happy Express</div>
+</div>
+<p class="card-desc">E-commerce de desayunos, almuerzos, bebidas y postres</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://cocinahappyes.vercel.app" target="_blank" class="url-link">cocinahappyes.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Sin autenticación - E-commerce público</p>
+<div class="forms-section">
+<span class="forms-title">📋 Rutas Públicas:</span>
+<div class="form-link">
+<span class="form-name">→ Carrito de compras</span>
+<a href="https://cocinahappyes.vercel.app/carrito" target="_blank" class="form-url">cocinahappyes.vercel.app/carrito</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Checkout</span>
+<a href="https://cocinahappyes.vercel.app/checkout" target="_blank" class="form-url">cocinahappyes.vercel.app/checkout</a>
+</div>
+</div>
+</div>
+
+<!-- 16. HOMEUX -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">16</span>
+<div class="card-title" style="margin:0;border:none;padding:0">HomeUX</div>
+</div>
+<p class="card-desc">Servicios del hogar - Plataforma de experiencia de usuario</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://homeux-green.vercel.app" target="_blank" class="url-link">homeux-green.vercel.app</a>
+</div>
+<div class="creds-label">🔑 Credenciales:</div>
+<table class="creds-table">
+<tr><th>Usuario</th><th>Contraseña</th><th>Rol</th></tr>
+<tr><td>admin</td><td>admin</td><td>ADMIN</td></tr>
+</table>
+</div>
+
+<!-- 17. IA -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">17</span>
+<div class="card-title" style="margin:0;border:none;padding:0">IA</div>
+</div>
+<p class="card-desc">Sistema de Inteligencia Artificial - SaaS Factory</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://ia.vercel.app" target="_blank" class="url-link">ia.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">No es aplicación Next.js - Sistema especializado</p>
+</div>
+
+<!-- 18. LAUNCHER -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">18</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Launcher</div>
+</div>
+<p class="card-desc">Portal central de acceso - SaaS Factory Sistemas</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://launcher.vercel.app" target="_blank" class="url-link">launcher.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Landing page estática - Sin autenticación</p>
+</div>
+
+<!-- 19. LIDERAZGO EN ACCIÓN -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">19</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Liderazgo en Acción</div>
+</div>
+<p class="card-desc">Plataforma de liderazgo - Alfredo Sterling</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://liderazgoenaccion.vercel.app" target="_blank" class="url-link">liderazgoenaccion.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Autenticación remota (Supabase)</p>
+</div>
+
+<!-- 20. NORTON LANDING -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">20</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Norton Landing</div>
+</div>
+<p class="card-desc">Norton Edificios Industriales - Landing corporativa</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://nortonlanding.vercel.app" target="_blank" class="url-link">nortonlanding.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Landing page estática - Sin autenticación</p>
+</div>
+
+<!-- 21. PORTAL DEMOS -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">21</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Portal Demos</div>
+</div>
+<p class="card-desc">SISTECH - Portal de demostraciones</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://portal-demos-rouge.vercel.app" target="_blank" class="url-link">portal-demos-rouge.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Landing page estática - Sin autenticación</p>
+</div>
+
+<!-- 22. PORTAL FLORES -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">22</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Portal Flores</div>
+</div>
+<p class="card-desc">Flores Fantásticas - Floristería Premium</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://portalflores.vercel.app" target="_blank" class="url-link">portalflores.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Acceso por contraseña en .env.local</p>
+<div class="forms-section">
+<span class="forms-title">📋 Rutas Públicas:</span>
+<div class="form-link">
+<span class="form-name">→ Consultas de Clientes</span>
+<a href="https://portalflores.vercel.app/consultas-clientes" target="_blank" class="form-url">portalflores.vercel.app/consultas-clientes</a>
+</div>
+<div class="form-link">
+<span class="form-name">→ Muestra</span>
+<a href="https://portalflores.vercel.app/muestra" target="_blank" class="form-url">portalflores.vercel.app/muestra</a>
+</div>
+</div>
+</div>
+
+<!-- 23. PORTAL INMOBILIARIO -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">23</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Portal Inmobiliario</div>
+</div>
+<p class="card-desc">Portal de gestión de propiedades inmobiliarias</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://portalinmobiliario.vercel.app" target="_blank" class="url-link">portalinmobiliario.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Autenticación remota (Supabase)</p>
+<div class="forms-section">
+<span class="forms-title">📋 Rutas Públicas:</span>
+<div class="form-link">
+<span class="form-name">→ Catálogo Inmobiliario</span>
+<a href="https://portalinmobiliario.vercel.app/catalogo" target="_blank" class="form-url">portalinmobiliario.vercel.app/catalogo</a>
+</div>
+</div>
+</div>
+
+<!-- 24. POSTRES EXQUISITOS -->
+<div class="card">
+<div style="display:flex;align-items:center;margin-bottom:12px">
+<span class="system-number">24</span>
+<div class="card-title" style="margin:0;border:none;padding:0">Postres Exquisitos</div>
+</div>
+<p class="card-desc">Postres Naturales Artesanales - Portal de ventas</p>
+<div class="url-section">
+<span class="url-label">🌐 URL:</span>
+<a href="https://postresexquisitos.vercel.app" target="_blank" class="url-link">postresexquisitos.vercel.app</a>
+</div>
+<p style="font-size:16px;color:#666">Landing page estática - Sin autenticación</p>
+</div>
+
+        </div>
+
+        <div class="footer">
+            <p class="title">✅ AUDITORÍA COMPLETA FINALIZADA</p>
+            <p>24 Sistemas empresariales en Vercel</p>
+            <p>Infraestructura SaaS Factory - José Palomares</p>
+            <p style="margin-top:20px;font-size:18px">Medellín, Colombia | 11 de junio de 2026 | 100% Verificado</p>
+            <p class="warning">⚠ DOCUMENTO CONFIDENCIAL - MANTENER SEGURO ⚠</p>
+        </div>
+
+    </div>
+</body>
+</html>

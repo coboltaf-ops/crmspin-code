@@ -326,7 +326,7 @@ export default function CotizacionesPage() {
                     { l: 'Ciudad', v: cli?.ciudad },
                     { l: 'Contacto', v: viewDetail.contacto_nombre },
                   ].map(f => (
-                    <div key={f.l}><p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
+                    <div key={f.l}><p style={{ color: '#14532d', fontSize: 12 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
                   ))}
                 </div>
               </div>
@@ -343,7 +343,7 @@ export default function CotizacionesPage() {
               { l: 'Vendedor', v: viewDetail.vendedor },
               { l: 'Oportunidad', v: viewDetail.oportunidad_nombre },
             ].map(f => (
-              <div key={f.l}><p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 11 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
+              <div key={f.l}><p style={{ color: '#14532d', fontSize: 12 }}>{f.l}</p><p style={{ color: '#ffffff', fontSize: 13 }}>{f.v || '—'}</p></div>
             ))}
           </div>
 
@@ -498,7 +498,7 @@ export default function CotizacionesPage() {
                     { l: 'Ciudad', v: cli?.ciudad },
                   ].map(f => (
                     <div key={f.l}>
-                      <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 10 }}>{f.l}</p>
+                      <p style={{ color: '#14532d', fontSize: 10 }}>{f.l}</p>
                       <p style={{ color: '#ffffff', fontSize: 12, fontWeight: 600 }}>{f.v || '—'}</p>
                     </div>
                   ))}
@@ -606,7 +606,7 @@ export default function CotizacionesPage() {
               <tbody>
                 {selected.detalles.filter(d => d.producto_id).length === 0 && (
                   <tr>
-                    <td colSpan={7} style={{ padding: 24, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 13, background: 'rgba(255,255,255,0.02)' }}>
+                    <td colSpan={7} style={{ padding: 24, textAlign: 'center', color: '#14532d', fontSize: 13, background: 'rgba(255,255,255,0.02)' }}>
                       Aún no se han agregado productos. Haz clic en <strong style={{ color: '#60a5fa' }}>+ Agregar Productos</strong> para comenzar.
                     </td>
                   </tr>
@@ -730,7 +730,7 @@ export default function CotizacionesPage() {
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', fontSize: 13, textAlign: 'center' }}>{c.detalles.length}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)', color: '#93c5fd', fontSize: 13, fontWeight: 600 }}>{fmtMoney(total)}</td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                        <span style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(c.situacion) }}>{c.situacion}</span>
+                        <span className="sit-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600, ...statusStyle(c.situacion) }}>{c.situacion}</span>
                       </td>
                       <td style={{ padding: '10px 14px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                         <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -753,7 +753,7 @@ export default function CotizacionesPage() {
                     </tr>
                   )
                 })}
-                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: 14 }}>No hay cotizaciones registradas</td></tr>}
+                {filtered.length === 0 && <tr><td colSpan={8} style={{ padding: 32, textAlign: 'center', color: '#14532d', fontSize: 14 }}>No hay cotizaciones registradas</td></tr>}
               </tbody>
             </table>
           </div>

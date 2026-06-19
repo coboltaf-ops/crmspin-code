@@ -29,8 +29,9 @@ export default function DashboardPage() {
 
 
   const cardStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255,255,255,0.15)', borderRadius: 16, padding: 24,
+    background: '#ffffff',
+    border: '2px solid #14532d', borderRadius: 16, padding: 24,
+    boxShadow: '0 1px 4px rgba(20,83,45,0.10)',
   }
 
   const cards = [
@@ -95,8 +96,8 @@ export default function DashboardPage() {
   }))
 
   return (
-    <div>
-      <h1 style={{ fontSize: 28, fontWeight: 800, color: '#ffffff', marginBottom: 24 }}>Dashboard</h1>
+    <div className="crm-dashboard" style={{ margin: -24, padding: 24, minHeight: 'calc(100vh - 64px)' }}>
+      <h1 style={{ fontSize: 28, fontWeight: 800, color: '#166534', marginBottom: 24 }}>Dashboard</h1>
 
       {/* Summary cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16, marginBottom: 24 }}>
@@ -106,7 +107,7 @@ export default function DashboardPage() {
               <span style={{ fontSize: 28 }}>{c.icon}</span>
               <span style={{ fontSize: 32, fontWeight: 800, color: c.color }}>{c.value}</span>
             </div>
-            <p style={{ color: '#fbbf24', fontSize: 18, fontWeight: 800 }}>{c.label}</p>
+            <p className="card-label">{c.label}</p>
           </div>
         ))}
       </div>
@@ -144,7 +145,7 @@ export default function DashboardPage() {
                     </div>
                   )
                 })}
-                {funnelData.length === 0 && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin oportunidades abiertas</p>}
+                {funnelData.length === 0 && <p style={{ color: '#14532d', fontSize: 13 }}>Sin oportunidades abiertas</p>}
               </div>
             )
           })()}
@@ -201,7 +202,7 @@ export default function DashboardPage() {
         <div onClick={() => router.push('/prospectos')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
           <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Prospectos por Situación</h2>
           {prospectosPorSituacion.length === 0 ? (
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin prospectos registrados</p>
+            <p style={{ color: '#14532d', fontSize: 13 }}>Sin prospectos registrados</p>
           ) : (() => {
             const total = prospectosPorSituacion.reduce((s, x) => s + x.count, 0)
             const cx = 90, cy = 90, r = 80, ir = 45
@@ -246,7 +247,7 @@ export default function DashboardPage() {
         <div onClick={() => router.push('/prospectos')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
           <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Prospectos por Procedencia</h2>
           {prospectosPorOrigen.length === 0 ? (
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin prospectos registrados</p>
+            <p style={{ color: '#14532d', fontSize: 13 }}>Sin prospectos registrados</p>
           ) : (() => {
             const max = prospectosPorOrigen[0].count
             const chartH = 180
@@ -272,7 +273,7 @@ export default function DashboardPage() {
         <div onClick={() => router.push('/clientes')} onMouseEnter={onHoverIn} onMouseLeave={onHoverOut} style={{ ...cardStyle, ...clickable }}>
           <h2 style={{ color: '#fbbf24', fontSize: 24, fontWeight: 800, marginBottom: 16 }}>Clientes por Macro Sector</h2>
           {clientesPorMacroSector.length === 0 ? (
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Sin clientes registrados</p>
+            <p style={{ color: '#14532d', fontSize: 13 }}>Sin clientes registrados</p>
           ) : (() => {
             const total = clientesPorMacroSector.reduce((s, x) => s + x.count, 0)
             const cx = 110, cy = 110, r = 95
