@@ -147,11 +147,11 @@ export default function TareasPage() {
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <button onClick={() => { setViewDetail(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Volver</button>
           {permisos.editar && viewDetail.situacion !== 'Completada' && viewDetail.situacion !== 'Cancelada' && (
-            <button onClick={() => { setSelected(viewDetail); setVista('form') }} style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
+            <button onClick={() => { setSelected(viewDetail); setVista('form') }} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: 'none' }}>Editar</button>
           )}
           {permisos.eliminar && (
             <button onClick={() => { if (confirm('¿Eliminar tarea?')) { deleteTarea(viewDetail.id); setViewDetail(null); setVista('lista') } }}
-              style={{ ...btnStyle, background: '#dc2626', color: '#fff', border: '1px solid #ef4444' }}>Eliminar</button>
+              style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: 'none' }}>Eliminar</button>
           )}
         </div>
         <div style={cardStyle}>
@@ -432,14 +432,14 @@ export default function TareasPage() {
                       <td style={{ padding: '10px 14px' }}>
                         <div style={{ display: 'flex', gap: 6 }}>
                           <button onClick={() => { setViewDetail(t); setVista('detalle') }}
-                            style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)', padding: '4px 12px', fontSize: 11 }}>Ver</button>
+                            style={{ ...btnStyle, background: '#ea580c', color: '#ffffff', border: 'none', padding: '4px 12px', fontSize: 11 }}>Ver</button>
                           {permisos.editar && (
                             <button onClick={() => { setSelected(t); setVista('form') }}
-                              style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)', padding: '4px 12px', fontSize: 11 }}>Editar</button>
+                              style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: 'none', padding: '4px 12px', fontSize: 11 }}>Editar</button>
                           )}
                           {permisos.eliminar && (
                             <button onClick={() => { if (confirm(`¿Eliminar tarea "${t.codigo}"?`)) deleteTarea(t.id) }}
-                              style={{ ...btnStyle, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', padding: '4px 12px', fontSize: 11 }}>Eliminar</button>
+                              style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: 'none', padding: '4px 12px', fontSize: 11 }}>Eliminar</button>
                           )}
                         </div>
                       </td>

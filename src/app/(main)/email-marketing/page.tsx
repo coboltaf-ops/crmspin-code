@@ -161,7 +161,7 @@ export default function EmailMarketingPage() {
                     Insertar
                   </button>
                   <button onClick={() => eliminarImg(img.cid, target)}
-                    style={{ ...btnStyle, padding: '3px 8px', fontSize: 10, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>
+                    style={{ ...btnStyle, padding: '3px 8px', fontSize: 10, background: '#dc2626', color: '#ffffff', border: 'none' }}>
                     ×
                   </button>
                 </div>
@@ -396,9 +396,9 @@ export default function EmailMarketingPage() {
                 )}
                 <div style={{ display: 'flex', gap: 6 }}>
                   <button onClick={() => { setTplNombre(tpl.nombre); setTplAsunto(tpl.asunto); setTplContenido(tpl.contenido); setTplImagenes(tpl.imagenes || []); setEditingTpl(tpl); setVista('editarPlantilla') }}
-                    style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)', padding: '5px 12px', fontSize: 12 }}>Editar</button>
+                    style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: 'none', padding: '5px 12px', fontSize: 12 }}>Editar</button>
                   <button onClick={() => { if (confirm('Eliminar plantilla?')) deletePlantilla(tpl.id) }}
-                    style={{ ...btnStyle, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)', padding: '5px 12px', fontSize: 12 }}>Eliminar</button>
+                    style={{ ...btnStyle, background: '#dc2626', color: '#ffffff', border: 'none', padding: '5px 12px', fontSize: 12 }}>Eliminar</button>
                 </div>
               </div>
             ))}
@@ -462,7 +462,7 @@ export default function EmailMarketingPage() {
           <button onClick={() => { setSelected(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Volver</button>
           {selected.estado === 'Borrador' && (
             <>
-              <button onClick={() => abrirEditar(selected)} style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
+              <button onClick={() => abrirEditar(selected)} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: 'none' }}>Editar</button>
               <button onClick={() => enviarCampana(selected)} disabled={sending}
                 style={{ ...btnStyle, background: '#3b82f6', color: '#fff', border: '1px solid #3b82f6', opacity: sending ? 0.5 : 1 }}>
                 {sending ? 'Enviando...' : 'Enviar Campana'}
@@ -781,7 +781,7 @@ export default function EmailMarketingPage() {
                   <td style={{ padding: '10px 14px' }}>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button onClick={() => { setSelected(c); setVista('detalle') }}
-                        style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)', padding: '5px 10px', fontSize: 12 }}>Ver</button>
+                        style={{ ...btnStyle, background: '#ea580c', color: '#ffffff', border: 'none', padding: '5px 10px', fontSize: 12 }}>Ver</button>
                       {c.estado === 'Borrador' && (
                         <button onClick={() => enviarCampana(c)} disabled={sending}
                           style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#3b82f6', border: '1px solid rgba(59,130,246,0.3)', padding: '5px 10px', fontSize: 12 }}>Enviar</button>

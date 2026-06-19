@@ -139,7 +139,7 @@ export default function FlujosPage() {
       <div>
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <button onClick={() => { setViewDetail(null); setVista('lista') }} style={{ ...btnStyle, background: '#000', color: '#fff', border: '1px solid #333' }}>← Volver</button>
-          <button onClick={() => abrirEditar(viewDetail)} style={{ ...btnStyle, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
+          <button onClick={() => abrirEditar(viewDetail)} style={{ ...btnStyle, background: '#2563eb', color: '#ffffff', border: 'none' }}>Editar</button>
           <button onClick={() => { toggleActivo(viewDetail.id); setViewDetail({ ...viewDetail, activo: !viewDetail.activo }) }}
             style={{ ...btnStyle, background: viewDetail.activo ? 'rgba(239,68,68,0.15)' : 'rgba(59,130,246,0.15)', color: viewDetail.activo ? '#ef4444' : '#3b82f6', border: `1px solid ${viewDetail.activo ? 'rgba(239,68,68,0.3)' : 'rgba(59,130,246,0.3)'}` }}>
             {viewDetail.activo ? 'Desactivar' : 'Activar'}
@@ -370,7 +370,7 @@ export default function FlujosPage() {
                     {OPERADORES.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
                   </select>
                   <input value={c.valor} onChange={e => updateCondicion(i, { valor: e.target.value })} placeholder="Valor..." style={{ ...inputStyle, flex: 1 }} />
-                  <button onClick={() => removeCondicion(i)} style={{ ...btnStyle, padding: '5px 10px', fontSize: 14, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>×</button>
+                  <button onClick={() => removeCondicion(i)} style={{ ...btnStyle, padding: '5px 10px', fontSize: 14, background: '#dc2626', color: '#ffffff', border: 'none' }}>×</button>
                 </div>
               ))}
             </div>
@@ -394,7 +394,7 @@ export default function FlujosPage() {
                     <select value={a.modulo_destino} onChange={e => updateAccion(i, { modulo_destino: e.target.value })} style={{ ...inputStyle, flex: 1 }}>
                       {MODULOS_FLUJO.map(m => <option key={m.id} value={m.id}>{m.label}</option>)}
                     </select>
-                    <button onClick={() => removeAccion(i)} style={{ ...btnStyle, padding: '5px 10px', fontSize: 14, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>×</button>
+                    <button onClick={() => removeAccion(i)} style={{ ...btnStyle, padding: '5px 10px', fontSize: 14, background: '#dc2626', color: '#ffffff', border: 'none' }}>×</button>
                   </div>
                   {/* Config segun tipo */}
                   {a.tipo === 'send_email' && (
@@ -534,11 +534,11 @@ export default function FlujosPage() {
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
                 <button onClick={e => { e.stopPropagation(); abrirEditar(f) }}
-                  style={{ ...btnStyle, flex: 1, padding: '6px 10px', fontSize: 11, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
+                  style={{ ...btnStyle, flex: 1, padding: '6px 10px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: 'none' }}>Editar</button>
                 <button onClick={e => { e.stopPropagation(); duplicarFlujo(f.id) }}
                   style={{ ...btnStyle, padding: '6px 10px', fontSize: 11, background: 'rgba(139,92,246,0.15)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.3)' }}>Duplicar</button>
                 <button onClick={e => { e.stopPropagation(); if (confirm('Eliminar flujo?')) deleteFlujo(f.id) }}
-                  style={{ ...btnStyle, padding: '6px 10px', fontSize: 11, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>Eliminar</button>
+                  style={{ ...btnStyle, padding: '6px 10px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: 'none' }}>Eliminar</button>
               </div>
             </div>
           ))}

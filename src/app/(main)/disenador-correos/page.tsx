@@ -256,11 +256,11 @@ export default function DisenadorCorreosPage() {
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
                 <button onClick={e => { e.stopPropagation(); abrirEditar(p) }}
-                  style={{ ...btnStyle, flex: 1, padding: '6px 10px', fontSize: 11, background: 'rgba(59,130,246,0.15)', color: '#60a5fa', border: '1px solid rgba(59,130,246,0.3)' }}>Editar</button>
+                  style={{ ...btnStyle, flex: 1, padding: '6px 10px', fontSize: 11, background: '#2563eb', color: '#ffffff', border: 'none' }}>Editar</button>
                 <button onClick={e => { e.stopPropagation(); duplicarPlantilla(p.id) }}
                   style={{ ...btnStyle, padding: '6px 10px', fontSize: 11, background: 'rgba(139,92,246,0.15)', color: '#a78bfa', border: '1px solid rgba(139,92,246,0.3)' }}>Duplicar</button>
                 <button onClick={e => { e.stopPropagation(); if (confirm('Eliminar plantilla?')) deletePlantilla(p.id) }}
-                  style={{ ...btnStyle, padding: '6px 10px', fontSize: 11, background: 'rgba(239,68,68,0.15)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.3)' }}>Eliminar</button>
+                  style={{ ...btnStyle, padding: '6px 10px', fontSize: 11, background: '#dc2626', color: '#ffffff', border: 'none' }}>Eliminar</button>
               </div>
             </div>
           ))}
