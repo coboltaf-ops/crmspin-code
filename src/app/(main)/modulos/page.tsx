@@ -36,27 +36,26 @@ export default function ModulosPage() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {modulos.map((m) => {
           const isProtected = m.id === 'dashboard' || m.id === 'usuarios' || m.id === 'modulos'
-          const isActivo = isProtected ? true : m.activo
           return (
             <div key={m.id} style={{
               display: 'flex', alignItems: 'center', padding: '16px 20px',
-              background: isActivo ? '#166534' : '#b91c1c',
-              borderRadius: 12, border: `1px solid ${isActivo ? '#15803d' : '#dc2626'}`,
+              background: 'rgba(255,255,255,0.03)',
+              borderRadius: 12, border: '1px solid rgba(255,255,255,0.15)',
             }}>
               <span style={{ fontSize: 24, marginRight: 16 }}>{m.icon}</span>
               <div style={{ flex: 1 }}>
-                <p style={{ color: '#ffffff', fontSize: 15, fontWeight: 700 }}>{m.label}</p>
-                <p style={{ color: '#ffffff', fontSize: 12.5 }}>{m.href}</p>
+                <p style={{ color: '#ffffff', fontSize: 15, fontWeight: 600 }}>{m.label}</p>
+                <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12.5 }}>{m.href}</p>
               </div>
               {isProtected ? (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ color: '#ffffff', fontSize: 12.5, fontWeight: 600 }}>Siempre activo</span>
+                <div style={{ ...btnStyle, background: '#166534', color: '#ffffff', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ color: '#ffffff', fontSize: 12.5, fontWeight: 700 }}>Siempre activo</span>
                   <div style={{ width: 48, height: 26, borderRadius: 13, background: 'rgba(0,0,0,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', padding: '0 3px' }}>
                     <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff' }} />
                   </div>
                 </div>
               ) : (
-                <button onClick={() => toggleModulo(m.id)} style={{ ...btnStyle, background: 'none', padding: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <button onClick={() => toggleModulo(m.id)} style={{ ...btnStyle, background: m.activo ? '#166534' : '#b91c1c', color: '#ffffff', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ color: '#ffffff', fontSize: 13, fontWeight: 700 }}>
                     {m.activo ? 'Activo' : 'Inactivo'}
                   </span>
