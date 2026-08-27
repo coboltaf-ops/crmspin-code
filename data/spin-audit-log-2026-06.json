@@ -287,5 +287,22 @@
     "campo": "",
     "valor_anterior": "",
     "valor_nuevo": ""
+  },
+  {
+    "id": "2f655770-cecb-469e-a4d2-071f7568c07a",
+    "fecha": "2026-06-30T16:51:54.338Z",
+    "fecha_dia": "30/06/2026",
+    "hora": "11:51:54 a. m.",
+    "usuario": "admin",
+    "usuario_nombre": "Admin CRM",
+    "rol": "Admin",
+    "modulo": "auth",
+    "accion": "LOGIN",
+    "registro_codigo": "",
+    "registro_nombre": "",
+    "detalle": "Inicio de sesión correcto",
+    "campo": "",
+    "valor_anterior": "",
+    "valor_nuevo": ""
   }
 ]

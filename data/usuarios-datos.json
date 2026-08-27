@@ -1,0 +1,146 @@
+[
+  {
+    "id": "admin-1",
+    "nombre": "Admin",
+    "apellido": "CRM",
+    "usuario": "admin",
+    "clave": "scrypt$f31ba5592fd8ada2e6184a3abc93e1ed$e3ec1381f8485b670dadd902a0a5d96b3676bcd26a8abb8b05bb186a51e00cfe6cb48e09a02b11a740c2cfbf174d24d52b335cd1b6f8a212139f06c3f3f50164",
+    "correo": "admin@crmspin.com",
+    "rol": "Admin",
+    "situacion": "Activo",
+    "permisos": [
+      {
+        "modulo": "dashboard",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "clientes",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "contactos",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "oportunidades",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "productos",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "cotizaciones",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "prospectos",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "pqrs",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "tareas",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "referencias",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      }
+    ]
+  },
+  {
+    "id": "jpalomares-maestro",
+    "nombre": "Jose",
+    "apellido": "Palomares",
+    "usuario": "jpalomares",
+    "clave": "scrypt$5b3d25801d49586a3c3823fc0f2ab7a1$176e37cf4696b0bef1052ba4b30a28e7964f9c46916e1ff0dfc235625925306aa7652b4f28f66167add9a081b95cbdef987207d8d04f9bf0b80c357508871f6b",
+    "correo": "jpalomares@palomares.com",
+    "rol": "Admin",
+    "situacion": "Activo",
+    "permisos": [
+      {
+        "modulo": "dashboard",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "clientes",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "contactos",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "oportunidades",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "productos",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "cotizaciones",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "prospectos",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "pqrs",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "tareas",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      },
+      {
+        "modulo": "referencias",
+        "leer": true,
+        "editar": true,
+        "eliminar": true
+      }
+    ]
+  }
+]

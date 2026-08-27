@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useUsuariosStore } from '@/features/usuarios-gestion/store/usuarios-store'
 import { useCurrentUserStore } from '@/features/usuarios-gestion/store/current-user-store'
 import { logAudit } from '@/shared/lib/audit'
 import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
@@ -9,7 +8,6 @@ import { useEmpresaStore } from '@/features/empresa/store/empresa-store'
 function LoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const usuarios = useUsuariosStore(s => s.usuarios)
   const setUser = useCurrentUserStore(s => s.setUser)
   const empresa = useEmpresaStore(s => s.empresas[0])
   const [usuario, setUsuario] = useState('')
@@ -31,12 +29,25 @@ function LoginContent() {
     }
   }, [searchParams])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const found = usuarios.find(u => u.usuario === usuario && u.clave === clave && u.situacion === 'Activo')
-    if (!found) {
-      setError('Usuario o clave incorrectos')
-      logAudit({ usuario: usuario || 'desconocido', modulo: 'auth', accion: 'OTRO', detalle: `Intento de login fallido para "${usuario}"` })
+    setError('')
+    let found
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, clave }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.ok) {
+        setError(data.error || 'Usuario o clave incorrectos')
+        logAudit({ usuario: usuario || 'desconocido', modulo: 'auth', accion: 'OTRO', detalle: `Intento de login fallido para "${usuario}"` })
+        return
+      }
+      found = data.user
+    } catch {
+      setError('Error de conexión')
       return
     }
     setUser(found)
